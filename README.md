@@ -1,15 +1,16 @@
 # 🍲 Shiwei Kitchen · 拾味厨房
 
-基于 Python 与 SQLite 的本地 AI 烹饪助手。集成 DeepSeek 工具调用、地区菜谱检索和个人菜谱管理，支持根据食材、人数、时间及设备生成烹饪建议。
+基于 Python 与 SQLite 的本地 AI 烹饪助手。集成 DeepSeek 工具调用、食材仓库、地区菜谱检索和个人菜谱管理，支持根据库存、到期日期、人数、时间及设备生成烹饪建议。
 
 > 让每一次下厨，都有一点新的期待。
 
 ## ✨ 功能
 
 - 🌏 **菜谱检索**：397 条内置做法，40 个地区与风味分类，支持菜名、食材、地区、用时和饮食类型筛选。
-- 🤖 **AI 问答**：通过 `search_recipes` 和 `get_recipe` 工具检索本地数据，结合厨房上下文生成回答。
+- 🥬 **食材仓库**：按批次记录余量、单位、类别、储存方式及到期 / 开封日期，支持临期筛选、编辑和用完标记。
+- 🤖 **AI 问答**：通过 `search_recipes`、`get_recipe` 和 `get_pantry` 工具检索本地数据，结合厨房上下文推荐菜单与消耗顺序。
 - 📝 **个人菜谱**：添加、编辑、删除、收藏，支持 JSON 批量导入、导入预览及导出备份。
-- 💾 **数据持久化**：SQLite 保存菜谱、收藏与对话；启动时自动初始化数据库并同步内置数据。
+- 💾 **数据持久化**：SQLite 保存库存、菜谱、收藏与对话；启动时自动初始化数据库并同步内置数据。
 - 🥣 **用量换算**：按份数缩放数值食材用量，保留原文中的非数值用量说明。
 
 ## 🧩 技术栈
@@ -49,7 +50,19 @@ Windows 可使用 `启动厨房.bat`。版本源码包见 [Releases](https://git
 
 `.env` 优先于同名环境变量。未配置 API Key 时使用本地菜谱检索；配置后，后端向 DeepSeek 发送相关菜谱、最近对话及厨房上下文。Key 仅由后端读取，配置接口不返回 Key。
 
-模型通过 `search_recipes`、`get_recipe` 访问菜谱库。每次问答最多执行 4 轮模型请求，上下文包含最近 12 条对话。接口实现参考 [Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/) 与 [Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)。
+模型通过 `search_recipes`、`get_recipe` 访问菜谱库，启用仓库时可通过 `get_pantry` 读取当前问答的库存快照。每次问答最多执行 4 轮模型请求，上下文包含最近 12 条对话。接口实现参考 [Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/) 与 [Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)。
+
+## 🥬 食材仓库
+
+在 **食材仓库 → 放入新食材** 中记录名称、余量和单位。同种食材可保存不同批次，选择冷藏、冷冻或常温储存，并按包装或消耗计划填写到期日期；日期可留空，不自动推算保质期。
+
+- **用库存想菜单**：开启仓库上下文并发起新对话，优先匹配现有食材，列出建议用量和需补充的材料。
+- **优先消耗临期**：优先考虑今天及未来 3 天内到期的批次，再结合时间、饮食偏好、忌口与厨房设备安排做法。
+- **更新余量 / 已用完**：手动编辑数量，或将批次数量标记为零。AI 问答只读取库存，不自动扣减。
+
+每次启用仓库的问答都从 SQLite 读取新快照，已删除或用完的食材不进入可用列表。已过标注日期的批次单独列为待检查，不纳入自动用料推荐。日期用于消耗排序，不能单独证明食材可食用，需结合包装说明、开封情况及储存条件判断。
+
+最多保存 200 个批次；单次问答优先参考最近到期的 100 个可用批次，超过时会提示未纳入数量。只有开启 **今天的厨房 → 使用食材仓库** 才发送库存信息给 DeepSeek。未配置 Key 时，提供基于食材名称的本地匹配、临期列表和缺料提示；名称匹配不表示库存数量足够。
 
 ## 📥 菜谱导入
 
@@ -116,6 +129,8 @@ python app.py --import-recipes path/to/recipes.json
 | DELETE | `/api/personal-recipes/{id}` | 删除个人菜谱 |
 | GET | `/api/favorites` | 收藏列表 |
 | PUT | `/api/favorites/{id}` | 设置收藏状态 |
+| GET / POST | `/api/pantry` | 查询库存及状态统计 / 新增批次 |
+| PUT / DELETE | `/api/pantry/{id}` | 更新 / 移除库存批次 |
 | GET / POST | `/api/settings` | 读取或保存模型配置 |
 | POST | `/api/chat` | 发送问题与厨房上下文 |
 | GET | `/api/sessions` | 对话列表 |
@@ -134,6 +149,16 @@ python app.py --import-recipes path/to/recipes.json
 ```
 
 `recipes` 应包含 1–500 条记录；`dry_run` 控制预览；`on_conflict` 支持 `skip`、`update`。响应包含 `added`、`updated`、`skipped` 和菜谱摘要。
+
+库存写入对象示例：
+
+```json
+{"name":"番茄","quantity":2,"unit":"个","category":"蔬菜","storage":"冷藏","expires_on":"2026-10-11","opened_on":"","notes":"适合炒蛋"}
+```
+
+`name` 必填；`quantity` 为 0–100000 的数值（默认 1），`unit` 默认“份”。`category` 支持蔬菜、水果、肉禽、水产、蛋奶、豆制品、主食、调味、其他；`storage` 支持冷藏、冷冻、常温。日期为 `YYYY-MM-DD` 或空字符串；开封日期不可晚于服务器当天。`PUT` 替换整条记录，未提供的可选字段使用默认值。
+
+`POST /api/chat` 的 `context` 可设置 `use_pantry: true` 与 `pantry_mode: "menu"` / `"expiry"`。库存由服务端读取，客户端传入的库存快照不被采用。日期状态按服务器本地日历日计算。
 
 ## 🗂️ 数据与目录
 
@@ -157,7 +182,7 @@ shiwei-kitchen/
 
 内置数据由 17 条精选家庭做法、372 条 HowToCook 配方及 8 条 Bastian/recipes 中文整理版组成。来源与许可见 [SOURCES.md](SOURCES.md)，地区统计见 [data/地区分类.md](data/地区分类.md)。地区为检索标签；未明确的用时、份量与饮食类型保留未知状态。
 
-数据库包含 `recipes`、`ingredients`、`steps`、`sources`、`personal_recipes`、`favorites`、`sessions`、`messages`。内置数据按内容摘要增量导入，个人菜谱与对话保留。厨房偏好另存于浏览器本地存储。
+数据库包含 `recipes`、`ingredients`、`steps`、`sources`、`personal_recipes`、`pantry`、`favorites`、`sessions`、`messages`。内置数据按内容摘要增量导入，库存、个人菜谱与对话保留。厨房偏好另存于浏览器本地存储。
 
 重建社区数据：
 

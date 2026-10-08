@@ -49,6 +49,10 @@ Bastian/recipes：保存原始 Markdown 快照，8道完整配方整理为中文
 
 项目默认模型为 `deepseek-flash`，可通过 `.env` 或网页配置修改。
 
+## 🥬 食材日期说明
+
+仓库日期用于安排消耗顺序，未填写时不推算保质期；已过标注日期的批次单独列为待检查。日期与可食用状态的关系可参考 [USDA FSIS · Food Product Dating](https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/food-product-dating)，具体储存和开封要求以包装说明为准。
+
 ## 🎨 图片与字体
 
 图片下载到 `public/assets/` 用于本地网站的食物氛围展示，均为 **风味示意图**，不代表所列菜谱的实际成品。页面菜谱详情和列表均说明这一点。

@@ -2,6 +2,7 @@
 DeepSeek calls are mocked; these tests never transmit a key or spend API credits.
 """
 import copy
+from datetime import date
 import io
 import json
 from pathlib import Path
@@ -197,7 +198,9 @@ class KitchenTests(unittest.TestCase):
         self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good,good]})[0],400)
         self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good]*501})[0],400)
         self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good],'dry_run':'yes'})[0],400)
-        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good],'padding':'x'*(2*1024*1024)})[0],413)
+        # Reject the declared size before reading; avoid Windows resetting a socket
+        # while the client is still streaming a large body into a closed connection.
+        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good]},headers={'Content-Length':str(2*1024*1024+1)})[0],413)
         self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good]},headers={'Origin':'https://example.com'})[0],403)
 
     def test_personal_import_keeps_builtin_source_metadata(self):
@@ -300,7 +303,109 @@ class KitchenTests(unittest.TestCase):
         self.assertEqual(request.full_url,'https://api.deepseek.com/chat/completions')
         self.assertEqual(payload['model'],'deepseek-flash')
         self.assertEqual(payload['thinking'],{'type':'disabled'})
-        self.assertEqual(len(payload['tools']),2)
+        self.assertEqual({tool['function']['name'] for tool in payload['tools']},{'search_recipes','get_recipe','get_pantry'})
+
+    def test_pantry_batches_crud_and_upgrade_persistence(self):
+        body={'name':'番茄','quantity':2.5,'unit':'斤','category':'蔬菜','storage':'冷藏','notes':'炖汤'}
+        status,first=self.request('/api/pantry','POST',body)
+        self.assertEqual(status,201)
+        status,second=self.request('/api/pantry','POST',body)
+        self.assertNotEqual(first['id'],second['id'])
+        changed={**body,'quantity':0,'storage':'冷冻'}
+        status,updated=self.request('/api/pantry/'+first['id'],'PUT',changed)
+        self.assertEqual(status,200)
+        self.assertEqual(updated['status'],'depleted')
+        app.init_db()
+        inventory=self.request('/api/pantry')[1]
+        self.assertEqual(len(inventory['items']),2)
+        self.assertEqual(inventory['counts']['available'],1)
+        self.assertEqual(self.request('/api/pantry/'+second['id'],'DELETE')[0],200)
+        self.assertEqual(self.request('/api/pantry/'+second['id'],'PUT',body)[0],404)
+        self.assertEqual(self.request('/api/pantry/'+second['id'],'DELETE')[0],404)
+
+    def test_pantry_date_boundaries_and_invalid_inputs(self):
+        with patch.object(app,'pantry_today',return_value=date(2026,10,8)):
+            for name,expiry,quantity in [('过期','2026-10-07',1),('今日','2026-10-08',1),('临期','2026-10-11',1),('新鲜','2026-10-12',1),('未知','',1),('耗尽','2026-10-07',0)]:
+                self.assertEqual(self.request('/api/pantry','POST',{'name':name,'expires_on':expiry,'quantity':quantity})[0],201)
+            inventory=self.request('/api/pantry')[1]
+            self.assertEqual([item['status'] for item in inventory['items']],['expired','today','soon','fresh','unknown','depleted'])
+            self.assertEqual(inventory['counts']['urgent'],2)
+            self.assertEqual(inventory['counts']['available'],4)
+            self.assertEqual(inventory['today'],'2026-10-08')
+            for body in ([],{}, {'name':'x','quantity':True},{'name':'x','quantity':-1},{'name':'x','quantity':'2'},{'name':'x','quantity':100001},{'name':'x','category':'不支持'},{'name':'x','expires_on':'2026-02-29'},{'name':'x','expires_on':'2026-1-2'},{'name':'x','opened_on':'2026-10-09'},{'name':'x','notes':[]},{'name':'x','expires_on':None}):
+                self.assertEqual(self.request('/api/pantry','POST',body)[0],400,body)
+            for body in ({'use_pantry':'true'},{'pantry_mode':'wrong'}):
+                self.assertEqual(self.request('/api/chat','POST',{'message':'晚餐','context':body})[0],400)
+            self.assertEqual(len(self.request('/api/pantry')[1]['items']),6)
+
+    def test_pantry_capacity_and_context_limit(self):
+        with app.connect() as db:
+            db.executemany('INSERT INTO pantry(id,name,quantity,unit,category,storage,expires_on) VALUES(?,?,?,?,?,?,?)',[(f'pantry-{i:032x}',f'食材{i}',1,'份','其他','冷藏','2099-01-01') for i in range(200)])
+        self.assertEqual(self.request('/api/pantry','POST',{'name':'超额'})[0],400)
+        self.assertEqual(self.request('/api/pantry/pantry-'+f'{0:032x}','PUT',{'name':'更新','quantity':0})[0],200)
+        snapshot=app.pantry_context()
+        self.assertEqual(len(snapshot['items']),100)
+        self.assertEqual(snapshot['omitted'],99)
+
+    def test_pantry_recommendations_prioritize_dates_and_honor_constraints(self):
+        def recipe(name,ingredients):
+            return app.normalize_personal_recipe({'name':name,'minutes':10,'servings':2,'diet':'vegan','ingredients':ingredients,'steps':['混合煮熟。']})
+        recipes=[recipe('较晚到期菜',['临期乙','补充材料']),recipe('今日到期菜',['临期甲','补充材料']),recipe('库存齐全菜',['新鲜甲','新鲜乙']),recipe('过期食材菜',['过期甲'])]
+        with patch.object(app,'pantry_today',return_value=date(2026,10,8)):
+            for name,expiry in [('临期甲','2026-10-08'),('临期乙','2026-10-11'),('新鲜甲','2026-11-01'),('新鲜乙',''),('过期甲','2026-10-07')]:
+                app.save_pantry_item({'name':name,'expires_on':expiry})
+            pantry=app.pantry_context()
+            context=app.validate_context({'use_pantry':True,'pantry_mode':'expiry','time':15,'diet':'vegan'})
+            with patch.object(app,'all_recipes',return_value=recipes):
+                ranked=app.pantry_recipe_candidates(pantry,context)
+                self.assertEqual([r['name'] for r in ranked],['今日到期菜','较晚到期菜','库存齐全菜'])
+                self.assertEqual(ranked[0]['pantry_match']['missing'],['补充材料'])
+                context['pantry_mode']='menu'
+                self.assertEqual(app.pantry_recipe_candidates(pantry,context)[0]['name'],'库存齐全菜')
+                context['avoid']='新鲜甲'
+                self.assertNotIn('库存齐全菜',[r['name'] for r in app.pantry_recipe_candidates(pantry,context)])
+                context['time']=5
+                self.assertEqual(app.pantry_recipe_candidates(pantry,context),[])
+            self.assertTrue(app.pantry_matches('西红柿','番茄'))
+            self.assertFalse(app.pantry_matches('番茄','白砂糖（中和西红柿的酸味）'))
+            app.save_pantry_item({'name':'过期甲','expires_on':'2026-10-10'})
+            self.assertTrue(app.pantry_recipe_allowed(recipes[-1],app.pantry_context()))
+
+    def test_pantry_offline_chat_and_no_automatic_deduction(self):
+        self.assertEqual(app.handle_chat({'message':'仓库有什么能做的','context':{'use_pantry':True}})['sources'],[])
+        with patch.object(app,'pantry_today',return_value=date(2026,10,8)):
+            app.save_pantry_item({'name':'番茄','quantity':2,'unit':'个','expires_on':'2026-10-08'})
+            app.save_pantry_item({'name':'鸡蛋','quantity':3,'unit':'个','expires_on':'2026-10-10'})
+            app.save_pantry_item({'name':'牛奶','expires_on':'2026-10-07'})
+            before=app.pantry_inventory()
+            result=app.handle_chat({'message':'根据库存推荐番茄炒鸡蛋','context':{'use_pantry':True,'pantry_mode':'expiry','time':30}})
+            self.assertEqual(result['mode'],'local')
+            self.assertIn('番茄 2个',result['content'])
+            self.assertIn('已过标注日期',result['content'])
+            self.assertIn('需核对或补充',result['content'])
+            self.assertIn('tomato-eggs',[r['id'] for r in result['sources']])
+            self.assertEqual(app.pantry_inventory(),before)
+
+    def test_pantry_tool_snapshot_is_current_and_opt_in(self):
+        app.CONFIG['api_key']='test-only-not-a-real-key'
+        item=app.save_pantry_item({'name':'私有库存测试食材','quantity':7,'unit':'克'})
+        call={'role':'assistant','content':None,'tool_calls':[{'id':'stock','type':'function','function':{'name':'get_pantry','arguments':'{}'}}]}
+        with patch.object(app,'deepseek_request',side_effect=[call,{'role':'assistant','content':'按库存安排。'}]) as mock:
+            result=app.handle_chat({'message':'库存菜单','context':{'use_pantry':True,'pantry':{'items':[{'name':'客户端伪造食材'}]}}})
+        tool=json.loads([m for m in mock.call_args.args[0] if m['role']=='tool'][0]['content'])
+        self.assertEqual(tool['items'][0]['quantity'],7)
+        self.assertEqual(tool['items'][0]['name'],item['name'])
+        self.assertNotIn('客户端伪造',json.dumps(tool,ensure_ascii=False))
+        app.save_pantry_item({'name':item['name'],'quantity':0},item['id'],updating=True)
+        with patch.object(app,'deepseek_request',side_effect=[call,{'role':'assistant','content':'库存已用完。'}]) as mock:
+            app.handle_chat({'message':'再看看','session_id':result['session_id'],'context':{'use_pantry':True}})
+        tool=json.loads([m for m in mock.call_args.args[0] if m['role']=='tool'][0]['content'])
+        self.assertEqual(tool['items'],[])
+        with patch.object(app,'deepseek_request',side_effect=[call,{'role':'assistant','content':'请提供食材。'}]) as mock:
+            app.handle_chat({'message':'推荐晚餐','context':{'use_pantry':False}})
+        messages=mock.call_args.args[0]
+        self.assertNotIn(item['name'],json.dumps(messages,ensure_ascii=False))
+        self.assertIn('error',json.loads([m for m in messages if m['role']=='tool'][0]['content']))
 
     def test_csrf_host_validation_and_private_files(self):
         self.assertEqual(self.request('/api/settings','POST',{'model':'deepseek-flash'},headers={'Origin':'https://attacker.example'})[0],403)

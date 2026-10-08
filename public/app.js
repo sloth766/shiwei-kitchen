@@ -8,6 +8,55 @@ const state = {recipes:[], favorites:new Set(), settings:{configured:false,model
 const contextIds = ['ingredients','servings','time','diet','avoid','equipment'];
 let toastTimer;
 let editingRecipe=null, importDraft=null;
+let editingStock=null, pantry={items:[],counts:{}};
+const stockFields=['name','quantity','unit','category','storage','expires_on','opened_on','notes'];
+async function refreshPantry() { pantry=await api('/api/pantry');renderPantry(); }
+function renderPantry() {
+  const counts=pantry.counts;
+  $('#pantry-date').textContent=pantry.today||'';
+  $('#pantry-summary').innerHTML=[['可参考库存',counts.available||0,'批'],['3 天内到期',counts.urgent||0,'批'],['已过日期 · 待检查',counts.expired||0,'批'],['已用完',counts.depleted||0,'批']].map(([label,n,unit])=>`<div><small>${label}</small><strong>${n}<span>${unit}</span></strong></div>`).join('');
+  const q=$('#pantry-search').value.trim().toLocaleLowerCase(),filter=$('#pantry-filter').value;
+  const items=pantry.items.filter(item=>item.name.toLocaleLowerCase().includes(q)&&(filter==='all'||filter==='active'&&!['expired','depleted'].includes(item.status)||filter==='urgent'&&['today','soon'].includes(item.status)||filter===item.status));
+  $('#pantry-total').textContent=`共 ${pantry.items.length} 个批次 · 当前显示 ${items.length} 个`;
+  $('#pantry-items').innerHTML=items.length?items.map(item=>{
+    const status={expired:'已过日期 · 待检查',today:'今天到期',soon:`${item.days_left} 天后到期`,fresh:`${item.days_left} 天后到期`,unknown:'日期未标注',depleted:'已用完'}[item.status];
+    return `<article class="pantry-card"><div class="stock-heading"><span class="stock-category">${esc(item.category)} · ${esc(item.storage)}</span><span class="stock-status ${esc(item.status)}">${esc(status)}</span></div><h2>${esc(item.name)}</h2><div class="stock-quantity">${esc(item.quantity)}<small>${esc(item.unit)}</small></div><div class="stock-dates"><span>到期 ${esc(item.expires_on||'未填写')}</span><span>开封 ${esc(item.opened_on||'未填写')}</span></div>${item.notes?`<p class="stock-notes">${esc(item.notes)}</p>`:''}<div class="stock-actions"><button data-stock-action="edit" data-stock-id="${esc(item.id)}">编辑</button>${item.status!=='depleted'?`<button data-stock-action="used" data-stock-id="${esc(item.id)}">已用完</button>`:''}<button data-stock-action="delete" data-stock-id="${esc(item.id)}">移除</button></div></article>`;
+  }).join(''):emptyState(pantry.items.length?'这里暂时没有食材':'给冰箱做一本小账本',pantry.items.length?'换个筛选条件试试。':'点击“放入新食材”，从手边的第一份新鲜开始。',false);
+  $('#pantry-context-summary').textContent=`可参考 ${counts.available||0} 批 · 临期 ${counts.urgent||0} 批`;
+}
+function openPantryEditor(item=null) {
+  editingStock=item;$('#pantry-editor-form').reset();$('#pantry-message').textContent='';
+  $('#pantry-editor-title').textContent=item?'更新这份食材':'放入新食材';
+  if(item)stockFields.forEach(key=>$(`#stock-${key}`).value=item[key]);
+  // Use the server's local calendar date, not a UTC date that may be yesterday.
+  if(pantry.today)$('#stock-opened_on').max=pantry.today;
+  $('#pantry-editor').showModal();
+}
+async function savePantry(event) {
+  event.preventDefault();const button=$('#save-pantry');button.disabled=true;
+  const body=Object.fromEntries(stockFields.map(key=>[key,key==='quantity'?Number($('#stock-quantity').value):$(`#stock-${key}`).value.trim()]));
+  try {await api(editingStock?`/api/pantry/${encodeURIComponent(editingStock.id)}`:'/api/pantry',{method:editingStock?'PUT':'POST',body:JSON.stringify(body)});await refreshPantry();$('#pantry-editor').close();toast('食材已保存，下一次推荐会参考最新库存');}catch(err){$('#pantry-message').textContent=err.message;}finally{button.disabled=false;}
+}
+async function pantryAction(button) {
+  const item=pantry.items.find(item=>item.id===button.dataset.stockId);if(!item)return;
+  if(button.dataset.stockAction==='edit'){openPantryEditor(item);return;}
+  if(button.dataset.stockAction==='delete'&&!window.confirm(`移除“${item.name}”这一批食材？`))return;
+  button.disabled=true;
+  try {
+    await api(`/api/pantry/${encodeURIComponent(item.id)}`,button.dataset.stockAction==='delete'?{method:'DELETE'}:{method:'PUT',body:JSON.stringify({...Object.fromEntries(stockFields.map(key=>[key,item[key]])),quantity:0})});
+    await refreshPantry();toast(button.dataset.stockAction==='delete'?'已移除这批食材':'已标记用完，推荐将参考剩余库存');
+  }finally{button.disabled=false;}
+}
+async function analyzePantry(mode) {
+  if(state.sending){toast('小厨正在回答，请等这次回答完成。');return;}
+  const buttons=[$('#pantry-menu'),$('#pantry-expiry')];buttons.forEach(b=>b.disabled=true);
+  try {
+    await refreshPantry();if(!pantry.counts.available){toast('还没有可参考的库存，先放入食材或检查日期吧。');return;}
+    $('#context-use-pantry').checked=true;$('#context-pantry-mode').value=mode;saveContext();newChat();
+    goChat(mode==='expiry'?'请根据食材仓库的到期日期安排消耗顺序，推荐 2–3 道适合的菜。列出建议用量、已有食材及需要补充的材料。':'请根据食材仓库推荐 2–3 道适合今天的菜，尽量使用现有食材。列出建议用量、已有食材及需要补充的材料。');
+    $('#chat-form').requestSubmit();
+  }catch(err){toast(err.message);}finally{buttons.forEach(b=>b.disabled=false);}
+}
 async function api(path, options = {}) {
   const response = await fetch(path, { ...options, headers: {'Content-Type':'application/json', ...options.headers} });
   let data;
@@ -16,9 +65,9 @@ async function api(path, options = {}) {
   return data;
 }
 function toast(message) { $('#toast').textContent=message; $('#toast').classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3500); }
-function context() { return Object.fromEntries(contextIds.map(id => [id,$(`#context-${id}`).value])); }
+function context() { return {...Object.fromEntries(contextIds.map(id => [id,$(`#context-${id}`).value])),use_pantry:$('#context-use-pantry').checked,pantry_mode:$('#context-pantry-mode').value}; }
 function saveContext() { try { localStorage.setItem('shiwei.context',JSON.stringify(context())); } catch {} updateContextChips(); }
-function updateContextChips() { const c=context(); $('#composer-context').innerHTML=`<span>${esc(c.servings)} 人</span><span>${esc(c.time)} 分钟</span>${c.diet ? `<span>${c.diet==='vegan'?'纯素':'蛋奶素'}</span>`:''}${c.avoid?'<span>已填写忌口</span>':''}`; }
+function updateContextChips() { const c=context();$('#context-pantry-mode').disabled=!c.use_pantry; $('#composer-context').innerHTML=`<span>${esc(c.servings)} 人</span><span>${esc(c.time)} 分钟</span>${c.diet ? `<span>${c.diet==='vegan'?'纯素':'蛋奶素'}</span>`:''}${c.avoid?'<span>已填写忌口</span>':''}${c.use_pantry?`<span>${c.pantry_mode==='expiry'?'仓库 · 优先临期':'已引用食材仓库'}</span>`:''}`; }
 function updateStatus() {
   const online=state.settings.configured;
   $('#connection-status').innerHTML=`<span class="status-dot"></span>${online?'DeepSeek 已配置':'本地菜谱模式'}`;
@@ -138,15 +187,16 @@ async function confirmImport() {
   }catch(err){$('#import-message').textContent=err.message;}finally{controls.forEach(id=>$(`#${id}`).disabled=false);$('#confirm-import').disabled=!importDraft;}
 }
 function navigate() {
-  const page=location.hash.slice(1)||'home', valid=['home','recipes','favorites','chat','personal'].includes(page)?page:'home';
+  const page=location.hash.slice(1)||'home', valid=['home','recipes','favorites','chat','personal','pantry'].includes(page)?page:'home';
   state.page=valid;
   $$('.page').forEach(el=>{el.hidden=el.id!==`page-${valid}`;});
   $$('.nav-item[data-page]').forEach(el=>{el.classList.toggle('active',el.dataset.page===valid); if(el.dataset.page===valid)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
-  $('#page-label').textContent={home:'厨房首页',recipes:'探索菜谱',favorites:'我的收藏',chat:'问问小厨',personal:'我的菜谱'}[valid];
+  $('#page-label').textContent={home:'厨房首页',recipes:'探索菜谱',favorites:'我的收藏',chat:'问问小厨',personal:'我的菜谱',pantry:'食材仓库'}[valid];
   toggleSidebar(false);
   if(valid==='recipes')renderExplore();
   if(valid==='favorites')renderFavorites();
   if(valid==='personal')renderPersonal();
+  if(valid==='pantry')refreshPantry().catch(err=>toast(err.message));
   if(valid==='chat')loadHistory().catch(()=>{});
   window.scrollTo(0,0);
 }
@@ -232,6 +282,11 @@ async function saveSettings(event) {
 async function disconnect() { try{state.settings=await api('/api/settings',{method:'POST',body:JSON.stringify({clear_key:true,model:$('#api-model').value.trim()})});updateStatus();$('#api-key').value='';$('#settings-message').textContent='已移除本机保存的 Key，切换为本地菜谱模式。';}catch(err){$('#settings-message').textContent=err.message;} }
 function setExploreFilter(filter) { state.exploreFilter=filter;$$('#explore-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.exploreFilter===filter)); }
 function bindEvents() {
+  $('#add-pantry').addEventListener('click',()=>openPantryEditor());$('#pantry-editor-form').addEventListener('submit',savePantry);
+  $('#pantry-search').addEventListener('input',renderPantry);$('#pantry-filter').addEventListener('change',renderPantry);
+  $('#pantry-menu').addEventListener('click',()=>analyzePantry('menu'));$('#pantry-expiry').addEventListener('click',()=>analyzePantry('expiry'));
+  $('#context-use-pantry').addEventListener('change',saveContext);$('#context-pantry-mode').addEventListener('change',saveContext);
+  $('#pantry-items').addEventListener('click',e=>{const b=e.target.closest('[data-stock-action]');if(b)pantryAction(b).catch(err=>toast(err.message));});
   $('#add-recipe').addEventListener('click',()=>openEditor());$('#recipe-editor-form').addEventListener('submit',saveRecipe);
   $('#import-recipes').addEventListener('click',openImporter);$('#preview-import').addEventListener('click',previewImport);$('#confirm-import').addEventListener('click',confirmImport);
   $('#import-json').addEventListener('input',invalidateImport);$('#import-conflict').addEventListener('change',invalidateImport);
@@ -265,10 +320,10 @@ function bindEvents() {
 async function boot() {
   bindEvents();photoHandlers();
   $('#date-label').textContent=new Intl.DateTimeFormat('zh-CN',{month:'long',day:'numeric',weekday:'long'}).format(new Date());
-  try {const saved=JSON.parse(localStorage.getItem('shiwei.context')||'{}');contextIds.forEach(id=>{if(saved[id]!=null)$(`#context-${id}`).value=String(saved[id]);});}catch{}
+  try {const saved=JSON.parse(localStorage.getItem('shiwei.context')||'{}');contextIds.forEach(id=>{if(saved[id]!=null)$(`#context-${id}`).value=String(saved[id]);});$('#context-use-pantry').checked=saved.use_pantry===true;if(['menu','expiry'].includes(saved.pantry_mode))$('#context-pantry-mode').value=saved.pantry_mode;}catch{}
   updateContextChips();navigate();
   try {
-    const [recipes,favorites,settings]=await Promise.all([api('/api/recipes'),api('/api/favorites'),api('/api/settings')]);state.recipes=recipes;state.favorites=new Set(favorites);state.settings=settings;renderHome();renderExplore();renderFavorites();renderPersonal();updateFavoriteCount();updateStatus();
+    const [recipes,favorites,settings,inventory]=await Promise.all([api('/api/recipes'),api('/api/favorites'),api('/api/settings'),api('/api/pantry')]);state.recipes=recipes;state.favorites=new Set(favorites);state.settings=settings;pantry=inventory;renderPantry();renderHome();renderExplore();renderFavorites();renderPersonal();updateFavoriteCount();updateStatus();
     const sessionId=sessionStorage.getItem('shiwei.session');if(sessionId)await loadSession(sessionId);
   } catch(err) {$('#connection-status').textContent='厨房连接失败';$('#home-recipes').innerHTML=emptyState('厨房暂时没有连接上',err.message,false);toast(err.message);}
 }
