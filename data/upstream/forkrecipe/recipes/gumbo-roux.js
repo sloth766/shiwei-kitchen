@@ -1,0 +1,87 @@
+export default {
+  repoId: "master_american_gumbo-roux_001",
+  parentRepoId: null,
+  slug: "gumbo-roux",
+  author: "ForkRecipe Kitchen",
+  title: "New Orleans Dark Roux",
+  description: "Equal weights of flour and oil stirred without interruption for 45 minutes until the paste crosses from blond to peanut butter to milk chocolate to dark bittersweet — a roux so dark it smells of roasted coffee and nuts, the irreplaceable foundation of gumbo.",
+  cuisine: "American",
+  culture: "Creole",
+  category: "sauces",
+  tags: ["roux", "gumbo", "new orleans", "cajun", "vegan"],
+  difficulty: 3,
+  activeTime: "55 min",
+  totalTime: "55 min",
+  ratioSystem: "parts",
+  stars: 0, forks: 0, contributors: 1,
+  license: "CC-BY-SA",
+  createdAt: "2026-06-27",
+  updatedAt: "2026-06-27",
+  flavorRadar: { sweet: 1, salty: 2, sour: 0, bitter: 5, umami: 4, heat: 1 },
+  ingredients: [
+    { ingId: "ing_01", role: "Fat",       name: "Neutral vegetable oil (canola or corn)", ratioValue: 4, defaultUnit: "parts", substitutions: ["lard (more traditional, adds flavor)", "duck fat (richer)"] },
+    { ingId: "ing_02", role: "Structure", name: "All-purpose flour",                      ratioValue: 4, defaultUnit: "parts", substitutions: ["rice flour (gluten-free, slightly thinner body)"] },
+  ],
+  processNodes: [
+    {
+      nodeId: "step_1", action: "Heat",
+      inputs: ["ing_01"],
+      outputState: "hot_oil",
+      instructions: "Pour the oil into a heavy-bottomed cast iron skillet or Dutch oven. Heat over medium to medium-high until the oil is shimmering and a pinch of flour dropped in sizzles immediately and vigorously. The oil must be fully hot before the flour goes in — cold or warm oil causes the flour to absorb the fat unevenly and produces a lumpy roux that never smooths out.",
+      visualCue: {
+        primaryTarget: "Oil is shimmering in visible heat waves across the surface. A pinch of flour dropped in sizzles vigorously on contact — not a slow fade, an immediate aggressive bubble.",
+        spectrum: [
+          { state: "Underdone", description: "Oil is warm but not shimmering. A flour pinch barely sizzles and sinks to the bottom.", action: "Increase heat to medium-high and wait another 2 minutes. Do not add the flour until the sizzle is aggressive." },
+          { state: "Perfect",   description: "Oil is shimmering with visible heat distortion. The flour test produces an immediate, vigorous, sustained sizzle.", action: "Add all the flour at once and begin whisking immediately." },
+          { state: "Overdone",  description: "Oil is beginning to smoke. Dark wisps are rising from the surface.", action: "Remove from heat for 30 seconds to cool. Smoking oil produces an acrid flavor that will carry into the roux." },
+        ],
+      },
+      feelCue: "Hold your palm 10 cm above the oil — you should feel a significant, steady heat pushing upward. If you feel only mild warmth, the oil is not ready.",
+    },
+    {
+      nodeId: "step_2", action: "Whisk",
+      inputs: ["hot_oil", "ing_02"],
+      outputState: "blond_roux",
+      instructions: "Add the flour all at once to the hot oil and immediately begin whisking in quick, constant strokes covering the entire surface of the pan. Within 30 seconds the mixture will become smooth and uniform. This is your blond roux — the starting point. Continue whisking constantly over medium heat. There is no such thing as 'stirring too much' at this stage. If you stop, the bottom scorches.",
+      visualCue: {
+        primaryTarget: "A smooth, pale golden paste the consistency of wet sand. Completely free of lumps. The color is between a blond and light peanut butter.",
+        spectrum: [
+          { state: "Underdone", description: "Mixture is still lumpy and pasty with visible dry flour pockets.", action: "Whisk more vigorously, making sure to reach the edges and corners of the pan." },
+          { state: "Perfect",   description: "Completely smooth, uniform blond paste. Slides freely with each whisk stroke. No raw flour smell — a faint cooked-pastry smell.", action: "Continue whisking. The color progression begins now." },
+          { state: "Overdone",  description: "At this stage, overdone means scorched — dark brown-black patches on the pan bottom and a burnt smell.", action: "If any burnt smell is present, you must start over. Burnt roux cannot be rescued and will make the entire gumbo taste bitter and acrid." },
+        ],
+      },
+      feelCue: "The whisk should drag through the roux with a consistent, smooth resistance — like stirring thick pudding. Any sticky, catching sensation means the roux is beginning to seize on the pan bottom; increase whisk speed and range.",
+    },
+    {
+      nodeId: "step_3", action: "Caramelize",
+      inputs: ["blond_roux"],
+      outputState: "dark_roux",
+      instructions: "Continue whisking constantly over medium to medium-high heat for the next 35–45 minutes. The roux will progress through a color spectrum: blond (5 min) → peanut butter (15 min) → milk chocolate brown (25 min) → dark chocolate (35 min) → near-black bittersweet (45 min). The heat is the enemy here — too high and it scorches before reaching the target color, too low and the process takes over an hour with less flavor development. If at any point you smell anything burnt, immediately slide the pot off the heat and whisk. A burnt roux cannot be salvaged.",
+      visualCue: {
+        primaryTarget: "A dark brown, near-black roux the color of bittersweet chocolate (70% cacao). The surface should look matte and dense, not glossy. The kitchen should fill with the smell of roasted coffee, hazelnuts, and deep wheat.",
+        spectrum: [
+          { state: "Underdone", description: "Roux is milk-chocolate brown — it will produce a good, medium gumbo but without the full depth and complexity of a true Creole dark roux.", action: "Continue cooking if you have the time. Each additional 5 minutes deepens the flavor significantly." },
+          { state: "Perfect",   description: "Dark chocolate to near-black. Smells of deeply roasted nuts and coffee with no burnt note. The roux has reduced in volume slightly and feels dense and heavy on the whisk.", action: "Immediately add the Holy Trinity (onion, celery, bell pepper) to stop the cooking." },
+          { state: "Overdone",  description: "The roux has gone fully black and the smell has shifted from roasted nuts to acrid carbon. This roux is burned.", action: "Discard the entire pot. Do not attempt to use burnt roux — a few black specks in gumbo will make the entire dish taste of char. Start over." },
+        ],
+      },
+      feelCue: "A dark roux stirred with a spoon should feel significantly heavier and denser than it did blond — the starch has been transformed and the mass has dried slightly. Hold a small amount in the spoon and smell it up close: roasted nuts and coffee beans, with zero sulfurous or burnt edge.",
+    },
+    {
+      nodeId: "step_4", action: "Bloom",
+      inputs: ["dark_roux"],
+      outputState: "finished_gumbo_roux",
+      instructions: "Immediately add the Holy Trinity (roughly equal parts diced onion, celery, and bell pepper — typically 2 cups combined for this roux quantity) to the hot dark roux. The vegetables will hiss explosively and release steam that drops the roux temperature, stopping the cooking. Stir vigorously — the roux will seize around the vegetables briefly, then loosen as the vegetables release moisture. Cook the aromatics into the roux for 5–7 minutes until softened. This bloomed roux is the base into which stock is added for gumbo.",
+      visualCue: {
+        primaryTarget: "The roux has softened into a thick, dark paste studded with softening, translucent vegetables. Color is deep mahogany-brown. The steam has subsided and the mixture moves freely.",
+        spectrum: [
+          { state: "Underdone", description: "Vegetables are still raw and rigid inside the roux. The roux itself has seized into a stiff mass around them.", action: "Continue stirring over medium heat. The vegetable moisture will loosen the roux within 2–3 minutes." },
+          { state: "Perfect",   description: "Vegetables are softened and translucent. The roux is loose, dark, and fragrant. All steam has subsided. The mixture smells of deep-roasted, onion-sweet caramel.", action: "Whisk in warm stock ladle by ladle to build gumbo, or cool and refrigerate up to 1 week." },
+          { state: "Overdone",  description: "Vegetables have cooked too long and broken down into the roux. Fine — the roux will be even smoother.", action: "Proceed. The flavor is unaffected." },
+        ],
+      },
+      feelCue: "Drag a spoon through the finished roux — it should feel like stirring thick, warm clay. Dense, heavy, and deeply fragrant. Lift the spoon and the roux should flow off slowly in a thick, molten ribbon — not fall in chunks, not pour like liquid.",
+    },
+  ],
+};

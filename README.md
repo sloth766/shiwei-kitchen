@@ -6,7 +6,7 @@
 
 ## ✨ 功能
 
-- 🌏 **菜谱检索**：397 条内置做法，40 个地区与风味分类，支持菜名、食材、地区、用时和饮食类型筛选。
+- 🌏 **菜谱检索**：1,775 条内置做法，96 个地区与风味分类，支持中英文菜名、食材、地区、用时和饮食类型筛选。
 - 🥬 **食材仓库**：按批次记录余量、单位、类别、储存方式及到期 / 开封日期，支持临期筛选、编辑和用完标记。
 - 🤖 **AI 问答**：通过 `search_recipes`、`get_recipe` 和 `get_pantry` 工具检索本地数据，结合厨房上下文推荐菜单与消耗顺序。
 - 📝 **个人菜谱**：添加、编辑、删除、收藏，支持 JSON 批量导入、导入预览及导出备份。
@@ -182,8 +182,12 @@ shiwei-kitchen/
 ├── data/
 │   ├── recipes.json        精选菜谱
 │   ├── community-recipes.json  社区菜谱
+│   ├── public-domain-recipes.json  公有领域菜谱
+│   ├── forkrecipe-recipes.json  世界菜谱 · CC BY-SA 4.0
 │   ├── recipe-sources.json 上游版本与 SHA-256
-│   ├── upstream/           原始 Markdown 与许可
+│   ├── open-recipe-sources.json  新增数据版本与 SHA-256
+│   ├── open-recipe-labels.json  中文菜名、食材与地区词表
+│   ├── upstream/           原始文本、作者署名与许可
 │   └── kitchen.db          运行时数据库
 ├── scripts/                数据构建与版本打包脚本
 ├── .env.example            配置模板
@@ -193,7 +197,11 @@ shiwei-kitchen/
 └── SOURCES.md              数据来源与许可说明
 ```
 
-内置数据由 17 条精选家庭做法、372 条 HowToCook 配方及 8 条 Bastian/recipes 中文整理版组成。来源与许可见 [SOURCES.md](SOURCES.md)，地区统计见 [data/地区分类.md](data/地区分类.md)。地区为检索标签；未明确的用时、份量与饮食类型保留未知状态。
+内置数据包含 17 条精选家庭做法、372 条 HowToCook 配方、8 条 Bastian/recipes 中文整理版、415 条 Public Domain Recipes 做法，以及 963 条 ForkRecipe 配方。来源与许可见 [SOURCES.md](SOURCES.md)，地区统计见 [data/地区分类.md](data/地区分类.md)。同名菜的不同做法分别保留；地区为检索标签，未明确的用时、份量与饮食类型保留未知状态。
+
+新增海外菜谱保留英文制作步骤，常见菜名和食材提供中文检索词。可按意大利、印度、越南、墨西哥、摩洛哥等地区浏览，再向小厨询问中文做法或根据库存调整。ForkRecipe 原文以基准配方比例记录用量，未注明人数时保留原始数值，不自动换算为人均份量。
+
+ForkRecipe 数据及本项目对该数据的整理采用 **CC BY-SA 4.0**，保留 FoodML 和原作者署名；再次发布其改编版本时须按同一许可分享。此许可适用于对应菜谱数据，不改变其他来源的许可。
 
 数据库包含 `recipes`、`ingredients`、`steps`、`sources`、`personal_recipes`、`pantry`、`favorites`、`sessions`、`messages`。内置数据按内容摘要增量导入，库存、个人菜谱与对话保留。厨房偏好另存于浏览器本地存储。
 
@@ -205,6 +213,16 @@ python scripts/expand_recipes.py
 ```
 
 `--fetch` 可重新获取固定版本的上游 Markdown。版本与文件摘要记录于 `data/recipe-sources.json`。
+
+重建新增的世界菜谱：
+
+```sh
+python scripts/import_open_recipes.py
+# 获取固定版本的文本快照，再重建：
+python scripts/import_open_recipes.py --fetch
+```
+
+脚本仅解析上游文本与数据字面量，校验固定 Git 版本的文件内容，跳过目录索引和模板，不执行上游 JavaScript。快照、署名与许可证位于 `data/upstream/`；导入统计和 SHA-256 位于 `data/open-recipe-sources.json`，中文词表位于 `data/open-recipe-labels.json`。启动时按文件摘要自动同步新增数据，保留个人菜谱、库存、收藏和对话。
 
 服务绑定 `127.0.0.1`，面向单用户本地使用；请求检查 Host、Origin，静态文件仅从 `public/` 提供。运行时配置与数据库不包含在版本源码包中。
 

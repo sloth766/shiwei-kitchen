@@ -1,0 +1,73 @@
+export default {
+  repoId: "master_french_clarified_butter_001",
+  parentRepoId: null,
+  slug: "clarified-butter",
+  author: "ForkRecipe Kitchen",
+  title: "Clarified Butter",
+  description: "Whole butter gently rendered until it splits into three: a raft of foam, a pool of clear gold, and a sediment of toasted milk solids. Strain off the pure butterfat and you gain a clear, nutty fat that sears without burning and keeps for months — push it a few minutes further and you are most of the way to ghee.",
+  cuisine: "French",
+  culture: "Classical",
+  category: "condiments",
+  tags: ["clarified-butter", "french", "fat", "ghee", "rendered", "high-smoke-point"],
+  difficulty: 2,
+  activeTime: "15 min",
+  totalTime: "30 min",
+  ratioSystem: "weight",
+  stars: 0,
+  forks: 0,
+  contributors: 1,
+  license: "CC-BY-SA",
+  createdAt: "2026-06-15",
+  updatedAt: "2026-06-15",
+  flavorRadar: { sweet: 1, salty: 0, sour: 0, bitter: 0, umami: 1, heat: 0 },
+  ingredients: [
+    { ingId: "ing_01", role: "Fat", name: "Unsalted butter (good quality, high butterfat)", ratioValue: 100, defaultUnit: "%", substitutions: ["cultured butter for a deeper, tangier note", "European-style 84% butterfat butter"] },
+  ],
+  processNodes: [
+    {
+      nodeId: "step_1", action: "Melt",
+      inputs: ["ing_01"],
+      outputState: "melted_butter",
+      instructions: "Cut the butter into even chunks and place in a heavy-bottomed saucepan over the lowest steady heat. Let it melt slowly without stirring — you want it to come apart gently, not boil. As it melts, the butter separates into three layers: a thin white foam of whey proteins rising to the top, a thick clear-yellow layer of butterfat in the middle, and the heavier milk solids (casein and lactose) sinking to the bottom. Do not rush this with high heat or you will scorch the solids before the fat is clear.",
+      visualCue: {
+        primaryTarget: "A fully liquid pot with a distinct white foam capping a deepening pool of translucent yellow fat, the bottom just beginning to look granular.",
+        spectrum: [
+          { state: "Underdone", description: "Chunks of solid butter still float in a cloudy, uniform melt with no visible separation into layers.", action: "Keep the heat low and steady and give it a few more minutes. Resist stirring — agitation keeps the solids suspended and slows the split." },
+          { state: "Perfect", description: "Everything is melted, a foamy white raft sits on top, and the middle layer is clearly yellow and translucent. No browning at the bottom yet.", action: "Hold at a bare simmer and move to skimming and rendering." },
+          { state: "Overdone", description: "The melt is bubbling hard and the foam is breaking up and spitting, with the bottom darkening fast.", action: "Pull off the heat immediately and let it settle. If the bottom has only lightly tanned, proceed; the flavor will lean toward ghee." },
+        ],
+      },
+      feelCue: "The pot should be near-silent — just a soft, occasional bubble, not a rolling boil. It smells sweetly of warm cream and butter, with no scorched edge.",
+    },
+    {
+      nodeId: "step_2", action: "Render",
+      inputs: ["melted_butter"],
+      outputState: "rendered_butterfat",
+      instructions: "Keep the butter at a bare simmer for 8 to 12 minutes. The water in the butter (about 15 to 18 percent of its weight) boils off, the bubbling quiets, and the foam on top thins. Skim away the white foam with a spoon as it accumulates so it doesn't fall back in. The middle layer turns from cloudy to brilliantly clear gold, and the milk solids on the bottom settle and slowly toast. For pure clarified butter, stop while the solids are pale; for a ghee-like depth, let them turn a light hazelnut brown and the kitchen fill with a nutty aroma.",
+      visualCue: {
+        primaryTarget: "A still, glass-clear pool of gold you can see the bottom of, the surface nearly free of foam, with settled solids ranging from cream to light tan.",
+        spectrum: [
+          { state: "Underdone", description: "The fat is still hazy or milky and the surface bubbles vigorously with steam — there is plenty of water left to drive off.", action: "Keep simmering and skimming. Cloudiness means water and suspended proteins remain; clarity comes only once the water has boiled away." },
+          { state: "Perfect", description: "The fat is transparent and luminous, the bubbling has slowed to a faint sizzle, and the solids at the bottom are settled and pale gold to light brown.", action: "Pull from the heat at once and let it rest a minute so the last solids drop. Move to straining." },
+          { state: "Overdone", description: "The solids are dark brown to black and the fat smells acrid and bitter rather than nutty.", action: "Strain immediately to stop the cooking and salvage what you can, but expect a scorched flavor. Next time pull it a minute or two sooner." },
+        ],
+      },
+      feelCue: "Listen for the bubbling to quiet from a busy fizz to an occasional pop — that hush is the water leaving. The smell shifts from plain warm cream toward toasted nuts and popcorn as the solids brown.",
+    },
+    {
+      nodeId: "step_3", action: "Strain",
+      inputs: ["rendered_butterfat"],
+      outputState: "clarified_butter",
+      instructions: "Let the pot rest off the heat for a minute so the remaining solids settle. Line a fine-mesh sieve with a few layers of damp cheesecloth (or a coffee filter) set over a clean, dry, heatproof jar. Pour the butterfat through slowly, leaving the toasted sediment behind in the pot — tilt and stop pouring before the dregs slide in. The cloth catches the last fine particles and any skimmed foam. What lands in the jar is clear, golden clarified butter. Cool to room temperature, then cap; it keeps for weeks at room temperature and many months refrigerated, where it sets to a firm, pale, grainy solid.",
+      visualCue: {
+        primaryTarget: "A jar of flawlessly clear, deep-gold fat with no visible specks or cloudiness, and a dry pan of spent brown solids left behind.",
+        spectrum: [
+          { state: "Underdone", description: "The strained fat carries visible flecks of solids or looks slightly cloudy in the jar.", action: "Strain again through fresh damp cheesecloth or a coffee filter. Any solids left in shorten shelf life and can scorch when you cook with it later." },
+          { state: "Perfect", description: "Crystal-clear golden fat in the jar, free of particles, with a clean nutty aroma and the sediment fully captured by the cloth.", action: "Let it cool and set, then cap and store. Use it for high-heat searing and sautéing where whole butter would burn." },
+          { state: "Overdone", description: "You poured too far and dark sediment has slipped into the jar, muddying the fat.", action: "Re-strain the whole jar through a fresh filter to pull the solids back out and restore clarity." },
+        ],
+      },
+      feelCue: "Pour in a slow, steady stream and you'll feel the moment the thin clear fat gives way to the heavier dregs at the bottom — stop there. Cooled and set, good clarified butter feels firm and slightly grainy, breaking with a clean, waxy snap.",
+    },
+  ],
+};

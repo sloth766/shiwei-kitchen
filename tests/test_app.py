@@ -60,13 +60,15 @@ class KitchenTests(unittest.TestCase):
     def test_bootstrap_static_database_and_provenance(self):
         status,health=self.request('/api/health')
         self.assertEqual(status,200)
-        self.assertGreaterEqual(health['recipes'],350)
+        self.assertGreaterEqual(health['recipes'],1700)
         self.assertFalse(health['configured'])
         status,page=self.request('/')
         self.assertEqual(status,200)
         self.assertIn('拾味厨房'.encode(),page)
         status,recipes=self.request('/api/recipes')
-        self.assertGreaterEqual(len(recipes),350)
+        self.assertGreaterEqual(len(recipes),1700)
+        self.assertTrue(any(r['id'].startswith('pdr-') for r in recipes))
+        self.assertTrue(any(r['id'].startswith('fork-') for r in recipes))
         self.assertEqual({r['region'] for r in recipes},{'东方','西方'})
         for recipe in recipes:
             self.assertTrue(recipe['source']['url'].startswith('https://'))
@@ -107,7 +109,7 @@ class KitchenTests(unittest.TestCase):
             with self.subTest(query=query):
                 recipes=app.search_recipes(query,max_minutes=30)
                 self.assertTrue(recipes)
-                self.assertTrue(all('咖喱' in r['name'] for r in recipes))
+                self.assertTrue(all('咖喱' in r['name']+' '+ ' '.join(r['tags']) for r in recipes))
                 self.assertTrue(all(r['minutes']<=30 for r in recipes))
         recipe=app.normalize_personal_recipe({'name':'暖暖一锅','minutes':15,
             'ingredients':['咖喱块（参考包装用量）'],'steps':['煮熟。']})
@@ -129,13 +131,17 @@ class KitchenTests(unittest.TestCase):
         self.assertEqual(status,200)
         self.assertEqual(result['mode'],'local')
         self.assertTrue(result['sources'])
-        self.assertTrue(all('咖喱' in source['name'] for source in result['sources']))
+        for source in result['sources']:
+            recipe=app.get_recipe(source['id'])
+            self.assertIn('咖喱',recipe['name']+' '+ ' '.join(recipe['tags']))
         self.assertNotIn('微波炉蛋糕',result['content'])
         status,followup=self.request('/api/chat','POST',{
             'message':'咖喱','session_id':result['session_id'],'context':{'time':30}})
         self.assertEqual(status,200)
         self.assertTrue(followup['sources'])
-        self.assertTrue(all('咖喱' in source['name'] for source in followup['sources']))
+        for source in followup['sources']:
+            recipe=app.get_recipe(source['id'])
+            self.assertIn('咖喱',recipe['name']+' '+ ' '.join(recipe['tags']))
 
     def test_offline_unknown_and_filtered_queries_report_no_match(self):
         for message in ('未收录的菜9f84','咖喱'):
@@ -210,6 +216,17 @@ class KitchenTests(unittest.TestCase):
         for r in app.all_recipes():
             self.assertTrue(all(s.strip() for s in r['steps']))
             self.assertTrue(r['area'] and r['area_group'])
+
+    def test_bilingual_recipe_names_match_the_dish_and_region(self):
+        for query in ('Chicken Paprikash','匈牙利红椒炖鸡'):
+            with self.subTest(query=query):
+                recipes=app.search_recipes(query,area='匈牙利')
+                self.assertTrue(recipes)
+                self.assertTrue(all('paprikash' in r['source']['title'].lower() for r in recipes))
+                self.assertEqual(app.search_recipes(query,area='日本'),[])
+                self.assertEqual(app.search_recipes(query,max_minutes=15),[])
+        self.assertTrue(app.search_recipes('咖喱',area='印度',max_minutes=60))
+        self.assertTrue(app.search_recipes('番茄',area='墨西哥'))
 
     def test_bundle_upgrade_is_idempotent_and_preserves_user_data(self):
         with app.connect() as db:

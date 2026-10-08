@@ -1,0 +1,13 @@
+ForkRecipe — Open Recipe Dataset
+Copyright © 2026 FoodML (https://foodml.xyz) and the ForkRecipe contributors named in data/users.js.
+
+The recipes and data in this repository are licensed under Creative Commons Attribution-ShareAlike 4.0
+International (CC BY-SA 4.0); see LICENSE. Reuse and remix them freely, with credit, and share adaptations under the
+same licence. Recipes adapted from public-domain sources remain free of copyright in their original form.
+
+"ForkRecipe", the ForkRecipe logo, "FoodML" and "alcheMISE" are trademarks of FoodML. CC BY-SA 4.0 does not grant
+trademark rights (section 2(b)(2)): you may say your work uses or is adapted from the ForkRecipe dataset, but you may
+not name your product, site or dataset "ForkRecipe" or suggest FoodML endorses it.
+
+The ForkRecipe app at forkrecipe.com (the fork/diff engine, auth, the AI content pipeline, admin tooling) is not in
+this repository and is not licensed under CC BY-SA.

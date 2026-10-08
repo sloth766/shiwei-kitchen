@@ -1,0 +1,118 @@
+export default {
+  repoId: "master_spanish_escalivada_001",
+  parentRepoId: null,
+  slug: "escalivada",
+  author: "ForkRecipe Kitchen",
+  title: "Escalivada",
+  description: "Catalonia's great summer dish — eggplant, red peppers, and onion roasted whole over flame or in a scorching oven until the skins blacken and collapse, then peeled and torn into long sweet, smoky ribbons dressed with olive oil. The technique is as old as fire itself.",
+  cuisine: "Spanish",
+  culture: "Catalan",
+  category: "vegetables",
+  tags: ["vegan", "gluten-free", "catalan", "roasted", "smoky"],
+  difficulty: 1,
+  activeTime: "10 min",
+  totalTime: "1 hr",
+  ratioSystem: "parts",
+  stars: 0,
+  forks: 0,
+  contributors: 1,
+  license: "CC-BY-SA",
+  createdAt: "2026-06-28",
+  updatedAt: "2026-06-28",
+
+  flavorRadar: { sweet: 3, salty: 1, sour: 1, bitter: 1, umami: 1, heat: 0 },
+
+  ingredients: [
+    { ingId: "ing_01", role: "Structure",  name: "Red bell peppers (whole)",                      ratioValue: 400, defaultUnit: "g",  substitutions: ["yellow bell peppers", "piquillo peppers (roast less time)"] },
+    { ingId: "ing_02", role: "Structure",  name: "Eggplant (aubergine, whole)",                   ratioValue: 400, defaultUnit: "g",  substitutions: ["Italian eggplant", "Japanese eggplant (reduce roasting time)"] },
+    { ingId: "ing_03", role: "Allium",     name: "White onion (whole, unpeeled)",                 ratioValue: 200, defaultUnit: "g",  substitutions: ["large shallots"] },
+    { ingId: "ing_04", role: "Fat",        name: "Extra-virgin olive oil, generous",              ratioValue: 60,  defaultUnit: "ml", substitutions: ["Arbequina or Hojiblanca olive oil preferred"] },
+    { ingId: "ing_05", role: "Allium",     name: "Garlic cloves, minced",                         ratioValue: 2,   defaultUnit: "cloves", substitutions: ["roasted garlic cloves, mashed"] },
+    { ingId: "ing_06", role: "Acid",       name: "Sherry vinegar",                                ratioValue: 15,  defaultUnit: "ml", substitutions: ["aged red wine vinegar", "moscatel vinegar"] },
+    { ingId: "ing_07", role: "Herb",       name: "Flat-leaf parsley, roughly chopped",            ratioValue: 10,  defaultUnit: "g",  substitutions: ["chives"] },
+    { ingId: "ing_08", role: "Seasoning",  name: "Coarse sea salt and black pepper",              ratioValue: 6,   defaultUnit: "g",  substitutions: [] },
+  ],
+
+  processNodes: [
+    {
+      nodeId: "step_1",
+      action: "Roast",
+      inputs: ["ing_01", "ing_02", "ing_03"],
+      outputState: "charred_vegetables",
+      instructions: "Place the whole peppers, eggplant, and unpeeled onion directly on the oven rack in a 230°C (450°F) oven (or directly on the grill grate over medium-high coals). Roast, turning every 15–20 minutes with tongs, until every vegetable is completely charred black on the outside, collapsed, and soft throughout — approximately 40–50 minutes in the oven, 25–35 minutes over direct coals. The objective is total charring: the black carbon on the outside is not an accident but the mechanism by which the flesh inside steams and sweetens. Do not rush this step by raising the heat further.",
+      visualCue: {
+        primaryTarget: "All three vegetables are uniformly black and blistered on the outside, significantly reduced in size, and visibly collapsed and soft. Juices may be caramelizing on the tray beneath.",
+        spectrum: [
+          { state: "Underdone", description: "Skin is lightly browned or blistered in patches but not fully black. Vegetables still hold their original shape and feel firm.", action: "Continue roasting. The skin must be fully charred all the way around before steaming. Turn to expose the pale sides." },
+          { state: "Perfect",   description: "Fully black on all surfaces, visibly soft and collapsed, slightly wrinkled. Steam hisses when touched with tongs. A knife enters with zero resistance.", action: "Transfer to a bowl immediately and cover tightly with plastic wrap or a plate." },
+          { state: "Overdone",  description: "Skin has split and is drying out, juices on the tray are burning. Vegetables beginning to dry rather than steam.", action: "Transfer to the bowl immediately. The flesh inside is still excellent." },
+        ],
+      },
+      feelCue: "Pick up an eggplant with tongs — a fully roasted one will feel floppy and almost hollow, swinging like a heavy sock. A still-firm one needs more time.",
+    },
+    {
+      nodeId: "step_2",
+      action: "Rest",
+      inputs: ["charred_vegetables"],
+      outputState: "steamed_vegetables",
+      instructions: "Transfer all the charred vegetables to a large bowl and cover tightly with plastic wrap or a large plate. Allow to steam in their own heat for at least 15 minutes — this steaming step is essential. The trapped heat and moisture cause the charred skin to separate cleanly from the flesh beneath and allow the flesh to finish cooking to a silky consistency all the way through. Do not skip or shorten this step. The vegetables will be very hot — handle with care.",
+      visualCue: {
+        primaryTarget: "Condensation visible on the plastic wrap or underside of the plate. Vegetables have softened further and sagged. Juices have pooled at the bottom of the bowl.",
+        spectrum: [
+          { state: "Underdone", description: "Minimal condensation. Vegetables still feel quite firm through the skin. Skin has not loosened.", action: "Cover again and wait the full 15 minutes minimum. More time does not hurt." },
+          { state: "Perfect",   description: "Heavy condensation on the cover. The skin of the peppers is visibly separating at the edges. Eggplant has completely collapsed.", action: "Uncover and begin peeling." },
+          { state: "Overdone",  description: "Vegetables have sat too long (over 30 minutes) — juices are cooling and congealing at the bottom of the bowl.", action: "Peel and proceed. The flavor is excellent; the texture may be slightly more broken down, which is characteristic of escalivada." },
+        ],
+      },
+      feelCue: "Press the skin of a pepper through the plastic wrap — it should feel like warm, wet paper, completely detached from the flesh beneath it.",
+    },
+    {
+      nodeId: "step_3",
+      action: "Peel",
+      inputs: ["steamed_vegetables"],
+      outputState: "peeled_vegetables",
+      instructions: "Working over the bowl to catch all juices (they are gold), peel the charred skin from each vegetable with your fingers — it should slip off in large sheets with minimal effort. Remove the seeds from the peppers by opening them flat and scraping the seed cluster out. Peel the onion and separate into its natural layers. Do not rinse the vegetables under water — rinsing washes away the smoky juices. A few small flecks of char clinging to the flesh are desirable and add smokiness.",
+      visualCue: {
+        primaryTarget: "Bare, glistening flesh in vivid colors: red-orange peppers, ivory-cream eggplant, translucent layers of onion. Small flecks of char visible but no large patches of skin.",
+        spectrum: [
+          { state: "Underdone", description: "Skin is not coming off cleanly, tearing and leaving large patches on the flesh.", action: "The vegetables need to steam longer. Re-cover and wait 5 more minutes." },
+          { state: "Perfect",   description: "Skin peels away in large sheets, revealing gleaming flesh. Occasional small char flecks remain. The flesh glistens with trapped juices.", action: "Tear into strips (do not dice) and combine in a serving bowl." },
+          { state: "Overdone",  description: "Flesh is very soft and beginning to break apart during peeling.", action: "Handle gently. Escalivada can be very soft and still delicious — the texture is rustic by nature." },
+        ],
+      },
+      feelCue: "The peeled pepper flesh should feel like wet satin — smooth, yielding, slightly slippery with its own sweet juices. Eggplant feels like custard.",
+    },
+    {
+      nodeId: "step_4",
+      action: "Slice",
+      inputs: ["peeled_vegetables"],
+      outputState: "torn_ribbons",
+      instructions: "Tear — do not cut — the peppers and eggplant into long strips approximately 2–3 cm wide, following the natural grain of the flesh where possible. Tearing creates irregular, textured edges that hold dressing better than a knife-cut surface and gives the dish its characteristic rustic appearance. The onion naturally separates into its layers. Arrange everything loosely in a wide, shallow serving dish, interleaving the different vegetables for visual variety.",
+      visualCue: {
+        primaryTarget: "Long, irregular ribbons of red pepper, pale eggplant, and translucent onion arranged loosely on a wide plate. No perfect, uniform cuts — all torn edges.",
+        spectrum: [
+          { state: "Underdone", description: "Pieces are too large and chunky. The strips have not been separated.", action: "Tear further into thinner ribbons — escalivada is always a loose, informal arrangement." },
+          { state: "Perfect",   description: "Long, graceful ribbons in three colors, slightly overlapping, informal but intentional. Juices pooling at the edges of the dish.", action: "Dress immediately." },
+          { state: "Overdone",  description: "Torn so fine the vegetables are disintegrating into shreds. The dish looks mashed rather than composed.", action: "Proceed — the flavor is identical. Consider it the rustic regional variant." },
+        ],
+      },
+      feelCue: "Pull a strip of pepper between your fingers — it should stretch slightly before tearing, like silk. The flesh should be impossibly silky and cool slightly to the touch.",
+    },
+    {
+      nodeId: "step_5",
+      action: "Season",
+      inputs: ["torn_ribbons", "ing_04", "ing_05", "ing_06", "ing_07", "ing_08"],
+      outputState: "escalivada",
+      instructions: "Drizzle the olive oil generously and evenly over the arranged vegetables. Add the minced garlic, a splash of sherry vinegar, and season with coarse salt and black pepper. Toss very gently to coat, being careful not to break the ribbons apart. Scatter the flat-leaf parsley. Taste: the escalivada should be sweet from the peppers, smoky from the charring, and bright from the vinegar, with the raw garlic providing a sharp counterpoint. Allow to rest at room temperature for at least 20–30 minutes before serving — the flavor improves dramatically as the garlic and vinegar marry with the vegetables.",
+      visualCue: {
+        primaryTarget: "Glistening, oil-dressed vegetables with flecks of garlic and parsley. The juices and oil have pooled together at the base of the dish, creating a reddish vinaigrette.",
+        spectrum: [
+          { state: "Underdone", description: "Vegetables are underdressed and look dry. No pooling at the base.", action: "Add more olive oil — escalivada is not a diet dish. The oil is essential for flavor and preservation." },
+          { state: "Perfect",   description: "Every ribbon is lightly glossy with oil. Parsley is vivid green, garlic flecks visible. The pooled juices at the base smell of smoke, olive oil, and vinegar.", action: "Rest at room temperature 20–30 minutes and serve with good bread for dipping." },
+          { state: "Overdone",  description: "Too much vinegar — the dish is sharp and acidic rather than balanced.", action: "Add more olive oil to cushion the acid, and a pinch of sugar if needed." },
+        ],
+      },
+      feelCue: "The serving dish should feel warm but not hot — escalivada is best eaten at a comfortable room temperature where the olive oil is fluid and the vegetables have relaxed fully into themselves.",
+    },
+  ],
+};

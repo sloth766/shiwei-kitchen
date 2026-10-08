@@ -1,6 +1,6 @@
 # 📚 菜谱与素材来源
 
-数据快照日期：**2026-10-08**。共 397 条做法，保存来源与版本信息；同名菜的不同来源分别保留。精选家庭做法为中文改编，社区配方保留上游文字与许可。
+数据快照日期：**2026-10-08**。共 1,775 条做法，保存来源与版本信息；同名菜的不同来源或不同做法分别保留。精选家庭做法为中文改编，社区配方保留上游文字与许可。
 
 ## 🌏 社区菜谱
 
@@ -8,14 +8,26 @@
 | --- | ---: | --- | --- |
 | [Anduin2017/HowToCook](https://github.com/Anduin2017/HowToCook) | 372 | `a2d45c6984dff9ee941da0e7c452f7965965d962` | [Unlicense](data/upstream/howtocook/LICENSE) |
 | [Bastian/recipes](https://github.com/Bastian/recipes) | 8 | `e5dd42a6a6cd1db25f083e1d0417af01c44527e9` | [MIT · Bastian Oppermann](data/upstream/bastian/LICENSE) |
+| [ronaldl29/public-domain-recipes](https://github.com/ronaldl29/public-domain-recipes) | 415 | `da84378b36bd5b2e3cb35f610d64630bf1bd899d` | [Unlicense](data/upstream/public-domain/LICENSE.md) |
+| [futurechef/forkrecipe-recipes](https://github.com/futurechef/forkrecipe-recipes) | 963 | `934319313379201f91ddccdd29abd054039a3ad6` | [CC BY-SA 4.0](data/upstream/forkrecipe/LICENSE) · FoodML 与 ForkRecipe contributors |
 
 HowToCook：仅收录 dishes/ 下有食材和操作的372篇 Markdown，排除示例模板。保存原文食材、用量和操作文字，去掉图片与 Markdown 样式，保留分支/小节。简短描述只保留风味介绍首句。
 
 Bastian/recipes：保存原始 Markdown 快照，8道完整配方整理为中文（墨西哥米饭/卷饼/玉米片、比萨、烤土豆、德式炖锅、美式汉堡、阿尔萨斯薄饼）。意面沙拉与番茄汤仅有 TODO，未入库。部分原文另引用 Chefkoch 或视频作者，原始链接在快照中保留。品牌酱料和未明确的包装容量不擅自填数。
 
+Public Domain Recipes：[上游许可声明](https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/README.md#license) 明确将网站及全部内容置于公有领域。收录 `content/` 下 415 篇食谱，排除首页索引。保留作者署名、原文食材用量、准备及制作步骤、补充说明；不收录图片。前置元数据与 Markdown 样式转换为本项目 JSON 格式。
+
+ForkRecipe：该固定版本包含 963 篇食谱，另有一份模块索引和一份模板，均不作为食谱导入。保留原文食材名称、基准用量、替代建议、制作步骤、视觉及触感提示、作者和完整快照。`ratioValue` 与 `defaultUnit` 记录在原文用量说明中；人数未明确时不自动缩放。用时仅采用 `totalTime`，不以 `activeTime` 代替总用时。超出本项目时间范围或包含不明确的等待说明时，标为用时未注明并保留原文。
+
+**ForkRecipe 署名与许可**：Copyright © 2026 FoodML 与 ForkRecipe contributors。作者登记见 [data/users.js](data/upstream/forkrecipe/data/users.js)，上游声明见 [NOTICE](data/upstream/forkrecipe/NOTICE)。`data/forkrecipe-recipes.json` 及其中由拾味厨房添加的中文菜名、检索词和结构化整理属于对应数据的改编版本，采用 [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/)。每条菜谱保留固定版本原文链接和署名，详情页说明许可。再次分享该数据或其中文讲解、调整版本时，请保留来源与作者、说明改动并使用相同许可。ForkRecipe 与 FoodML 商标不属于许可范围，本项目不表示获得其背书。
+
+新增两库保留英文步骤，中文词表用于常见菜名、食材检索及明确的地区映射，并非全部菜谱的全文翻译。地区根据上游 `cuisine`、`culture`、标签和明确菜名归类；不明地区使用“国际家常”。素食属性均保持待核对，原文 `fasting` 等标签不直接作为纯素认证。
+
 社区配方没有经过逐条试做；原文明确的总用时以约数显示，没有总用时则不参与限时筛选。饮食类型统一设为待核对；常见过敏原为关键词检测补充，不能认证不含过敏原。地区标签来自菜名、明确的风味介绍及少量经典菜名映射；含糊或多地区的中式菜归入家常菜。这些是浏览分类，不是原产地认证。
 
 [recipe-sources.json](data/recipe-sources.json) 保存版本、整理日期与每篇 Markdown 的 SHA-256；`scripts/expand_recipes.py` 支持从已保存快照离线重建。
+
+[open-recipe-sources.json](data/open-recipe-sources.json) 记录新增两库的版本、收录及排除结果、原文和许可证 SHA-256。`scripts/import_open_recipes.py` 可离线重建；`--fetch` 从固定版本下载文本。解析器只接受数据字面量，不执行上游代码。原文快照按字节保存，构建时与固定版本的 Git blob 校验值比较。
 
 ## 🥢 精选家庭菜谱
 
