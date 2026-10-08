@@ -1,16 +1,18 @@
-# Shiwei Kitchen · 拾味厨房
+# 🍲 Shiwei Kitchen · 拾味厨房
 
 基于 Python 与 SQLite 的本地 AI 烹饪助手。集成 DeepSeek 工具调用、地区菜谱检索和个人菜谱管理，支持根据食材、人数、时间及设备生成烹饪建议。
 
-## 功能
+> 让每一次下厨，都有一点新的期待。
 
-- **菜谱检索**：397 条内置做法，40 个地区与风味分类，支持菜名、食材、地区、用时和饮食类型筛选。
-- **AI 问答**：通过 `search_recipes` 和 `get_recipe` 工具检索本地数据，结合厨房上下文生成回答。
-- **个人菜谱**：添加、编辑、删除、收藏，支持 JSON 批量导入、导入预览及导出备份。
-- **数据持久化**：SQLite 保存菜谱、收藏与对话；启动时自动初始化数据库并同步内置数据。
-- **用量换算**：按份数缩放数值食材用量，保留原文中的非数值用量说明。
+## ✨ 功能
 
-## 技术栈
+- 🌏 **菜谱检索**：397 条内置做法，40 个地区与风味分类，支持菜名、食材、地区、用时和饮食类型筛选。
+- 🤖 **AI 问答**：通过 `search_recipes` 和 `get_recipe` 工具检索本地数据，结合厨房上下文生成回答。
+- 📝 **个人菜谱**：添加、编辑、删除、收藏，支持 JSON 批量导入、导入预览及导出备份。
+- 💾 **数据持久化**：SQLite 保存菜谱、收藏与对话；启动时自动初始化数据库并同步内置数据。
+- 🥣 **用量换算**：按份数缩放数值食材用量，保留原文中的非数值用量说明。
+
+## 🧩 技术栈
 
 | 层级 | 实现 |
 | --- | --- |
@@ -20,7 +22,7 @@
 | 模型接口 | DeepSeek Chat Completions、Tool Calls |
 | 运行环境 | Python 3.10+ |
 
-## 快速开始
+## 🚀 快速开始
 
 ```sh
 git clone https://github.com/sloth766/shiwei-kitchen.git
@@ -36,7 +38,7 @@ python app.py --port 8766 --open
 
 Windows 可使用 `启动厨房.bat`。版本源码包见 [Releases](https://github.com/sloth766/shiwei-kitchen/releases)，安装与升级说明见 [INSTALL.md](INSTALL.md)。
 
-## 配置
+## ⚙️ 配置
 
 复制 `.env.example` 为 `.env`，设置以下变量，或通过网页中的 **AI 连接设置** 保存配置。
 
@@ -49,7 +51,7 @@ Windows 可使用 `启动厨房.bat`。版本源码包见 [Releases](https://git
 
 模型通过 `search_recipes`、`get_recipe` 访问菜谱库。每次问答最多执行 4 轮模型请求，上下文包含最近 12 条对话。接口实现参考 [Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/) 与 [Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)。
 
-## 菜谱导入
+## 📥 菜谱导入
 
 ### 网页导入
 
@@ -102,7 +104,7 @@ python app.py --import-recipes path/to/recipes.json
 
 命令行导入按 `id` 更新记录，不删除文件中未出现的菜谱。图片路径须引用 `public/assets/` 中已有资源。
 
-## HTTP API
+## 🔌 HTTP API
 
 | 方法 | 路径 | 用途 |
 | --- | --- | --- |
@@ -133,7 +135,7 @@ python app.py --import-recipes path/to/recipes.json
 
 `recipes` 应包含 1–500 条记录；`dry_run` 控制预览；`on_conflict` 支持 `skip`、`update`。响应包含 `added`、`updated`、`skipped` 和菜谱摘要。
 
-## 数据与目录
+## 🗂️ 数据与目录
 
 ```text
 shiwei-kitchen/
@@ -168,7 +170,7 @@ python scripts/expand_recipes.py
 
 服务绑定 `127.0.0.1`，面向单用户本地使用；请求检查 Host、Origin，静态文件仅从 `public/` 提供。运行时配置与数据库不包含在版本源码包中。
 
-## 版本发布
+## 📦 版本发布
 
 [Releases](https://github.com/sloth766/shiwei-kitchen/releases) 提供源码 ZIP 与 `SHA256SUMS.txt`。在干净且已提交的 Git 工作区执行：
 

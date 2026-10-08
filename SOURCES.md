@@ -1,8 +1,8 @@
-# 菜谱与素材来源
+# 📚 菜谱与素材来源
 
 数据快照日期：**2026-10-08**。共 397 条做法，保存来源与版本信息；同名菜的不同来源分别保留。精选家庭做法为中文改编，社区配方保留上游文字与许可。
 
-## 社区菜谱
+## 🌏 社区菜谱
 
 | 来源 | 收录 | 固定版本 | 许可 |
 | --- | ---: | --- | --- |
@@ -17,7 +17,7 @@ Bastian/recipes：保存原始 Markdown 快照，8道完整配方整理为中文
 
 [recipe-sources.json](data/recipe-sources.json) 保存版本、整理日期与每篇 Markdown 的 SHA-256；`scripts/expand_recipes.py` 支持从已保存快照离线重建。
 
-## 精选家庭菜谱
+## 🥢 精选家庭菜谱
 
 | 中文家庭版 | 公开参考来源 |
 | --- | --- |
@@ -41,7 +41,7 @@ Bastian/recipes：保存原始 Markdown 快照，8道完整配方整理为中文
 
 鸡肉、碎肉、鱼类、剩饭的温度及全熟鸡蛋原则参考 [FoodSafety.gov · Safe Minimum Internal Temperatures](https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures)。
 
-## DeepSeek 接口
+## 🤖 DeepSeek 接口
 
 - [Your First API Call](https://api-docs.deepseek.com/)
 - [Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/)
@@ -49,7 +49,7 @@ Bastian/recipes：保存原始 Markdown 快照，8道完整配方整理为中文
 
 项目默认模型为 `deepseek-flash`，可通过 `.env` 或网页配置修改。
 
-## 图片与字体
+## 🎨 图片与字体
 
 图片下载到 `public/assets/` 用于本地网站的食物氛围展示，均为 **风味示意图**，不代表所列菜谱的实际成品。页面菜谱详情和列表均说明这一点。
 

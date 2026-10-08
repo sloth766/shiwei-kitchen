@@ -1,12 +1,12 @@
-# 安装与升级
+# 🚀 安装与升级
 
-## 环境
+## 🧰 环境
 
 - Python 3.10+
 - 支持浏览器访问的本地运行环境
 - AI 问答使用 DeepSeek API Key
 
-## 获取源码
+## 📥 获取源码
 
 ```sh
 git clone https://github.com/sloth766/shiwei-kitchen.git
@@ -15,7 +15,7 @@ cd shiwei-kitchen
 
 也可从 [Releases](https://github.com/sloth766/shiwei-kitchen/releases) 获取 `shiwei-kitchen-v<version>-source.zip` 并解压。源码包包含服务端、前端资源、内置菜谱与上游许可。
 
-## 配置与启动
+## ⚙️ 配置与启动
 
 将 `.env.example` 复制为 `.env`，按需设置：
 
@@ -40,13 +40,13 @@ python app.py --port 8766 --open
 
 首次启动自动初始化 `data/kitchen.db` 并导入内置菜谱。关闭服务使用 `Ctrl+C`。
 
-## 数据迁移
+## 💾 数据迁移
 
 更新前停止服务，将旧目录中的 `data/kitchen.db` 与 `.env` 复制到新版对应位置后启动。启动时会同步变更的内置菜谱，并保留个人菜谱、收藏与对话。
 
 网页 **我的菜谱 → 导出我的菜谱** 可导出个人菜谱 JSON。该文件可用于再次导入，不包含收藏或聊天记录。
 
-## 产物校验
+## 🔎 产物校验
 
 Release 附带 `SHA256SUMS.txt`。PowerShell：
 
