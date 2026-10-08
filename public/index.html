@@ -38,6 +38,7 @@
         <a href="#chat" class="nav-item" data-page="chat"><svg><use href="#i-spark"/></svg>问问小厨<span class="nav-label">AI</span></a>
         <a href="#recipes" class="nav-item" data-page="recipes"><svg><use href="#i-book"/></svg>探索菜谱</a>
         <a href="#favorites" class="nav-item" data-page="favorites"><svg><use href="#i-heart"/></svg>我的收藏<span class="nav-count" id="favorite-count">0</span></a>
+        <a href="#personal" class="nav-item" data-page="personal"><svg><use href="#i-plus"/></svg>我的菜谱</a>
       </nav>
       <div class="sidebar-note"><span class="note-doodle">✳</span><h3>每一餐，都值得用心。</h3><p>一点新鲜食材，<br>一点小小灵感，<br>就是生活的好味道。</p><span class="note-line"></span></div>
       <div class="sidebar-bottom"><button class="nav-item" id="settings-button"><svg><use href="#i-settings"/></svg>AI 连接设置</button><div class="local-profile"><span class="avatar">厨</span><div>我的小厨房<small><span class="status-dot"></span>本地运行 · 数据存于本机</small></div></div></div>
@@ -46,6 +47,12 @@
     <div class="main-shell">
       <header class="topbar"><div class="breadcrumb"><button class="icon-button mobile-menu" id="menu-button" aria-label="打开导航"><svg><use href="#i-menu"/></svg></button><span>我的厨房</span><span class="crumb-slash">/</span><strong id="page-label">厨房首页</strong></div><div class="topbar-right"><span class="connection-status" id="connection-status"><span class="status-dot"></span>正在连接厨房</span><button class="icon-button" id="top-settings" aria-label="连接设置"><svg><use href="#i-settings"/></svg></button><span class="avatar small">厨</span></div></header>
       <main id="main-content">
+        <section id="page-personal" class="page" hidden>
+          <div class="greeting-row"><div><div class="eyebrow">FROM YOUR OWN KITCHEN</div><h1>我的菜谱<span class="heading-flower">✳</span></h1><p>妈妈的拿手菜，自己的新灵感，都值得留在这里。</p></div></div>
+          <div class="personal-intro"><span class="personal-doodle">🥣</span><div><h2>把熟悉的味道，写成自己的食谱</h2><p>添加后可以按地区搜索、收藏，也可以请小厨结合这些做法给你建议。</p></div></div>
+          <div class="personal-actions"><button class="primary-button" id="add-recipe"><svg><use href="#i-plus"/></svg>记一道拿手菜</button><button class="secondary-button" id="import-recipes"><svg><use href="#i-book"/></svg>批量导入 JSON</button><button class="secondary-button" id="export-recipes">导出我的菜谱</button></div>
+          <p class="results-caption" id="personal-total" aria-live="polite"></p><div class="recipe-grid explore-grid" id="personal-recipes"></div>
+        </section>
         <section id="page-home" class="page">
           <div class="greeting-row"><div><div class="eyebrow">A LITTLE INSPIRATION, EVERY DAY</div><h1>今天，也要好好吃饭<span class="heading-flower">✳</span></h1><p>让冰箱里的日常，变成餐桌上的惊喜。</p></div><div class="date-pill" id="date-label"></div></div>
           <section class="hero" aria-label="做饭灵感">
@@ -66,5 +73,27 @@
   <dialog id="recipe-dialog" class="recipe-dialog"><button class="icon-button dialog-close" data-close-dialog="recipe-dialog" aria-label="关闭菜谱"><svg><use href="#i-close"/></svg></button><div id="recipe-detail"></div></dialog>
   <dialog id="settings-dialog" class="settings-dialog"><button class="icon-button dialog-close" data-close-dialog="settings-dialog" aria-label="关闭设置"><svg><use href="#i-close"/></svg></button><span class="settings-emblem"><svg><use href="#i-spark"/></svg></span><div class="eyebrow">YOUR KITCHEN, A LITTLE SMARTER</div><h2>连接你的 AI 小厨</h2><p>让 DeepSeek 从本地菜谱中查找做法，<br>再根据你的食材、口味和设备调整。</p><form id="settings-form"><label for="api-key">DeepSeek API Key</label><input id="api-key" type="password" autocomplete="off" maxlength="300" placeholder="输入 API Key；留空保留已有配置"><label for="api-model">模型名称</label><input id="api-model" value="deepseek-flash" maxlength="80" placeholder="deepseek-flash"><div class="settings-privacy"><svg><use href="#i-check"/></svg><span>Key 保存在本机 .env 中；仅后端向 DeepSeek 发送。<br>问答时会发送相关菜谱、对话和当前厨房信息。</span></div><div class="settings-actions"><button type="button" class="text-button" id="disconnect-ai">断开 AI 连接</button><button class="primary-button" id="save-settings">保存设置<svg><use href="#i-arrow"/></svg></button></div><div class="form-message" id="settings-message" role="status"></div></form><a class="settings-doc-link" href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer">前往 DeepSeek 获取 API Key<svg><use href="#i-link"/></svg></a></dialog>
   <div id="toast" class="toast" role="status"></div>
+  <dialog id="recipe-editor" class="editor-dialog"><button class="icon-button dialog-close" data-close-dialog="recipe-editor" aria-label="关闭编辑器"><svg><use href="#i-close"/></svg></button><div class="eyebrow">A RECIPE TO REMEMBER</div><h2 id="editor-title">记一道拿手菜</h2><p>写下食材和步骤，让下一次下厨更从容。</p>
+    <form id="recipe-editor-form" class="editor-form"><div class="editor-fields">
+      <label class="wide">菜谱名称<input id="edit-name" maxlength="100" required placeholder="比如：妈妈的番茄炖牛腩"></label>
+      <label>地区大类<select id="edit-group"><option>中国</option><option>亚洲</option><option>欧洲</option><option>美洲</option><option>中东</option><option>非洲</option><option>大洋洲</option><option>其他</option></select></label>
+      <label>具体地区 / 风味<input id="edit-area" list="recipe-area-options" maxlength="80" value="家常菜" required><datalist id="recipe-area-options"></datalist></label>
+      <label>烹饪时间（分钟，可留空）<input id="edit-minutes" type="number" min="1" max="1440" placeholder="用时未标注"></label>
+      <label>份数（可留空）<input id="edit-servings" type="number" min="1" max="20" placeholder="份量未注明"></label>
+      <label>饮食类型<select id="edit-diet"><option value="unknown">待核对</option><option value="omnivore">荤素搭配</option><option value="vegetarian">蛋奶素</option><option value="vegan">纯素</option></select></label>
+      <label>常见过敏原<input id="edit-allergens" maxlength="500" placeholder="如：牛奶、鸡蛋、花生"></label>
+      <label class="wide">一句话介绍<textarea id="edit-description" rows="2" maxlength="2000" placeholder="你喜欢这道菜的理由…"></textarea></label>
+      <label class="wide">食材（每行一项）<textarea id="edit-ingredients" rows="5" maxlength="20000" required placeholder="番茄 | 2 | 个&#10;鸡蛋 | 3 | 个&#10;盐 | 适量"></textarea><small>用“名称 | 数量 | 单位”填写可换算用量；也可以直接写“盐适量”。</small></label>
+      <label class="wide">制作步骤（每行一步）<textarea id="edit-steps" rows="6" maxlength="60000" required placeholder="番茄切块，鸡蛋打散。&#10;热锅炒熟鸡蛋，盛出备用。"></textarea></label>
+      <label class="wide">小提醒<textarea id="edit-tip" rows="2" maxlength="2000" placeholder="火候、替换食材或自己的经验…"></textarea></label>
+      <label class="wide">参考来源链接（可选）<input id="edit-source" type="url" maxlength="2000" placeholder="https://…；自创菜谱可留空"></label>
+    </div><p class="form-message" id="editor-message" role="status"></p><div class="personal-actions"><button class="primary-button" id="save-recipe">保存这道菜<svg><use href="#i-check"/></svg></button><button type="button" class="secondary-button" data-close-dialog="recipe-editor">取消</button></div></form>
+  </dialog>
+  <dialog id="recipe-importer" class="editor-dialog"><button class="icon-button dialog-close" data-close-dialog="recipe-importer" aria-label="关闭导入"><svg><use href="#i-close"/></svg></button><div class="eyebrow">MORE FLAVOURS, MORE POSSIBILITIES</div><h2>把菜谱带进厨房</h2><p>选择 JSON 文件或粘贴菜谱数组，先预览，再保存。每次最多 500 道，文件小于 2 MB。</p>
+    <div class="personal-actions"><label class="secondary-button file-picker">选择 JSON 文件<input id="import-file" type="file" accept=".json,application/json"></label><button class="secondary-button" id="download-template">下载示例模板</button></div>
+    <label class="import-label" for="import-json">菜谱 JSON</label><textarea id="import-json" class="import-json" rows="9" placeholder='[{"name":"番茄炒鸡蛋","ingredients":["番茄 2 个","鸡蛋 3 个"],"steps":["切块，打散鸡蛋。","先炒鸡蛋，再炒番茄，混合调味。"]}]'></textarea>
+    <label class="import-label" for="import-conflict">遇到相同 id 的自建菜谱</label><select id="import-conflict"><option value="skip">跳过已有菜谱（推荐）</option><option value="update">更新已有自建菜谱，保留收藏</option></select>
+    <p class="form-message" id="import-message" role="status"></p><div id="import-preview" class="import-preview" hidden></div><div class="personal-actions"><button class="secondary-button" id="preview-import">检查并预览</button><button class="primary-button" id="confirm-import" disabled>确认导入<svg><use href="#i-check"/></svg></button></div>
+  </dialog>
 </body>
 </html>

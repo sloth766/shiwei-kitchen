@@ -9,6 +9,7 @@ import hashlib
 from contextlib import contextmanager
 import json
 import mimetypes
+import math
 import os
 from pathlib import Path
 import re
@@ -97,6 +98,10 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE INDEX IF NOT EXISTS idx_messages_session ON messages(session_id,id);
 CREATE INDEX IF NOT EXISTS idx_recipes_region ON recipes(region);
 CREATE INDEX IF NOT EXISTS idx_ingredients_name ON ingredients(name);
+CREATE TABLE IF NOT EXISTS personal_recipes (
+  recipe_id TEXT PRIMARY KEY REFERENCES recipes(id) ON DELETE CASCADE,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 '''
 
 
@@ -110,7 +115,7 @@ def validate_recipe(recipe):
                 'equipment','adaptation','source','ingredients','steps'}
     if not isinstance(recipe, dict) or required - recipe.keys():
         raise AppError('菜谱缺少必填字段。')
-    if not re.fullmatch(r'[a-z0-9-]{1,80}', recipe['id']):
+    if not isinstance(recipe['id'],str) or not re.fullmatch(r'[a-z0-9-]{1,80}', recipe['id']):
         raise AppError('菜谱 id 只能包含小写英文、数字和连字符。')
     if recipe['region'] not in ('东方','西方') or recipe['diet'] not in ('vegan','vegetarian','omnivore','unknown'):
         raise AppError('无效的菜谱区域或饮食类型。')
@@ -134,19 +139,21 @@ def validate_recipe(recipe):
         if not isinstance(recipe[key],list) or len(recipe[key])>30 or any(not isinstance(x,str) or not 1<=len(x)<=80 for x in recipe[key]):
             raise AppError(f'菜谱 {key} 必须为文本数组。')
     source=recipe['source']
-    if not isinstance(source,dict) or any(not isinstance(source.get(k),str) or not source[k] for k in ('name','title','url','retrieved_at')):
+    if not isinstance(source,dict) or any(not isinstance(source.get(k),str) or not source[k] or len(source[k])>2000 for k in ('name','title','retrieved_at')) or not isinstance(source.get('url'),str) or len(source['url'])>2000:
         raise AppError('来源必须有名称、标题、链接和整理日期。')
-    if urlsplit(source['url']).scheme!='https' or not urlsplit(source['url']).hostname:
+    if source['url'] and (urlsplit(source['url']).scheme!='https' or not urlsplit(source['url']).hostname):
         raise AppError('来源链接必须使用 HTTPS。')
+    if not source['url'] and source['name']!='我的厨房':
+        raise AppError('外部来源需要 HTTPS 链接；自创菜谱请选择我的厨房。')
     if not re.fullmatch(r'\d{4}-\d{2}-\d{2}',source['retrieved_at']):
         raise AppError('整理日期格式必须为 YYYY-MM-DD。')
     if not isinstance(recipe['ingredients'],list) or not 1 <= len(recipe['ingredients']) <= 50:
         raise AppError('需要 1–50 项食材。')
     for ingredient in recipe['ingredients']:
-        if not isinstance(ingredient,dict) or not isinstance(ingredient.get('name'),str) or not ingredient['name'] or not isinstance(ingredient.get('unit'),str):
+        if not isinstance(ingredient,dict) or not isinstance(ingredient.get('name'),str) or not 1<=len(ingredient['name'])<=300 or not isinstance(ingredient.get('unit'),str) or len(ingredient['unit'])>100:
             raise AppError('食材字段无效。')
         q=ingredient.get('quantity')
-        if q is not None and (type(q) not in (int,float) or not 0 < q <= 100000):
+        if q is not None and (type(q) not in (int,float) or not math.isfinite(q) or not 0 < q <= 100000):
             raise AppError('食材用量必须为正数或 null（适量）。')
     if not isinstance(recipe['steps'],list) or not 1 <= len(recipe['steps']) <= 100 or any(not isinstance(s,str) or not 1 <= len(s) <= 2000 for s in recipe['steps']):
         raise AppError('需要有效的步骤列表。')
@@ -161,20 +168,94 @@ def import_recipes(path):
     if len({r['id'] for r in recipes}) != len(recipes):
         raise AppError('导入文件中存在重复的菜谱 id。')
     with connect() as db:
-        for r in recipes:
-            source=r['source']
-            db.execute('INSERT INTO sources(name,title,url,retrieved_at) VALUES(?,?,?,?) ON CONFLICT(url) DO UPDATE SET name=excluded.name,title=excluded.title,retrieved_at=excluded.retrieved_at',(source['name'],source['title'],source['url'],source['retrieved_at']))
-            source_id=db.execute('SELECT id FROM sources WHERE url=?',(source['url'],)).fetchone()[0]
-            columns=['id','name','region','cuisine','minutes','servings','diet','image','image_alt','description','difficulty','tip','tags','allergens','equipment','adaptation','source_id']
-            columns[-1:-1]=['area_group','area','time_note','servings_note','quantity_notes']
-            values=[json_text(r[k]) if k in ('tags','allergens','equipment') else r.get(k,'') for k in columns[:-1]]+[source_id]
-            assignments=','.join(f'{k}=excluded.{k}' for k in columns if k!='id')
-            db.execute(f'INSERT INTO recipes({",".join(columns)}) VALUES({",".join("?" for _ in columns)}) ON CONFLICT(id) DO UPDATE SET {assignments}',values)
-            db.execute('DELETE FROM ingredients WHERE recipe_id=?',(r['id'],))
-            db.execute('DELETE FROM steps WHERE recipe_id=?',(r['id'],))
-            db.executemany('INSERT INTO ingredients VALUES(?,?,?,?,?)',[(r['id'],n,i['name'],i['quantity'],i['unit']) for n,i in enumerate(r['ingredients'])])
-            db.executemany('INSERT INTO steps VALUES(?,?,?)',[(r['id'],n,s) for n,s in enumerate(r['steps'])])
+        write_recipes(db,recipes)
     return len(recipes)
+
+
+def write_recipes(db,recipes,protect_sources=False):
+    for r in recipes:
+        source=r['source']
+        source_url=source['url'] or 'personal:'+r['id']
+        conflict='DO NOTHING' if protect_sources and source['url'] else 'DO UPDATE SET name=excluded.name,title=excluded.title,retrieved_at=excluded.retrieved_at'
+        db.execute('INSERT INTO sources(name,title,url,retrieved_at) VALUES(?,?,?,?) ON CONFLICT(url) '+conflict,(source['name'],source['title'],source_url,source['retrieved_at']))
+        source_id=db.execute('SELECT id FROM sources WHERE url=?',(source_url,)).fetchone()[0]
+        columns=['id','name','region','cuisine','minutes','servings','diet','image','image_alt','description','difficulty','tip','tags','allergens','equipment','adaptation','source_id']
+        columns[-1:-1]=['area_group','area','time_note','servings_note','quantity_notes']
+        values=[json_text(r[k]) if k in ('tags','allergens','equipment') else r.get(k,'') for k in columns[:-1]]+[source_id]
+        assignments=','.join(f'{k}=excluded.{k}' for k in columns if k!='id')
+        db.execute(f'INSERT INTO recipes({",".join(columns)}) VALUES({",".join("?" for _ in columns)}) ON CONFLICT(id) DO UPDATE SET {assignments}',values)
+        db.execute('DELETE FROM ingredients WHERE recipe_id=?',(r['id'],))
+        db.execute('DELETE FROM steps WHERE recipe_id=?',(r['id'],))
+        db.executemany('INSERT INTO ingredients VALUES(?,?,?,?,?)',[(r['id'],n,i['name'],i['quantity'],i['unit']) for n,i in enumerate(r['ingredients'])])
+        db.executemany('INSERT INTO steps VALUES(?,?,?)',[(r['id'],n,s) for n,s in enumerate(r['steps'])])
+
+
+def normalize_personal_recipe(value):
+    if not isinstance(value,dict):
+        raise AppError('每道菜谱必须是 JSON 对象。')
+    r=dict(value)
+    r.setdefault('region','东方' if r.get('area_group','中国') in ('中国','亚洲') else '西方')
+    r.setdefault('id','user-'+uuid.uuid4().hex)
+    if not isinstance(r['id'],str) or not re.fullmatch(r'user-[a-z0-9-]{1,75}',r['id']):
+        raise AppError('自建菜谱 id 需以 user- 开头；新菜谱可不填 id，由系统生成。')
+    defaults=dict(region='东方',cuisine='自家风味',minutes=1,servings=2,diet='unknown',
+                  image='/assets/hero.jpg',image_alt='餐桌风味示意',description='来自我的厨房的一道菜。',
+                  difficulty='家常',tip='结合食材状态和锅具判断火候。',tags=[],allergens=[],equipment=[],
+                  adaptation='用户自行整理，食材与做法以录入内容为准。',area_group='中国',area='家常菜',
+                  time_note='' if 'minutes' in r else 'unknown',servings_note='' if 'servings' in r else '份量未注明，保留录入用量。',quantity_notes='')
+    for key,default in defaults.items():
+        r.setdefault(key,default)
+    if r['area_group'] not in ('中国','亚洲','欧洲','美洲','中东','非洲','大洋洲','其他') or not isinstance(r['area'],str) or not r['area'].strip():
+        raise AppError('请选择有效地区大类，并填写具体地区或风味。')
+    if 'source' not in r:
+        r['source']=dict(name='我的厨房',title=r.get('name','自创菜谱'),url='',retrieved_at=time.strftime('%Y-%m-%d'))
+    if isinstance(r.get('ingredients'),str):
+        r['ingredients']=[line.strip() for line in r['ingredients'].splitlines() if line.strip()]
+    if isinstance(r.get('ingredients'),list):
+        r['ingredients']=[dict(name=i.strip(),quantity=None,unit='') if isinstance(i,str) else {'quantity':None,'unit':'',**i} if isinstance(i,dict) else i for i in r['ingredients']]
+    if isinstance(r.get('steps'),str):
+        r['steps']=[line.strip() for line in r['steps'].splitlines() if line.strip()]
+    validate_recipe(r)
+    return r
+
+
+def import_personal_recipes(body):
+    records=body.get('recipes')
+    if not isinstance(records,list) or not 1<=len(records)<=500:
+        raise AppError('一次需要导入 1–500 道菜谱。')
+    dry_run=body.get('dry_run',False)
+    if type(dry_run) is not bool or body.get('on_conflict','skip') not in ('skip','update'):
+        raise AppError('导入选项无效。')
+    recipes=[]
+    for index,value in enumerate(records,1):
+        try:
+            recipes.append(normalize_personal_recipe(value))
+        except (AppError,TypeError,ValueError) as error:
+            raise AppError(f'第 {index} 道菜谱：{error}') from None
+    if len({r['id'] for r in recipes})!=len(recipes):
+        raise AppError('导入文件中存在重复的菜谱 id。')
+    selected=[]
+    added=updated=skipped=0
+    with connect() as db:
+        # Lock before checking conflicts, so concurrent imports cannot bypass
+        # ownership checks or silently overwrite one another.
+        db.execute('BEGIN IMMEDIATE')
+        for r in recipes:
+            exists=db.execute('SELECT 1 FROM recipes WHERE id=?',(r['id'],)).fetchone()
+            owned=db.execute('SELECT 1 FROM personal_recipes WHERE recipe_id=?',(r['id'],)).fetchone()
+            if exists and not owned:
+                raise AppError('不能覆盖内置菜谱。',409)
+            if exists and body.get('on_conflict','skip')=='skip':
+                skipped+=1
+                continue
+            updated+=bool(exists)
+            added+=not bool(exists)
+            selected.append(r)
+        if not dry_run:
+            write_recipes(db,selected,protect_sources=True)
+            db.executemany('INSERT OR IGNORE INTO personal_recipes(recipe_id) VALUES(?)',[(r['id'],) for r in selected])
+    return dict(added=added,updated=updated,skipped=skipped,dry_run=dry_run,
+                recipes=[dict(id=r['id'],name=r['name'],area_group=r['area_group'],area=r['area']) for r in selected])
 
 
 def init_db():
@@ -216,12 +297,16 @@ def all_recipes(recipe_id=None):
         for row in db.execute('SELECT * FROM ingredients'+child_where+' ORDER BY recipe_id,position',args):
             ingredients.setdefault(row['recipe_id'],[]).append(dict(name=row['name'],quantity=row['quantity'],unit=row['unit']))
         steps={}
+        personal={row[0] for row in db.execute('SELECT recipe_id FROM personal_recipes')}
         for row in db.execute('SELECT * FROM steps'+child_where+' ORDER BY recipe_id,position',args):
             steps.setdefault(row['recipe_id'],[]).append(row['instruction'])
     output=[]
     for row in rows:
         r=dict(row)
         r['source']=dict(name=r.pop('source_name'),title=r.pop('source_title'),url=r.pop('source_url'),retrieved_at=r.pop('retrieved_at'))
+        if r['source']['url'].startswith('personal:'):
+            r['source']['url']=''
+        r['personal']=r['id'] in personal
         r.pop('source_id')
         for key in ('tags','allergens','equipment'):
             r[key]=json.loads(r[key])
@@ -593,7 +678,7 @@ class Handler(BaseHTTPRequestHandler):
             except (BrokenPipeError,ConnectionResetError):
                 pass
 
-    def read_json(self):
+    def read_json(self,max_bytes=12000):
         if self.headers.get('Content-Type','').split(';')[0].strip()!='application/json':
             raise AppError('请求必须为 application/json。',415)
         if self.headers.get('Transfer-Encoding'):
@@ -602,8 +687,8 @@ class Handler(BaseHTTPRequestHandler):
             length=int(self.headers.get('Content-Length','0'))
         except ValueError:
             raise AppError('请求长度无效。') from None
-        if not 0<length<=12000:
-            raise AppError('请求体为空或超过 12 KB。',413)
+        if not 0<length<=max_bytes:
+            raise AppError(f'请求体为空或超过 {max_bytes//1024} KB。',413)
         try:
             raw=self.rfile.read(length)
             data=json.loads(raw)
@@ -625,6 +710,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.respond({'ok':True,'recipes':count,**public_settings()})
             if path=='/api/settings':
                 return self.respond(public_settings())
+            if path=='/api/personal-recipes':
+                return self.respond([r for r in all_recipes() if r['personal']])
             if path=='/api/recipes':
                 params=parse_qs(url.query)
                 if not params:
@@ -659,6 +746,16 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_bytes(target.read_bytes(),content_type)
         if method=='POST' and path=='/api/settings':
             return self.respond(update_settings(self.read_json()))
+        if method=='POST' and path=='/api/recipes/import':
+            return self.respond(import_personal_recipes(self.read_json(2*1024*1024)))
+        if method=='DELETE' and path.startswith('/api/personal-recipes/'):
+            recipe_id=path[len('/api/personal-recipes/'):]
+            with connect() as db:
+                if not db.execute('SELECT 1 FROM personal_recipes WHERE recipe_id=?',(recipe_id,)).fetchone():
+                    raise AppError('只能删除自己添加的菜谱。',404)
+                db.execute('DELETE FROM recipes WHERE id=?',(recipe_id,))
+                db.execute('DELETE FROM sources WHERE url=?',('personal:'+recipe_id,))
+            return self.respond({'deleted':recipe_id})
         if method=='POST' and path=='/api/chat':
             return self.respond(handle_chat(self.read_json()))
         if method=='PUT' and path.startswith('/api/favorites/'):

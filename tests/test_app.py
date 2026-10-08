@@ -135,6 +135,78 @@ class KitchenTests(unittest.TestCase):
         self.assertEqual(self.request('/api/favorites/missing','PUT',{'favorite':True})[0],404)
         self.assertEqual(self.request('/api/favorites/tomato-eggs','PUT',{'favorite':'yes'})[0],400)
 
+    def test_personal_import_preview_persistence_and_retrieval(self):
+        recipe={'id':'user-family-soup','name':'清爽萝卜汤','area_group':'中国','area':'广东',
+                'minutes':25,'servings':3,'diet':'vegan','ingredients':['萝卜 1 个','盐适量'],
+                'steps':'萝卜切块。\n加水煮软，调味。'}
+        count=len(app.all_recipes())
+        status,preview=self.request('/api/recipes/import','POST',{'recipes':[recipe],'dry_run':True})
+        self.assertEqual(status,200)
+        self.assertEqual(preview['added'],1)
+        self.assertEqual(len(app.all_recipes()),count)
+        self.assertEqual(self.request('/api/personal-recipes')[1],[])
+        status,result=self.request('/api/recipes/import','POST',{'recipes':[recipe]})
+        self.assertEqual(status,200)
+        self.assertEqual(result['added'],1)
+        stored=self.request('/api/recipes/user-family-soup')[1]
+        self.assertTrue(stored['personal'])
+        self.assertEqual(stored['steps'],['萝卜切块。','加水煮软，调味。'])
+        self.assertEqual(stored['source']['url'],'')
+        self.assertIsNone(stored['ingredients'][0]['quantity'])
+        self.assertEqual(app.search_recipes('清爽萝卜汤',area='广东')[0]['id'],recipe['id'])
+        app.init_db()
+        self.assertEqual(len(app.all_recipes()),count+1)
+        self.assertEqual(self.request('/api/personal-recipes')[1][0]['id'],recipe['id'])
+        reply=app.handle_chat({'message':'清爽萝卜汤怎么做？'})
+        self.assertIn(recipe['id'],[r['id'] for r in reply['sources']])
+
+    def test_personal_export_round_trip_conflicts_updates_and_delete(self):
+        minimal={'name':'我的炖菜','ingredients':[{'name':'土豆','quantity':2,'unit':'个'}],'steps':['煮熟。']}
+        self.request('/api/recipes/import','POST',{'recipes':[minimal]})
+        exported=self.request('/api/personal-recipes')[1]
+        self.assertEqual(len(exported),1)
+        rid=exported[0]['id']
+        self.assertTrue(rid.startswith('user-'))
+        self.assertEqual(exported[0]['time_note'],'unknown')
+        self.assertTrue(exported[0]['servings_note'])
+        self.request('/api/favorites/'+rid,'PUT',{'favorite':True})
+        exported[0]['name']='改良版炖菜'
+        status,result=self.request('/api/recipes/import','POST',{'recipes':exported})
+        self.assertEqual((status,result['skipped']),(200,1))
+        self.assertEqual(app.get_recipe(rid)['name'],'我的炖菜')
+        status,result=self.request('/api/recipes/import','POST',{'recipes':exported,'on_conflict':'update'})
+        self.assertEqual((status,result['updated']),(200,1))
+        self.assertEqual(app.get_recipe(rid)['name'],'改良版炖菜')
+        self.assertIn(rid,self.request('/api/favorites')[1])
+        self.assertEqual(self.request('/api/personal-recipes/tomato-eggs','DELETE')[0],404)
+        self.assertEqual(self.request('/api/personal-recipes/'+rid,'DELETE')[0],200)
+        self.assertNotIn(rid,self.request('/api/favorites')[1])
+        self.assertEqual(self.request('/api/recipes/'+rid)[0],404)
+
+    def test_personal_import_rejects_bad_batches_without_partial_writes(self):
+        good={'id':'user-valid','name':'测试菜','ingredients':['番茄'],'steps':['切块。']}
+        count=len(app.all_recipes())
+        for bad in (dict(good,name=''),dict(good,id='tomato-eggs'),dict(good,ingredients=[]),
+                    dict(good,image='https://example.com/a.jpg'),dict(good,minutes='30'),
+                    dict(good,ingredients=[{'name':'盐','quantity':float('nan'),'unit':'克'}]),
+                    dict(good,source={'name':'外部来源','title':'测试','url':'','retrieved_at':'2026-10-08'}),
+                    dict(good,area_group='不明地区')):
+            with self.subTest(bad=bad):
+                self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good,bad]})[0],400)
+                self.assertEqual(len(app.all_recipes()),count)
+        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good,good]})[0],400)
+        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good]*501})[0],400)
+        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good],'dry_run':'yes'})[0],400)
+        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good],'padding':'x'*(2*1024*1024)})[0],413)
+        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[good]},headers={'Origin':'https://example.com'})[0],403)
+
+    def test_personal_import_keeps_builtin_source_metadata(self):
+        before=app.get_recipe('tomato-eggs')['source']
+        recipe={'name':'参考做法','ingredients':['番茄'],'steps':['煮熟。'],
+                'source':{**before,'name':'用户的来源标题','title':'另一个标题'}}
+        self.assertEqual(self.request('/api/recipes/import','POST',{'recipes':[recipe]})[0],200)
+        self.assertEqual(app.get_recipe('tomato-eggs')['source'],before)
+
     def test_offline_chat_quantity_and_history(self):
         status,result=self.request('/api/chat','POST',{'message':'西红柿鸡蛋怎么做，4 人份','context':{'servings':2,'time':20}})
         self.assertEqual(status,200)
