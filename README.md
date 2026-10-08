@@ -218,6 +218,17 @@ python scripts/package_release.py
 
 版本读取自 `VERSION`，产物写入 `dist/v<version>/`。打包基于 `HEAD`，保留上游文件内容，并统一 Windows BAT 的 CRLF 换行。
 
+## 🛠️ 自动检查
+
+GitHub Actions 在 `main` 推送和 Pull Request 时执行 JavaScript 语法检查与隔离数据库的集成测试，覆盖 Windows / Linux 和 Python 3.10 / 3.12。测试使用独立数据库和模拟模型响应，无需配置 API Key。也可在 [Actions](https://github.com/sloth766/shiwei-kitchen/actions) 手动运行。
+
+本地执行：
+
+```sh
+node --check public/app.js
+python -m unittest discover -s tests -v
+```
+
 ## 🤝 致谢
 
 感谢 [@mumoaurora](https://github.com/mumoaurora) 提供 [Issue #1](https://github.com/sloth766/shiwei-kitchen/issues/1) 中的详细复现与检索修复补丁，帮助小厨更准确地理解每一餐的需求。
