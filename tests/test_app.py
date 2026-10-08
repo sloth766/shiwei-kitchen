@@ -42,6 +42,11 @@ class KitchenTests(unittest.TestCase):
         app.CONFIG.update(self.original_config)
         self.temp.cleanup()
 
+    def add_fast_western_vegan_recipe(self):
+        # The bundled catalogue has no verified Western vegan dish <=15 minutes.
+        # A controlled fixture checks positive retrieval as well as inherited filters.
+        app.import_personal_recipes({'recipes':[{'id':'user-test-western-vegan','name':'快手西式豆腐','region':'西方','area_group':'欧洲','area':'意大利','diet':'vegan','minutes':10,'servings':2,'ingredients':['豆腐','番茄'],'steps':['切块后炒熟。']}]})
+
     def request(self,path,method='GET',body=None,headers=None):
         data=None if body is None else json.dumps(body,ensure_ascii=False).encode()
         request=urllib.request.Request(self.base+path,data=data,method=method,headers={'Content-Type':'application/json',**(headers or {})})
@@ -84,7 +89,9 @@ class KitchenTests(unittest.TestCase):
             recipes=app.search_recipes(area=area,limit=8)
             self.assertTrue(recipes,area)
             self.assertTrue(all(r['area']==area for r in recipes))
-        self.assertTrue(all(r['area']=='四川' for r in app.search_recipes('想吃川菜',limit=8)))
+        regional=app.search_recipes('想吃川菜',limit=8)
+        self.assertTrue(regional)
+        self.assertTrue(all(r['area']=='四川' for r in regional))
         self.assertEqual(app.search_recipes(area='不存在的地区'),[])
         self.assertTrue(all(r['area_group']=='欧洲' for r in app.search_recipes(area_group='欧洲',limit=8)))
         status,recipes=self.request('/api/recipes?area='+urllib.parse.quote('广东'))
@@ -94,6 +101,102 @@ class KitchenTests(unittest.TestCase):
         status,recipes=self.request('/api/recipes?area_group='+urllib.parse.quote('美洲'))
         self.assertEqual(status,200)
         self.assertTrue(all(r['area_group']=='美洲' for r in recipes))
+
+    def test_partial_recipe_names_and_ingredient_keywords(self):
+        for query in ('咖喱','咖喱 咖喱','咖喱怎么做','我想吃咖喱'):
+            with self.subTest(query=query):
+                recipes=app.search_recipes(query,max_minutes=30)
+                self.assertTrue(recipes)
+                self.assertTrue(all('咖喱' in r['name'] for r in recipes))
+                self.assertTrue(all(r['minutes']<=30 for r in recipes))
+        recipe=app.normalize_personal_recipe({'name':'暖暖一锅','minutes':15,
+            'ingredients':['咖喱块（参考包装用量）'],'steps':['煮熟。']})
+        with patch.object(app,'all_recipes',return_value=[recipe]):
+            self.assertEqual(app.search_recipes('咖喱')[0]['id'],recipe['id'])
+
+    def test_unknown_keywords_never_fall_back_to_unrelated_recipes(self):
+        for query in ('未收录的菜9f84','快手未收录的菜9f84','咖喱 15 分钟内'):
+            with self.subTest(query=query):
+                self.assertEqual(app.search_recipes(query,max_minutes=15),[])
+        status,recipes=self.request('/api/recipes?q='+urllib.parse.quote('未收录的菜9f84'))
+        self.assertEqual(status,200)
+        self.assertEqual(recipes,[])
+        self.assertTrue(app.search_recipes('推荐晚餐',max_minutes=30))
+        self.assertTrue(app.search_recipes('',max_minutes=30))
+
+    def test_offline_curry_chat_returns_only_related_recipes(self):
+        status,result=self.request('/api/chat','POST',{'message':'咖喱','context':{'time':30}})
+        self.assertEqual(status,200)
+        self.assertEqual(result['mode'],'local')
+        self.assertTrue(result['sources'])
+        self.assertTrue(all('咖喱' in source['name'] for source in result['sources']))
+        self.assertNotIn('微波炉蛋糕',result['content'])
+        status,followup=self.request('/api/chat','POST',{
+            'message':'咖喱','session_id':result['session_id'],'context':{'time':30}})
+        self.assertEqual(status,200)
+        self.assertTrue(followup['sources'])
+        self.assertTrue(all('咖喱' in source['name'] for source in followup['sources']))
+
+    def test_offline_unknown_and_filtered_queries_report_no_match(self):
+        for message in ('未收录的菜9f84','咖喱'):
+            with self.subTest(message=message):
+                status,result=self.request('/api/chat','POST',{
+                    'message':message,'context':{'time':15}})
+                self.assertEqual(status,200)
+                self.assertEqual(result['sources'],[])
+                self.assertIn('关键词',result['content'])
+                self.assertNotIn('可以从',result['content'])
+
+    def test_zero_match_followup_does_not_repeat_previous_menu(self):
+        status,first=self.request('/api/chat','POST',{'message':'牛肉','context':{'time':30}})
+        self.assertEqual(status,200)
+        self.assertTrue(first['sources'])
+        for message in ('鱼香肉丝','未收录的菜9f84'):
+            with self.subTest(message=message):
+                status,result=self.request('/api/chat','POST',{
+                    'message':message,'session_id':first['session_id'],'context':{'time':30}})
+                self.assertEqual(status,200)
+                self.assertEqual(result['match_status'],'no_match')
+                self.assertEqual(result['match_count'],0)
+                self.assertEqual(result['sources'],[])
+                self.assertIn('## 没有找到匹配菜谱',result['content'])
+                self.assertNotIn('可以从',result['content'])
+                self.assertNotIn('**食材：**',result['content'])
+                self.assertNotEqual(result['content'],first['content'])
+        session=self.request('/api/sessions/'+first['session_id'])[1]
+        self.assertEqual(len(session['messages']),6)
+        self.assertEqual(session['messages'][-1]['content'],result['content'])
+        self.assertEqual(session['messages'][-1]['sources'],[])
+
+    def test_new_specific_query_ignores_old_topics_and_sidebar_ingredients(self):
+        first=app.handle_chat({'message':'咖喱'})
+        result=app.handle_chat({'message':'未收录的菜9f84','session_id':first['session_id'],
+                               'context':{'ingredients':'鸡蛋'}})
+        self.assertEqual(result['sources'],[])
+        self.assertEqual(result['match_status'],'no_match')
+        followup=app.handle_chat({'message':'还有什么建议？','session_id':first['session_id']})
+        self.assertEqual(followup['sources'],[])
+        self.assertEqual(followup['match_status'],'no_match')
+
+    def test_explicit_followup_still_reuses_the_previous_topic(self):
+        first=app.handle_chat({'message':'番茄炒鸡蛋'})
+        for _ in range(2):
+            followup=app.handle_chat({'message':'还有什么建议？','session_id':first['session_id']})
+            self.assertTrue(followup['sources'])
+            self.assertEqual(followup['sources'][0]['id'],'tomato-eggs')
+
+    def test_pantry_zero_match_uses_the_dedicated_return(self):
+        result=app.handle_chat({'message':'根据库存推荐菜单','context':{'use_pantry':True}})
+        self.assertEqual(result['match_status'],'no_match')
+        self.assertEqual(result['match_count'],0)
+        self.assertEqual(result['sources'],[])
+        self.assertIn('## 没有找到匹配菜谱',result['content'])
+        self.assertIn('库存为空',result['content'])
+
+    def test_specific_dish_query_never_becomes_an_ingredient_recommendation(self):
+        self.assertEqual(app.search_recipes('红烧牛肉',max_minutes=30),[])
+        self.assertEqual(app.search_recipes('鱼香肉丝',max_minutes=30),[])
+        self.assertTrue(app.search_recipes('鱼香肉丝',max_minutes=60))
 
     def test_source_quantities_and_unknown_metadata_remain_honest(self):
         recipe=app.get_recipe('bastian-pizza')
@@ -223,15 +326,126 @@ class KitchenTests(unittest.TestCase):
         self.assertEqual(len(self.request('/api/sessions')[1]),1)
 
     def test_explicit_diet_time_and_allergy_survive_followup(self):
+        self.add_fast_western_vegan_recipe()
         result=app.handle_chat({'message':'我对牛奶过敏，请推荐 15 分钟内的纯素菜。'})
+        self.assertTrue(result['sources'])
         for source in result['sources']:
             recipe=app.get_recipe(source['id'])
             self.assertEqual(recipe['diet'],'vegan')
             self.assertLessEqual(recipe['minutes'],15)
             self.assertNotIn('牛奶',recipe['allergens'])
         followup=app.handle_chat({'message':'再推荐一道西式的','session_id':result['session_id']})
+        self.assertTrue(followup['sources'])
+        self.assertEqual(followup['context']['time'],15)
+        self.assertEqual(followup['context']['diet'],'vegan')
         for source in followup['sources']:
-            self.assertNotIn('牛奶',app.get_recipe(source['id'])['allergens'])
+            recipe=app.get_recipe(source['id'])
+            self.assertNotIn('牛奶',recipe['allergens'])
+            self.assertEqual(recipe['diet'],'vegan')
+            self.assertEqual(recipe['region'],'西方')
+            self.assertLessEqual(recipe['minutes'],15)
+
+    def test_conversation_constraints_survive_unchanged_sidebar_and_restart(self):
+        self.add_fast_western_vegan_recipe()
+        sidebar={'time':30,'servings':2,'diet':'','region':''}
+        first=app.handle_chat({'message':'推荐 15 分钟内的纯素菜，4 人份','context':sidebar})
+        app.init_db()
+        followup=app.handle_chat({'message':'再推荐一道西式的','session_id':first['session_id'],'context':sidebar})
+        self.assertTrue(followup['sources'])
+        for key,value in {'time':15,'servings':4,'diet':'vegan','region':'西方'}.items():
+            self.assertEqual(followup['context'][key],value)
+        restored=app.read_session(first['session_id'])
+        self.assertEqual(restored['context'],followup['context'])
+        result=app.handle_chat({'message':'推荐菜单','session_id':first['session_id'],'context':{'time':60,'servings':1,'diet':'vegetarian'}})
+        self.assertEqual(result['context']['time'],60)
+        self.assertEqual(result['context']['servings'],1)
+        self.assertEqual(result['context']['diet'],'vegetarian')
+
+    def test_explicit_sidebar_reset_overrides_inferred_values(self):
+        first=app.handle_chat({'message':'推荐 15 分钟内的纯素菜','context':{'time':30,'diet':''}})
+        second=app.handle_chat({'message':'推荐菜单','session_id':first['session_id'],'context':{'time':30,'diet':''},'context_overrides':['time','diet']})
+        self.assertEqual(second['context']['time'],30)
+        self.assertEqual(second['context']['diet'],'')
+        for overrides in ('time',['unknown'],['time'],[False]):
+            self.assertEqual(self.request('/api/chat','POST',{'message':'菜单','context':{},'context_overrides':overrides})[0],400)
+
+    def test_legacy_session_migration_recovers_conditions(self):
+        self.add_fast_western_vegan_recipe()
+        first=app.handle_chat({'message':'推荐 15 分钟内的纯素菜，4 人份'})
+        with app.connect() as db:
+            db.execute('ALTER TABLE sessions DROP COLUMN constraints')
+        app.init_db()
+        result=app.handle_chat({'message':'再推荐一道西式的','session_id':first['session_id']})
+        self.assertTrue(result['sources'])
+        self.assertEqual(result['context']['time'],15)
+        self.assertEqual(result['context']['servings'],4)
+        self.assertEqual(result['context']['diet'],'vegan')
+
+    def test_failed_answer_does_not_change_session_constraints(self):
+        first=app.handle_chat({'message':'推荐 15 分钟内的纯素菜'})
+        before=app.read_session(first['session_id'])
+        app.CONFIG['api_key']='test-only-not-a-real-key'
+        with patch.object(app,'deepseek_request',side_effect=app.AppError('连接失败',502)):
+            with self.assertRaises(app.AppError):
+                app.handle_chat({'message':'推荐 60 分钟内的菜','session_id':first['session_id']})
+        self.assertEqual(app.read_session(first['session_id']),before)
+
+    def test_region_words_cannot_rescue_unknown_food_keywords(self):
+        for query in ('西式未收录的菜9f84','推荐快手的未收录的菜9f84'):
+            self.assertEqual(app.search_recipes(query,max_minutes=30),[])
+
+    def test_inventory_equivalence_does_not_treat_substitutes_as_owned(self):
+        for stock,ingredient in [('番茄酱','番茄'),('番茄汁','番茄'),('番茄','番茄酱'),('奶粉','牛奶'),('鸡肉','鸡腿'),('干香菇','香菇')]:
+            self.assertFalse(app.pantry_matches(stock,ingredient),(stock,ingredient))
+        for stock,ingredient in [('西红柿','番茄'),('番茄','西红柿一个'),('大虾','虾'),('花生米','花生'),('番茄','番茄（可选）')]:
+            self.assertTrue(app.pantry_matches(stock,ingredient),(stock,ingredient))
+        app.save_pantry_item({'name':'番茄酱'})
+        recipe=app.get_recipe('tomato-eggs')
+        with patch.object(app,'all_recipes',return_value=[recipe]):
+            self.assertEqual(app.pantry_recipe_candidates(app.pantry_context(),app.validate_context({'use_pantry':True})),[])
+
+    def test_specific_pantry_query_does_not_return_other_stock_menus(self):
+        app.save_pantry_item({'name':'番茄'})
+        app.save_pantry_item({'name':'鸡蛋'})
+        generic=app.handle_chat({'message':'根据库存推荐菜单','context':{'use_pantry':True}})
+        self.assertTrue(generic['sources'])
+        for query in ('未收录的菜9f84','红烧牛肉','鱼香肉丝'):
+            result=app.handle_chat({'message':query,'session_id':generic['session_id'],'context':{'use_pantry':True,'time':30}})
+            self.assertEqual(result['sources'],[])
+            self.assertEqual(result['match_status'],'no_match')
+
+    def test_equipment_is_excluded_from_pantry_missing_ingredients(self):
+        recipe=app.normalize_personal_recipe({'name':'冰箱拌番茄','minutes':5,'ingredients':['番茄','冰箱','碗'],'steps':['放入碗中。']})
+        app.save_pantry_item({'name':'番茄'})
+        with patch.object(app,'all_recipes',return_value=[recipe]):
+            result=app.pantry_recipe_candidates(app.pantry_context(),app.validate_context({'use_pantry':True}))
+        self.assertEqual(result[0]['pantry_match']['missing'],[])
+        self.assertEqual(result[0]['pantry_match']['available'],['番茄'])
+
+    def test_tools_cannot_relax_time_diet_or_region(self):
+        self.add_fast_western_vegan_recipe()
+        app.CONFIG['api_key']='test-only-not-a-real-key'
+        unknown=next(r['id'] for r in app.all_recipes() if r['time_note']=='unknown')
+        calls=[{'id':'search','type':'function','function':{'name':'search_recipes','arguments':json.dumps({'query':'推荐晚餐','max_minutes':1440,'diet':'vegetarian','region':'东方','limit':5})}},
+               {'id':'long','type':'function','function':{'name':'get_recipe','arguments':'{"recipe_id":"carbonara"}'}},
+               {'id':'unknown-time','type':'function','function':{'name':'get_recipe','arguments':json.dumps({'recipe_id':unknown})}},
+               {'id':'wrong-region','type':'function','function':{'name':'get_recipe','arguments':'{"recipe_id":"tomato-eggs"}'}}]
+        with patch.object(app,'deepseek_request',side_effect=[{'role':'assistant','content':None,'tool_calls':calls},{'role':'assistant','content':'推荐满足厨房条件的西式纯素菜。'}]) as mock:
+            result=app.handle_chat({'message':'推荐晚餐','context':{'time':15,'diet':'vegan','region':'西方'}})
+        tools={m['tool_call_id']:json.loads(m['content']) for m in mock.call_args.args[0] if m['role']=='tool'}
+        self.assertTrue(tools['search'])
+        self.assertTrue(all(r['minutes']<=15 and r['diet']=='vegan' and r['region']=='西方' for r in tools['search']))
+        self.assertTrue(all('error' in tools[key] for key in ('long','unknown-time','wrong-region')))
+        self.assertTrue(all(app.recipe_in_context(app.get_recipe(r['id']),app.validate_context({'time':15,'diet':'vegan','region':'西方'})) for r in result['sources']))
+
+    def test_tool_time_and_limit_types_are_strict(self):
+        app.CONFIG['api_key']='test-only-not-a-real-key'
+        calls=[{'id':str(index),'type':'function','function':{'name':'search_recipes','arguments':json.dumps(args)}} for index,args in enumerate([{'query':'','max_minutes':True},{'query':'','max_minutes':0},{'query':'','limit':False},{'query':'','limit':6}])]
+        with patch.object(app,'deepseek_request',side_effect=[{'role':'assistant','content':None,'tool_calls':calls},{'role':'assistant','content':'请重新查询。'}]) as mock:
+            app.handle_chat({'message':'菜单'})
+        tools=[json.loads(m['content']) for m in mock.call_args.args[0] if m['role']=='tool']
+        self.assertEqual(len(tools),4)
+        self.assertTrue(all('error' in result for result in tools))
 
     def test_empty_result_is_honest(self):
         result=app.handle_chat({'message':'我想吃晚饭','context':{'diet':'vegan','time':1}})

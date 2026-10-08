@@ -5,9 +5,11 @@ const icon = (name) => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeUrl = (value) => { try { const u = new URL(value); return u.protocol === 'https:' ? u.href : '#'; } catch { return '#'; } };
 const state = {recipes:[], favorites:new Set(), settings:{configured:false,model:'deepseek-flash'}, homeFilter:'all', exploreFilter:'all', areaGroup:'', area:'', recipePage:1, sessionId:null, sending:false, currentRecipe:null, searchTimer:null, messages:[], page:'home', sessionEpoch:0};
-const contextIds = ['ingredients','servings','time','diet','avoid','equipment'];
+const contextIds = ['ingredients','servings','time','diet','avoid','equipment','region'];
 let toastTimer;
 let editingRecipe=null, importDraft=null;
+const contextOverrides=new Set();
+let expandedRegions=false;
 let editingStock=null, pantry={items:[],counts:{}};
 const stockFields=['name','quantity','unit','category','storage','expires_on','opened_on','notes'];
 async function refreshPantry() { pantry=await api('/api/pantry');renderPantry(); }
@@ -67,7 +69,19 @@ async function api(path, options = {}) {
 function toast(message) { $('#toast').textContent=message; $('#toast').classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3500); }
 function context() { return {...Object.fromEntries(contextIds.map(id => [id,$(`#context-${id}`).value])),use_pantry:$('#context-use-pantry').checked,pantry_mode:$('#context-pantry-mode').value}; }
 function saveContext() { try { localStorage.setItem('shiwei.context',JSON.stringify(context())); } catch {} updateContextChips(); }
-function updateContextChips() { const c=context();$('#context-pantry-mode').disabled=!c.use_pantry; $('#composer-context').innerHTML=`<span>${esc(c.servings)} 人</span><span>${esc(c.time)} 分钟</span>${c.diet ? `<span>${c.diet==='vegan'?'纯素':'蛋奶素'}</span>`:''}${c.avoid?'<span>已填写忌口</span>':''}${c.use_pantry?`<span>${c.pantry_mode==='expiry'?'仓库 · 优先临期':'已引用食材仓库'}</span>`:''}`; }
+function syncContext(values,expected=null) {
+  if(!values)return;
+  contextIds.forEach(key=>{
+    const input=$(`#context-${key}`),value=values[key];
+    if(value==null||expected&&input.value!==String(expected[key]))return;
+    if(input.tagName==='SELECT'&&!Array.from(input.options).some(option=>option.value===String(value))){
+      const option=document.createElement('option');option.value=String(value);option.textContent=key==='time'?`${value} 分钟`:`${value} 人`;input.append(option);
+    }
+    input.value=String(value);
+  });
+  saveContext();
+}
+function updateContextChips() { const c=context();$('#context-pantry-mode').disabled=!c.use_pantry; $('#composer-context').innerHTML=`<span>${esc(c.servings)} 人</span><span>${esc(c.time)} 分钟</span>${c.diet ? `<span>${c.diet==='vegan'?'纯素':'蛋奶素'}</span>`:''}${c.region?`<span>${esc(c.region)}菜式</span>`:''}${c.avoid?'<span>已填写忌口</span>':''}${c.use_pantry?`<span>${c.pantry_mode==='expiry'?'仓库 · 优先临期':'已引用食材仓库'}</span>`:''}`; }
 function updateStatus() {
   const online=state.settings.configured;
   $('#connection-status').innerHTML=`<span class="status-dot"></span>${online?'DeepSeek 已配置':'本地菜谱模式'}`;
@@ -92,8 +106,12 @@ function renderRegions() {
   const groupCount=g=>state.recipes.filter(r=>r.area_group===g).length;
   $('#region-groups').innerHTML=`<button data-region-group="" aria-pressed="${!state.areaGroup}" class="${!state.areaGroup?'active':''}">全部地区 <small>${state.recipes.length}</small></button>`+groups.map(g=>`<button data-region-group="${esc(g)}" aria-pressed="${state.areaGroup===g}" class="${state.areaGroup===g?'active':''}">${esc(label(g))} <small>${groupCount(g)}</small></button>`).join('');
   const selected=state.recipes.filter(r=>!state.areaGroup||r.area_group===state.areaGroup);
-  const areas=[...new Set(selected.map(r=>r.area).filter(Boolean))].sort((a,b)=>a==='家常菜'?-1:b==='家常菜'?1:a.localeCompare(b,'zh-CN'));
-  $('#region-areas').innerHTML=`<button data-region-area="" aria-pressed="${!state.area}" class="${!state.area?'active':''}">全部口味</button>`+areas.map(a=>`<button data-region-area="${esc(a)}" aria-pressed="${state.area===a}" class="${state.area===a?'active':''}">${esc(a)} <small>${selected.filter(r=>r.area===a).length}</small></button>`).join('');
+  const common=['家常菜','四川','广东','湖南','东北','日本','意大利','墨西哥'];
+  const rank=area=>common.includes(area)?common.indexOf(area):common.length;
+  const areas=[...new Set(selected.map(r=>r.area).filter(Boolean))].sort((a,b)=>rank(a)-rank(b)||a.localeCompare(b,'zh-CN'));
+  const visible=expandedRegions?areas:areas.slice(0,10);
+  if(state.area&&!visible.includes(state.area))visible.push(state.area);
+  $('#region-areas').innerHTML=`<button data-region-area="" aria-pressed="${!state.area}" class="${!state.area?'active':''}">全部口味</button>`+visible.map(a=>`<button data-region-area="${esc(a)}" aria-pressed="${state.area===a}" class="${state.area===a?'active':''}">${esc(a)} <small>${selected.filter(r=>r.area===a).length}</small></button>`).join('')+(areas.length>10?`<button data-region-toggle aria-expanded="${expandedRegions}" class="region-toggle">${expandedRegions?'收起地区 ↑':`查看全部 ${areas.length} 个地区 ↓`}</button>`:'');
   $('#region-summary').textContent=`${new Set(state.recipes.map(r=>r.area).filter(Boolean)).size} 个地区与风味`;
 }
 function recipeTime(r) { return r.time_note==='unknown'?'用时未标注':`${r.time_note==='source'?'约 ':''}${r.minutes} 分钟`; }
@@ -244,7 +262,7 @@ function appendMessage(role,content,mode=null,sources=[],save=true) {
   $('#chat-welcome').hidden=true;
   const div=document.createElement('div');div.className=`message ${role}`;
   const body=document.createElement('div');body.className='message-body';
-  if(role==='assistant'&&mode){const label=document.createElement('div');label.className='message-mode';label.textContent=mode==='deepseek'?'DEEPSEEK · 参考本地菜谱':'本地菜谱检索 · 尚未调用 AI';body.append(label);}
+  if(role==='assistant'&&mode){const label=document.createElement('div');label.className='message-mode';label.textContent=mode==='deepseek'?'DEEPSEEK · 参考本地菜谱':sources.length?'本地菜谱检索 · 尚未调用 AI':'本地菜谱检索 · 0 匹配';body.append(label);}
   const contentDiv=document.createElement('div');contentDiv.className='message-content';if(role==='user')contentDiv.textContent=content;else contentDiv.innerHTML=markdown(content);body.append(contentDiv);
   if(sources.length){const list=document.createElement('div');list.className='message-source-list';sources.forEach(r=>{const btn=document.createElement('button');btn.textContent=`↗ ${r.name}`;btn.dataset.recipeId=r.id;list.append(btn);});body.append(list);}
   const avatar=document.createElement('div');avatar.className='message-avatar';if(role==='user')avatar.textContent='我';else avatar.innerHTML=icon('chef');div.append(avatar,body);$('#chat-messages').append(div);
@@ -258,10 +276,12 @@ async function sendChat(event) {
   state.sending=true;$('#send-button').disabled=true;$('#new-chat').disabled=true;const epoch=state.sessionEpoch;
   const userNode=appendMessage('user',message);$('#chat-input').value='';
   const thinking=document.createElement('div');thinking.className='message';thinking.innerHTML=`<span class="message-avatar">${icon('chef')}</span><div class="thinking">${state.settings.configured?'小厨正在查看菜谱，准备你的答案':'正在从本地菜谱中寻找好味道'} <span></span><span></span><span></span></div>`;$('#chat-messages').append(thinking);scrollChat();
+  const sentContext=context();
+  const sentOverrides=[...contextOverrides];
   try {
-    const result=await api('/api/chat',{method:'POST',body:JSON.stringify({message,session_id:state.sessionId,context:context()})});
+    const result=await api('/api/chat',{method:'POST',body:JSON.stringify({message,session_id:state.sessionId,context:sentContext,context_overrides:sentOverrides})});
     if(epoch!==state.sessionEpoch)return;
-    state.sessionId=result.session_id;sessionStorage.setItem('shiwei.session',state.sessionId);thinking.remove();appendMessage('assistant',result.content,result.mode,result.sources);await loadHistory();
+    state.sessionId=result.session_id;sessionStorage.setItem('shiwei.session',state.sessionId);thinking.remove();sentOverrides.forEach(key=>{if($(`#context-${key}`).value===String(sentContext[key]))contextOverrides.delete(key);});syncContext(result.context,sentContext);appendMessage('assistant',result.content,result.mode,result.sources);await loadHistory();
   } catch(err) {
     thinking.remove();userNode.remove();state.messages.pop();$('#chat-input').value=message;
     const error=document.createElement('div');error.className='error-message';error.textContent=err.message;$('#chat-messages').append(error);scrollChat();
@@ -271,7 +291,7 @@ async function loadHistory() { const sessions=await api('/api/sessions');$('#cha
 async function loadSession(id) {
   if(state.sending){toast('小厨正在回答，请等这次回答完成。');return;}
   const epoch=++state.sessionEpoch;
-  try { const session=await api(`/api/sessions/${encodeURIComponent(id)}`);if(epoch!==state.sessionEpoch)return;state.sessionId=id;state.messages=[];sessionStorage.setItem('shiwei.session',id);$('#chat-messages').replaceChildren();$('#chat-welcome').hidden=!!session.messages.length;session.messages.forEach(m=>appendMessage(m.role,m.content,m.mode,m.sources)); } catch(err){if(err.status===404&&sessionStorage.getItem('shiwei.session')===id)newChat();toast(err.message);}
+  try { const session=await api(`/api/sessions/${encodeURIComponent(id)}`);if(epoch!==state.sessionEpoch)return;state.sessionId=id;state.messages=[];sessionStorage.setItem('shiwei.session',id);syncContext(session.context);$('#chat-messages').replaceChildren();$('#chat-welcome').hidden=!!session.messages.length;session.messages.forEach(m=>appendMessage(m.role,m.content,m.mode,m.sources)); } catch(err){if(err.status===404&&sessionStorage.getItem('shiwei.session')===id)newChat();toast(err.message);}
 }
 function newChat() { if(state.sending)return;state.sessionEpoch++;state.sessionId=null;state.messages=[];sessionStorage.removeItem('shiwei.session');$('#chat-messages').replaceChildren();$('#chat-welcome').hidden=false;$('#chat-input').value='';$('#chat-input').focus(); }
 function openSettings() { $('#api-key').value='';$('#settings-message').textContent='';$('#api-key').placeholder=state.settings.configured?'已配置 Key；留空保持不变':'输入你的 DeepSeek API Key';$('#api-model').value=state.settings.model;$('#settings-dialog').showModal(); }
@@ -308,19 +328,19 @@ function bindEvents() {
   $$('[data-home-filter]').forEach(btn=>btn.addEventListener('click',()=>{state.homeFilter=btn.dataset.homeFilter;$$('[data-home-filter]').forEach(b=>b.classList.toggle('active',b===btn));renderHome();}));
   $$('[data-explore-filter]').forEach(btn=>btn.addEventListener('click',()=>{setExploreFilter(btn.dataset.exploreFilter);state.areaGroup='';state.area='';renderExplore(true);}));
   $('#recipe-search').addEventListener('input',()=>{clearTimeout(state.searchTimer);state.searchTimer=setTimeout(()=>renderExplore(true),120);});['time-filter','diet-filter'].forEach(id=>$(`#${id}`).addEventListener('change',()=>renderExplore(true)));
-  $('#region-groups').addEventListener('click',e=>{const b=e.target.closest('[data-region-group]');if(b){state.areaGroup=b.dataset.regionGroup;state.area='';setExploreFilter('all');renderExplore(true);}});
-  $('#region-areas').addEventListener('click',e=>{const b=e.target.closest('[data-region-area]');if(b){state.area=b.dataset.regionArea;renderExplore(true);}});
+  $('#region-groups').addEventListener('click',e=>{const b=e.target.closest('[data-region-group]');if(b){state.areaGroup=b.dataset.regionGroup;state.area='';expandedRegions=false;setExploreFilter('all');renderExplore(true);}});
+  $('#region-areas').addEventListener('click',e=>{if(e.target.closest('[data-region-toggle]')){expandedRegions=!expandedRegions;renderRegions();return;}const b=e.target.closest('[data-region-area]');if(b){state.area=b.dataset.regionArea;renderExplore(true);}});
   $('#recipe-pagination').addEventListener('click',e=>{const b=e.target.closest('[data-recipe-page]');if(b&&!b.disabled){state.recipePage=Number(b.dataset.recipePage);renderExplore();$('#results-caption').scrollIntoView({block:'start',behavior:'smooth'});}});
   document.addEventListener('click',e=>{const favorite=e.target.closest('[data-favorite-id]'),recipe=e.target.closest('[data-recipe-id]'),session=e.target.closest('[data-session-id]'),close=e.target.closest('[data-close-dialog]');if(favorite)toggleFavorite(favorite.dataset.favoriteId);else if(recipe)openRecipe(recipe.dataset.recipeId);else if(session)loadSession(session.dataset.sessionId);else if(close)$(`#${close.dataset.closeDialog}`).close();});
   $$('dialog').forEach(dialog=>dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}}));
   $('#settings-form').addEventListener('submit',saveSettings);$('#disconnect-ai').addEventListener('click',disconnect);$('#chat-form').addEventListener('submit',sendChat);$('#new-chat').addEventListener('click',newChat);
   $('#chat-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('#chat-form').requestSubmit();}});
-  contextIds.forEach(id=>$(`#context-${id}`).addEventListener('input',saveContext));
+  contextIds.forEach(id=>$(`#context-${id}`).addEventListener('input',()=>{contextOverrides.add(id);saveContext();}));
 }
 async function boot() {
   bindEvents();photoHandlers();
   $('#date-label').textContent=new Intl.DateTimeFormat('zh-CN',{month:'long',day:'numeric',weekday:'long'}).format(new Date());
-  try {const saved=JSON.parse(localStorage.getItem('shiwei.context')||'{}');contextIds.forEach(id=>{if(saved[id]!=null)$(`#context-${id}`).value=String(saved[id]);});$('#context-use-pantry').checked=saved.use_pantry===true;if(['menu','expiry'].includes(saved.pantry_mode))$('#context-pantry-mode').value=saved.pantry_mode;}catch{}
+  try {const saved=JSON.parse(localStorage.getItem('shiwei.context')||'{}');$('#context-use-pantry').checked=saved.use_pantry===true;if(['menu','expiry'].includes(saved.pantry_mode))$('#context-pantry-mode').value=saved.pantry_mode;syncContext(saved);}catch{}
   updateContextChips();navigate();
   try {
     const [recipes,favorites,settings,inventory]=await Promise.all([api('/api/recipes'),api('/api/favorites'),api('/api/settings'),api('/api/pantry')]);state.recipes=recipes;state.favorites=new Set(favorites);state.settings=settings;pantry=inventory;renderPantry();renderHome();renderExplore();renderFavorites();renderPersonal();updateFavoriteCount();updateStatus();

@@ -12,6 +12,7 @@
 - 📝 **个人菜谱**：添加、编辑、删除、收藏，支持 JSON 批量导入、导入预览及导出备份。
 - 💾 **数据持久化**：SQLite 保存库存、菜谱、收藏与对话；启动时自动初始化数据库并同步内置数据。
 - 🥣 **用量换算**：按份数缩放数值食材用量，保留原文中的非数值用量说明。
+- 🔎 **明确的匹配结果**：支持部分菜名和食材关键词；具体查询无结果时返回独立提示，连续追问保留厨房条件。
 
 ## 🧩 技术栈
 
@@ -52,6 +53,12 @@ Windows 可使用 `启动厨房.bat`。版本源码包见 [Releases](https://git
 
 模型通过 `search_recipes`、`get_recipe` 访问菜谱库，启用仓库时可通过 `get_pantry` 读取当前问答的库存快照。每次问答最多执行 4 轮模型请求，上下文包含最近 12 条对话。接口实现参考 [Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/) 与 [Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)。
 
+### 🔎 检索与会话条件
+
+输入“咖喱”等部分菜名可查找相关做法；明确菜名受到用时等条件限制时，返回没有匹配的结果。只有“推荐晚餐”等泛化请求使用通用菜单。“还有什么建议”等明确追问继承上一话题，新菜名或食材按本轮问题检索。
+
+同一会话保留时间、人数、饮食偏好、菜式偏好、忌口和设备等结构化条件。对话中明确提出的新条件和侧栏修改优先，刷新后可恢复已保存的条件。服务端对模型的搜索和菜谱读取工具统一落实时间、饮食及菜式限制。
+
 ## 🥬 食材仓库
 
 在 **食材仓库 → 放入新食材** 中记录名称、余量和单位。同种食材可保存不同批次，选择冷藏、冷冻或常温储存，并按包装或消耗计划填写到期日期；日期可留空，不自动推算保质期。
@@ -63,6 +70,8 @@ Windows 可使用 `启动厨房.bat`。版本源码包见 [Releases](https://git
 每次启用仓库的问答都从 SQLite 读取新快照，已删除或用完的食材不进入可用列表。已过标注日期的批次单独列为待检查，不纳入自动用料推荐。日期用于消耗排序，不能单独证明食材可食用，需结合包装说明、开封情况及储存条件判断。
 
 最多保存 200 个批次；单次问答优先参考最近到期的 100 个可用批次，超过时会提示未纳入数量。只有开启 **今天的厨房 → 使用食材仓库** 才发送库存信息给 DeepSeek。未配置 Key 时，提供基于食材名称的本地匹配、临期列表和缺料提示；名称匹配不表示库存数量足够。
+
+库存使用独立的食材等价表，例如“西红柿”与“番茄”可匹配，“番茄酱”与鲜番茄分别处理。名称差异较大的食材可能需要统一录入名称；AI 建议的替代材料不会自动视为已持有。已识别设备不进入库存缺料列表，原始菜谱内容保留。
 
 ## 📥 菜谱导入
 
@@ -160,6 +169,10 @@ python app.py --import-recipes path/to/recipes.json
 
 `POST /api/chat` 的 `context` 可设置 `use_pantry: true` 与 `pantry_mode: "menu"` / `"expiry"`。库存由服务端读取，客户端传入的库存快照不被采用。日期状态按服务器本地日历日计算。
 
+聊天响应包含 `match_status`（`matched`、`no_match`、`generated`）、`match_count` 与本次有效 `context`。本地零匹配使用 HTTP 200，返回 `match_status: "no_match"`、`match_count: 0`、`sources: []`，保存及重新读取会话后仍保留该结果。`generated` 表示 AI 回答未附本地菜谱来源。
+
+`context` 支持 `time`、`servings`、`diet`、`avoid`、`equipment`、`ingredients`、`region`（空字符串 / `东方` / `西方`）。省略的条件继承会话状态；与上一轮侧栏默认值相同的输入保留对话推断条件。顶层 `context_overrides` 可列出需显式覆盖的字段，如 `["time", "diet"]`，用于主动重置限制；这些字段须同时出现在 `context` 中。
+
 ## 🗂️ 数据与目录
 
 ```text
@@ -204,3 +217,7 @@ python scripts/package_release.py
 ```
 
 版本读取自 `VERSION`，产物写入 `dist/v<version>/`。打包基于 `HEAD`，保留上游文件内容，并统一 Windows BAT 的 CRLF 换行。
+
+## 🤝 致谢
+
+感谢 [@mumoaurora](https://github.com/mumoaurora) 提供 [Issue #1](https://github.com/sloth766/shiwei-kitchen/issues/1) 中的详细复现与检索修复补丁，帮助小厨更准确地理解每一餐的需求。
