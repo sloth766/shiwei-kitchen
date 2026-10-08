@@ -1,8 +1,8 @@
 # 菜谱与素材来源
 
-整理日期：**2026-10-08**。共397条做法，每道都保存来源链接；同名菜的不同来源版本分别保留。没有下载上游摄影或评论。以下17道精选菜是中文家庭改编，用时为估计；本次新增社区数据的保存方式见下表。
+数据快照日期：**2026-10-08**。共 397 条做法，保存来源与版本信息；同名菜的不同来源分别保留。精选家庭做法为中文改编，社区配方保留上游文字与许可。
 
-## 新增开源菜谱
+## 社区菜谱
 
 | 来源 | 收录 | 固定版本 | 许可 |
 | --- | ---: | --- | --- |
@@ -17,7 +17,7 @@ Bastian/recipes：保存原始 Markdown 快照，8道完整配方整理为中文
 
 [recipe-sources.json](data/recipe-sources.json) 保存版本、整理日期与每篇 Markdown 的 SHA-256；`scripts/expand_recipes.py` 支持从已保存快照离线重建。
 
-## 原有精选菜谱
+## 精选家庭菜谱
 
 | 中文家庭版 | 公开参考来源 |
 | --- | --- |
@@ -47,7 +47,7 @@ Bastian/recipes：保存原始 Markdown 快照，8道完整配方整理为中文
 - [Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/)
 - [Tool Calls](https://api-docs.deepseek.com/guides/tool_calls/)
 
-默认模型为当前文档中的 `deepseek-flash`；模型名称可在网页设置中调整。
+项目默认模型为 `deepseek-flash`，可通过 `.env` 或网页配置修改。
 
 ## 图片与字体
 
