@@ -15,7 +15,11 @@
 
 ## 🚀 开始使用
 
-需要 Python 3.10 或更新版本（本项目已使用 Python 3.12 验证）。
+从 [最新 Release](https://github.com/sloth766/shiwei-kitchen/releases/latest) 下载 `shiwei-kitchen-v1.0.0-source.zip`，解压到一个普通文件夹，然后双击 **启动厨房.bat**。详细步骤见 [INSTALL.md](INSTALL.md)。
+
+需要 Python 3.10 或更新版本（本项目已使用 Python 3.12 验证）。首次安装可从 [Python 官网](https://www.python.org/downloads/) 下载当前稳定版，并确保 `python` 或 `py` 命令可用。源码包不包含 Python 解释器。
+
+**为什么没有 npm 安装？** 前端是原生 HTML/CSS/JavaScript，后端是 Python 标准库与 SQLite，没有 Node 构建步骤或第三方 Python 依赖。直接运行即可，无需 `npm install`、`pip install` 或编译前端。
 
 双击 **启动厨房.bat**。脚本会检测可用的 Python 3.10+；当前电脑优先使用已验证的 `E:\railway\python.exe`，否则检查 PATH 与 `py` 启动器。启动失败时窗口会保留具体错误。
 
@@ -144,3 +148,9 @@ node --check public/app.js
 Python 测试使用临时数据库和配置文件，模拟 DeepSeek 响应，不向真实 DeepSeek 发送数据或消耗额度。Node 只用于可选的 JavaScript 语法检查，网站运行不依赖 Node。
 
 服务只绑定 `127.0.0.1`，适用于个人电脑上的本地使用。请求验证 Host 和 Origin，静态文件限制在 `public/`，`.env` 与数据库不能从网页下载。当前无多人账号、云部署或实时联网搜索功能。过敏原标签是辅助筛选；复合调味料仍须核对包装。
+
+## 📦 源码发布
+
+[Releases](https://github.com/sloth766/shiwei-kitchen/releases) 提供按版本固定的源码 ZIP、更新记录和 SHA-256 校验文件。ZIP 包含前后端、启动脚本、397 条内置做法及上游许可，不包含 API Key、个人数据库或 UI 截图。
+
+维护者可以在已提交的 Git 工作区运行 `python scripts/package_release.py`，从 `HEAD` 生成版本源码包与校验文件，输出到 `dist/`。脚本从 Git 提交打包，保留上游原始文字，并将 Windows BAT 转为 CRLF。版本记录见 [CHANGELOG.md](CHANGELOG.md)。
