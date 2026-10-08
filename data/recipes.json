@@ -1,0 +1,1531 @@
+[
+  {
+    "id": "tomato-eggs",
+    "name": "番茄炒鸡蛋",
+    "region": "东方",
+    "cuisine": "中式 · 家常",
+    "minutes": 15,
+    "servings": 2,
+    "diet": "vegetarian",
+    "image": "/assets/eggs.jpg",
+    "image_alt": "鸡蛋与番茄早餐",
+    "description": "酸甜番茄，柔软鸡蛋，是熟悉的家的味道。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "番茄",
+        "quantity": 400,
+        "unit": "克"
+      },
+      {
+        "name": "鸡蛋",
+        "quantity": 3,
+        "unit": "个"
+      },
+      {
+        "name": "小葱",
+        "quantity": 1,
+        "unit": "根"
+      },
+      {
+        "name": "食用油",
+        "quantity": 15,
+        "unit": "毫升"
+      },
+      {
+        "name": "盐",
+        "quantity": 2,
+        "unit": "克"
+      },
+      {
+        "name": "白糖",
+        "quantity": 3,
+        "unit": "克"
+      },
+      {
+        "name": "水",
+        "quantity": 40,
+        "unit": "毫升"
+      }
+    ],
+    "steps": [
+      "番茄切块，鸡蛋加一小半盐打散，小葱切碎。",
+      "锅里放一半油，中火将蛋液炒至凝固，盛出。",
+      "加剩余油炒番茄约 2 分钟，加入水、糖和剩余盐，焖至变软。",
+      "鸡蛋回锅拌匀，炒至全熟，撒葱花即可。"
+    ],
+    "tip": "糖可按番茄酸度减少；鸡蛋先炒再回锅，口感更嫩。",
+    "allergens": [
+      "鸡蛋"
+    ],
+    "tags": [
+      "番茄",
+      "西红柿",
+      "鸡蛋",
+      "不辣",
+      "家常",
+      "快手"
+    ],
+    "equipment": [
+      "炒锅",
+      "平底锅"
+    ],
+    "source": {
+      "name": "The Woks of Life",
+      "title": "Chinese Tomato Egg Stir-fry",
+      "url": "https://thewoksoflife.com/stir-fried-tomato-and-egg/",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "中国",
+    "area": "家常菜"
+  },
+  {
+    "id": "carbonara",
+    "name": "培根蛋香意面",
+    "region": "西方",
+    "cuisine": "意式 · 经典",
+    "minutes": 25,
+    "servings": 2,
+    "diet": "omnivore",
+    "image": "/assets/pasta.jpg",
+    "image_alt": "香草意面",
+    "description": "用鸡蛋与奶酪拌出浓香，无需额外加奶油。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "意大利面",
+        "quantity": 180,
+        "unit": "克"
+      },
+      {
+        "name": "培根",
+        "quantity": 70,
+        "unit": "克"
+      },
+      {
+        "name": "鸡蛋",
+        "quantity": 1,
+        "unit": "个"
+      },
+      {
+        "name": "蛋黄",
+        "quantity": 2,
+        "unit": "个"
+      },
+      {
+        "name": "帕尔马干酪",
+        "quantity": 25,
+        "unit": "克"
+      },
+      {
+        "name": "蒜",
+        "quantity": 1,
+        "unit": "瓣"
+      },
+      {
+        "name": "橄榄油",
+        "quantity": 5,
+        "unit": "毫升"
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "按包装说明在盐水中煮面，留出一杯面汤。",
+      "培根切块，少量油煎香，再加入蒜末翻炒。",
+      "鸡蛋、蛋黄、奶酪和黑胡椒搅匀；面条入锅后离火。",
+      "快速拌入蛋液，分次加面汤，使酱汁挂在面上，立即食用。"
+    ],
+    "tip": "离火拌蛋液可避免结块；此做法未保证蛋液完全熟透，应使用巴氏杀菌蛋。",
+    "allergens": [
+      "小麦",
+      "鸡蛋",
+      "牛奶"
+    ],
+    "tags": [
+      "意面",
+      "培根",
+      "鸡蛋",
+      "奶酪",
+      "西式",
+      "快手"
+    ],
+    "equipment": [
+      "汤锅",
+      "平底锅"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Cream-free spaghetti carbonara",
+      "url": "https://www.bbcgoodfood.com/recipes/two-step-carbonara",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "欧洲",
+    "area": "意大利"
+  },
+  {
+    "id": "teriyaki-chicken",
+    "name": "照烧鸡腿饭",
+    "region": "东方",
+    "cuisine": "日式 · 下饭",
+    "minutes": 30,
+    "servings": 2,
+    "diet": "omnivore",
+    "image": "/assets/chicken.jpg",
+    "image_alt": "照烧鸡肉",
+    "description": "咸甜酱汁裹住鸡腿，配一碗米饭刚刚好。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "去骨鸡腿",
+        "quantity": 400,
+        "unit": "克"
+      },
+      {
+        "name": "熟米饭",
+        "quantity": 400,
+        "unit": "克"
+      },
+      {
+        "name": "酱油",
+        "quantity": 25,
+        "unit": "毫升"
+      },
+      {
+        "name": "味醂",
+        "quantity": 25,
+        "unit": "毫升"
+      },
+      {
+        "name": "清酒",
+        "quantity": 25,
+        "unit": "毫升"
+      },
+      {
+        "name": "白糖",
+        "quantity": 10,
+        "unit": "克"
+      },
+      {
+        "name": "食用油",
+        "quantity": 10,
+        "unit": "毫升"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "将鸡腿厚处划开压平、擦干；酱油、味醂、清酒与糖混合。",
+      "中火热油，鸡腿皮面朝下煎约 5 分钟，翻面后加盖小火煎约 3 分钟。",
+      "倒入酱汁，小火煮并淋在鸡肉上，直到鸡肉最厚处达到 74°C。",
+      "酱汁略浓后切块，盖在热米饭上。"
+    ],
+    "tip": "时间基于已经煮好的米饭。无味醂可尝试少量糖与水替代，风味会改变；注意酱油含盐。",
+    "allergens": [
+      "大豆",
+      "小麦"
+    ],
+    "tags": [
+      "鸡腿",
+      "鸡肉",
+      "米饭",
+      "照烧",
+      "不辣",
+      "日式"
+    ],
+    "equipment": [
+      "平底锅",
+      "电饭煲"
+    ],
+    "source": {
+      "name": "Just One Cookbook",
+      "title": "Chicken Teriyaki",
+      "url": "https://www.justonecookbook.com/chicken-teriyaki/",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "亚洲",
+    "area": "日本"
+  },
+  {
+    "id": "kung-pao",
+    "name": "宫保鸡丁",
+    "region": "东方",
+    "cuisine": "川式 · 微辣",
+    "minutes": 35,
+    "servings": 2,
+    "diet": "omnivore",
+    "image": "/assets/chicken.jpg",
+    "image_alt": "照烧鸡肉",
+    "description": "鸡丁、花生与酸甜酱汁，炒出有层次的香。",
+    "difficulty": "需要一点耐心",
+    "ingredients": [
+      {
+        "name": "鸡胸肉",
+        "quantity": 300,
+        "unit": "克"
+      },
+      {
+        "name": "熟花生",
+        "quantity": 40,
+        "unit": "克"
+      },
+      {
+        "name": "大葱",
+        "quantity": 1,
+        "unit": "根"
+      },
+      {
+        "name": "蒜",
+        "quantity": 2,
+        "unit": "瓣"
+      },
+      {
+        "name": "姜",
+        "quantity": 8,
+        "unit": "克"
+      },
+      {
+        "name": "干辣椒",
+        "quantity": 2,
+        "unit": "个"
+      },
+      {
+        "name": "生抽",
+        "quantity": 20,
+        "unit": "毫升"
+      },
+      {
+        "name": "米醋",
+        "quantity": 15,
+        "unit": "毫升"
+      },
+      {
+        "name": "糖",
+        "quantity": 8,
+        "unit": "克"
+      },
+      {
+        "name": "淀粉",
+        "quantity": 8,
+        "unit": "克"
+      },
+      {
+        "name": "水",
+        "quantity": 40,
+        "unit": "毫升"
+      },
+      {
+        "name": "食用油",
+        "quantity": 20,
+        "unit": "毫升"
+      },
+      {
+        "name": "花椒粉",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "鸡肉切丁，用一半生抽与一半淀粉腌 15 分钟；葱姜蒜切好。",
+      "余下生抽、淀粉与醋、糖、水调成碗汁。",
+      "热油炒鸡丁，盛出；转小火炒香葱姜蒜、辣椒和花椒。",
+      "鸡丁回锅，倒入搅匀的碗汁，炒至鸡肉中心 74°C、汁变稠，最后加熟花生。"
+    ],
+    "tip": "花生最后放更脆；对花生过敏时不要用坚果随意替代，可直接省去。",
+    "allergens": [
+      "花生",
+      "大豆",
+      "小麦"
+    ],
+    "tags": [
+      "鸡肉",
+      "花生",
+      "川菜",
+      "辣",
+      "宫保",
+      "酸甜"
+    ],
+    "equipment": [
+      "炒锅",
+      "平底锅"
+    ],
+    "source": {
+      "name": "The Woks of Life",
+      "title": "Kung Pao Chicken",
+      "url": "https://thewoksoflife.com/kung-pao-chicken/",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "中国",
+    "area": "四川"
+  },
+  {
+    "id": "mapo-tofu",
+    "name": "家常麻婆豆腐",
+    "region": "东方",
+    "cuisine": "川式 · 麻辣",
+    "minutes": 25,
+    "servings": 2,
+    "diet": "omnivore",
+    "image": "/assets/rice.jpg",
+    "image_alt": "炒饭与蔬菜",
+    "description": "嫩豆腐吸饱香辣汤汁，特别适合配米饭。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "嫩豆腐",
+        "quantity": 400,
+        "unit": "克"
+      },
+      {
+        "name": "猪肉末",
+        "quantity": 120,
+        "unit": "克"
+      },
+      {
+        "name": "豆瓣酱",
+        "quantity": 15,
+        "unit": "克"
+      },
+      {
+        "name": "姜",
+        "quantity": 8,
+        "unit": "克"
+      },
+      {
+        "name": "蒜",
+        "quantity": 2,
+        "unit": "瓣"
+      },
+      {
+        "name": "小葱",
+        "quantity": 1,
+        "unit": "根"
+      },
+      {
+        "name": "花椒粉",
+        "quantity": 1,
+        "unit": "克"
+      },
+      {
+        "name": "淀粉",
+        "quantity": 6,
+        "unit": "克"
+      },
+      {
+        "name": "水",
+        "quantity": 200,
+        "unit": "毫升"
+      },
+      {
+        "name": "食用油",
+        "quantity": 15,
+        "unit": "毫升"
+      }
+    ],
+    "steps": [
+      "豆腐切小块，姜蒜切末，淀粉取少量配方水调匀。",
+      "中火热油炒香姜蒜，加入肉末炒散至熟。",
+      "加入豆瓣酱和花椒炒香，倒入水煮开，轻放豆腐，小火煮约 5 分钟。",
+      "肉末应达到 71°C。加入搅匀的淀粉水，轻推至变稠，撒葱花。"
+    ],
+    "tip": "豆瓣酱已有盐，尝味后再决定是否加盐；无辣版本需另换调味，不能只减少辣椒。",
+    "allergens": [
+      "大豆",
+      "小麦"
+    ],
+    "tags": [
+      "豆腐",
+      "猪肉",
+      "肉末",
+      "川菜",
+      "辣",
+      "下饭"
+    ],
+    "equipment": [
+      "炒锅",
+      "平底锅"
+    ],
+    "source": {
+      "name": "The Woks of Life",
+      "title": "Mapo Tofu",
+      "url": "https://thewoksoflife.com/ma-po-tofu-real-deal/",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "中国",
+    "area": "四川"
+  },
+  {
+    "id": "vegetable-rice",
+    "name": "缤纷蔬菜炒饭",
+    "region": "东方",
+    "cuisine": "中式 · 快手",
+    "minutes": 20,
+    "servings": 2,
+    "diet": "vegan",
+    "image": "/assets/rice.jpg",
+    "image_alt": "炒饭与蔬菜",
+    "description": "把手边蔬菜切成小粒，炒一碗轻松的日常。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "熟米饭",
+        "quantity": 400,
+        "unit": "克"
+      },
+      {
+        "name": "胡萝卜",
+        "quantity": 80,
+        "unit": "克"
+      },
+      {
+        "name": "豌豆",
+        "quantity": 80,
+        "unit": "克"
+      },
+      {
+        "name": "蘑菇",
+        "quantity": 100,
+        "unit": "克"
+      },
+      {
+        "name": "洋葱",
+        "quantity": 50,
+        "unit": "克"
+      },
+      {
+        "name": "小葱",
+        "quantity": 1,
+        "unit": "根"
+      },
+      {
+        "name": "生抽",
+        "quantity": 15,
+        "unit": "毫升"
+      },
+      {
+        "name": "食用油",
+        "quantity": 15,
+        "unit": "毫升"
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "米饭拨散，胡萝卜、洋葱和蘑菇切小粒。",
+      "热油先炒洋葱与胡萝卜，加入蘑菇和豌豆炒至熟。",
+      "加入米饭炒散，少量生抽沿锅边加入。",
+      "继续翻炒到整体充分热透，剩饭复热中心达到 74°C，加入葱和胡椒。"
+    ],
+    "tip": "使用及时冷却并冷藏的米饭；不使用长时间放在室温下的剩饭。",
+    "allergens": [
+      "大豆",
+      "小麦"
+    ],
+    "tags": [
+      "米饭",
+      "蔬菜",
+      "素食",
+      "炒饭",
+      "快手"
+    ],
+    "equipment": [
+      "炒锅",
+      "平底锅"
+    ],
+    "source": {
+      "name": "The Woks of Life",
+      "title": "Vegetable Fried Rice",
+      "url": "https://thewoksoflife.com/vegetable-fried-rice/",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "中国",
+    "area": "家常菜"
+  },
+  {
+    "id": "oyakodon",
+    "name": "日式鸡肉亲子丼",
+    "region": "东方",
+    "cuisine": "日式 · 温暖",
+    "minutes": 30,
+    "servings": 2,
+    "diet": "omnivore",
+    "image": "/assets/chicken.jpg",
+    "image_alt": "照烧鸡肉",
+    "description": "洋葱的甜、鸡肉的鲜，一起铺在热米饭上。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "去骨鸡腿",
+        "quantity": 300,
+        "unit": "克"
+      },
+      {
+        "name": "鸡蛋",
+        "quantity": 3,
+        "unit": "个"
+      },
+      {
+        "name": "洋葱",
+        "quantity": 120,
+        "unit": "克"
+      },
+      {
+        "name": "熟米饭",
+        "quantity": 400,
+        "unit": "克"
+      },
+      {
+        "name": "日式高汤",
+        "quantity": 180,
+        "unit": "毫升"
+      },
+      {
+        "name": "酱油",
+        "quantity": 25,
+        "unit": "毫升"
+      },
+      {
+        "name": "味醂",
+        "quantity": 20,
+        "unit": "毫升"
+      },
+      {
+        "name": "糖",
+        "quantity": 6,
+        "unit": "克"
+      },
+      {
+        "name": "小葱",
+        "quantity": 1,
+        "unit": "根"
+      }
+    ],
+    "steps": [
+      "洋葱切丝、鸡肉切小块；高汤与酱油、味醂、糖入浅锅煮开。",
+      "放洋葱小火煮软，再放鸡肉煮约 6–8 分钟，检查中心达到 74°C。",
+      "蛋液分两次淋入，加盖小火煮到蛋液完全凝固。",
+      "盛到热米饭上，撒葱花；时间按现成米饭估算。"
+    ],
+    "tip": "这里采用全熟鸡蛋版；高汤若用木鱼花制成，会含鱼类过敏原。",
+    "allergens": [
+      "鸡蛋",
+      "大豆",
+      "小麦",
+      "鱼"
+    ],
+    "tags": [
+      "鸡肉",
+      "鸡蛋",
+      "洋葱",
+      "米饭",
+      "日式",
+      "不辣"
+    ],
+    "equipment": [
+      "平底锅",
+      "电饭煲"
+    ],
+    "source": {
+      "name": "Just One Cookbook",
+      "title": "Oyakodon (Chicken and Egg Bowl)",
+      "url": "https://www.justonecookbook.com/oyakodon/",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "亚洲",
+    "area": "日本"
+  },
+  {
+    "id": "miso-soup",
+    "name": "豆腐海带味噌汤",
+    "region": "东方",
+    "cuisine": "日式 · 汤品",
+    "minutes": 15,
+    "servings": 2,
+    "diet": "vegan",
+    "image": "/assets/miso.jpg",
+    "image_alt": "豆腐海带味噌汤",
+    "description": "一碗轻柔的热汤，为简单的一餐添一点鲜。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "嫩豆腐",
+        "quantity": 180,
+        "unit": "克"
+      },
+      {
+        "name": "干裙带菜",
+        "quantity": 3,
+        "unit": "克"
+      },
+      {
+        "name": "味噌",
+        "quantity": 30,
+        "unit": "克"
+      },
+      {
+        "name": "昆布香菇素高汤",
+        "quantity": 500,
+        "unit": "毫升"
+      },
+      {
+        "name": "小葱",
+        "quantity": 1,
+        "unit": "根"
+      }
+    ],
+    "steps": [
+      "按包装说明泡发裙带菜，豆腐切小块。",
+      "将事先准备的素高汤煮开，放豆腐和裙带菜，小火煮约 3 分钟。",
+      "关火，用少量热汤把味噌化开，倒回锅中搅匀。",
+      "撒葱花，趁热享用，加入味噌后避免长时间沸腾。"
+    ],
+    "tip": "本版选择素高汤；购买味噌时核对是否含鱼粉及其他动物成分。",
+    "allergens": [
+      "大豆"
+    ],
+    "tags": [
+      "豆腐",
+      "海带",
+      "味噌",
+      "汤",
+      "素食",
+      "日式"
+    ],
+    "equipment": [
+      "汤锅"
+    ],
+    "source": {
+      "name": "Just One Cookbook",
+      "title": "Homemade Miso Soup",
+      "url": "https://www.justonecookbook.com/homemade-miso-soup/",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "亚洲",
+    "area": "日本"
+  },
+  {
+    "id": "bibimbap",
+    "name": "韩式蔬菜拌饭",
+    "region": "东方",
+    "cuisine": "韩式 · 一碗满足",
+    "minutes": 35,
+    "servings": 2,
+    "diet": "vegetarian",
+    "image": "/assets/hero.jpg",
+    "image_alt": "缤纷蔬菜餐碗",
+    "description": "彩色蔬菜、煎蛋与拌饭酱，好看也好吃。",
+    "difficulty": "需要一点耐心",
+    "ingredients": [
+      {
+        "name": "熟米饭",
+        "quantity": 400,
+        "unit": "克"
+      },
+      {
+        "name": "鸡蛋",
+        "quantity": 2,
+        "unit": "个"
+      },
+      {
+        "name": "菠菜",
+        "quantity": 150,
+        "unit": "克"
+      },
+      {
+        "name": "黄豆芽",
+        "quantity": 150,
+        "unit": "克"
+      },
+      {
+        "name": "胡萝卜",
+        "quantity": 100,
+        "unit": "克"
+      },
+      {
+        "name": "西葫芦",
+        "quantity": 100,
+        "unit": "克"
+      },
+      {
+        "name": "韩式辣酱",
+        "quantity": 25,
+        "unit": "克"
+      },
+      {
+        "name": "香油",
+        "quantity": 10,
+        "unit": "毫升"
+      },
+      {
+        "name": "白芝麻",
+        "quantity": 5,
+        "unit": "克"
+      },
+      {
+        "name": "蒜",
+        "quantity": 2,
+        "unit": "瓣"
+      },
+      {
+        "name": "食用油",
+        "quantity": 15,
+        "unit": "毫升"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "菠菜焯熟挤干，黄豆芽煮至完全熟透；胡萝卜和西葫芦切丝。",
+      "分别炒熟胡萝卜、西葫芦；菠菜、豆芽用盐、蒜末和少量香油拌匀。",
+      "鸡蛋煎至蛋白和蛋黄凝固，米饭加热。",
+      "各样蔬菜与煎蛋排在米饭上，加辣酱、香油与芝麻，吃前拌匀。"
+    ],
+    "tip": "这是省去牛肉和山菜的家庭版；辣酱须核对是否含鱼、虾等配料。",
+    "allergens": [
+      "鸡蛋",
+      "大豆",
+      "小麦",
+      "芝麻"
+    ],
+    "tags": [
+      "米饭",
+      "蔬菜",
+      "鸡蛋",
+      "韩式",
+      "辣",
+      "素食"
+    ],
+    "equipment": [
+      "平底锅",
+      "汤锅"
+    ],
+    "source": {
+      "name": "Maangchi",
+      "title": "Bibimbap",
+      "url": "https://www.maangchi.com/recipe/bibimbap",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "亚洲",
+    "area": "韩国"
+  },
+  {
+    "id": "ratatouille",
+    "name": "法式田园炖蔬菜",
+    "region": "西方",
+    "cuisine": "法式 · 田园",
+    "minutes": 50,
+    "servings": 2,
+    "diet": "vegan",
+    "image": "/assets/salad.jpg",
+    "image_alt": "新鲜蔬菜沙拉",
+    "description": "番茄、茄子和西葫芦，慢慢煮出蔬菜的甜。",
+    "difficulty": "需要一点耐心",
+    "ingredients": [
+      {
+        "name": "茄子",
+        "quantity": 250,
+        "unit": "克"
+      },
+      {
+        "name": "西葫芦",
+        "quantity": 250,
+        "unit": "克"
+      },
+      {
+        "name": "彩椒",
+        "quantity": 150,
+        "unit": "克"
+      },
+      {
+        "name": "番茄",
+        "quantity": 300,
+        "unit": "克"
+      },
+      {
+        "name": "洋葱",
+        "quantity": 100,
+        "unit": "克"
+      },
+      {
+        "name": "蒜",
+        "quantity": 2,
+        "unit": "瓣"
+      },
+      {
+        "name": "橄榄油",
+        "quantity": 25,
+        "unit": "毫升"
+      },
+      {
+        "name": "红酒醋",
+        "quantity": 10,
+        "unit": "毫升"
+      },
+      {
+        "name": "罗勒",
+        "quantity": 5,
+        "unit": "克"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "蔬菜洗净切成相近大小的小块。",
+      "分批用少量油将茄子、西葫芦和彩椒炒软，盛出。",
+      "炒香洋葱和蒜，加入番茄与红酒醋，煮成酱汁。",
+      "蔬菜回锅，小火炖约 10 分钟至软，加盐、胡椒与罗勒调味。"
+    ],
+    "tip": "不是层层摆片的烤箱版；分批炒能避免蔬菜出水后难以上色。",
+    "allergens": [],
+    "tags": [
+      "番茄",
+      "茄子",
+      "西葫芦",
+      "蔬菜",
+      "法式",
+      "素食"
+    ],
+    "equipment": [
+      "汤锅",
+      "平底锅"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Ratatouille",
+      "url": "https://www.bbcgoodfood.com/recipes/ratatouille",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "欧洲",
+    "area": "法国"
+  },
+  {
+    "id": "pancakes",
+    "name": "经典牛奶薄煎饼",
+    "region": "西方",
+    "cuisine": "欧式 · 早餐",
+    "minutes": 30,
+    "servings": 2,
+    "diet": "vegetarian",
+    "image": "/assets/pancakes.jpg",
+    "image_alt": "煎饼与水果",
+    "description": "薄薄一张，搭配水果，让早餐也有仪式感。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "普通面粉",
+        "quantity": 100,
+        "unit": "克"
+      },
+      {
+        "name": "鸡蛋",
+        "quantity": 1,
+        "unit": "个"
+      },
+      {
+        "name": "牛奶",
+        "quantity": 300,
+        "unit": "毫升"
+      },
+      {
+        "name": "食用油",
+        "quantity": 10,
+        "unit": "毫升"
+      },
+      {
+        "name": "盐",
+        "quantity": 1,
+        "unit": "克"
+      }
+    ],
+    "steps": [
+      "面粉和盐混合，加鸡蛋与一半牛奶搅匀。",
+      "逐渐加入剩余牛奶，调成流动的均匀面糊。",
+      "平底锅中火加热刷薄油，倒少量面糊，转锅铺成薄层。",
+      "煎约 1 分钟至底部上色，翻面煎熟；重复完成，其余搭配按喜好添加。"
+    ],
+    "tip": "这是无泡打粉的薄饼版，图片只作早餐氛围示意；面糊应煎熟再吃。",
+    "allergens": [
+      "小麦",
+      "鸡蛋",
+      "牛奶"
+    ],
+    "tags": [
+      "鸡蛋",
+      "牛奶",
+      "面粉",
+      "煎饼",
+      "早餐",
+      "不辣"
+    ],
+    "equipment": [
+      "平底锅"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Classic pancakes",
+      "url": "https://www.bbcgoodfood.com/recipes/classic-pancakes",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "美洲",
+    "area": "美国"
+  },
+  {
+    "id": "greek-salad",
+    "name": "希腊田园沙拉",
+    "region": "西方",
+    "cuisine": "地中海 · 清爽",
+    "minutes": 15,
+    "servings": 2,
+    "diet": "vegetarian",
+    "image": "/assets/salad.jpg",
+    "image_alt": "新鲜蔬菜沙拉",
+    "description": "脆爽蔬菜与菲达奶酪，拌出明亮的地中海味道。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "番茄",
+        "quantity": 250,
+        "unit": "克"
+      },
+      {
+        "name": "黄瓜",
+        "quantity": 200,
+        "unit": "克"
+      },
+      {
+        "name": "红洋葱",
+        "quantity": 40,
+        "unit": "克"
+      },
+      {
+        "name": "菲达奶酪",
+        "quantity": 100,
+        "unit": "克"
+      },
+      {
+        "name": "黑橄榄",
+        "quantity": 40,
+        "unit": "克"
+      },
+      {
+        "name": "橄榄油",
+        "quantity": 15,
+        "unit": "毫升"
+      },
+      {
+        "name": "干牛至",
+        "quantity": 1,
+        "unit": "克"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "蔬菜彻底洗净，番茄、黄瓜切块，红洋葱切薄片。",
+      "将蔬菜与橄榄放入大碗，加入橄榄油、牛至和少量胡椒。",
+      "菲达奶酪切块或掰碎，放在蔬菜上。",
+      "轻轻拌匀，尝味后少量加盐，尽快食用。"
+    ],
+    "tip": "奶酪与橄榄本身较咸，先尝味；蛋奶素食者应选择使用非动物凝乳酶的奶酪。",
+    "allergens": [
+      "牛奶"
+    ],
+    "tags": [
+      "番茄",
+      "黄瓜",
+      "奶酪",
+      "沙拉",
+      "素食",
+      "不辣"
+    ],
+    "equipment": [
+      "无需加热"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Greek salad",
+      "url": "https://www.bbcgoodfood.com/recipes/greek-salad",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "欧洲",
+    "area": "希腊"
+  },
+  {
+    "id": "mushroom-soup",
+    "name": "奶香蘑菇浓汤",
+    "region": "西方",
+    "cuisine": "欧式 · 热汤",
+    "minutes": 45,
+    "servings": 2,
+    "diet": "vegetarian",
+    "image": "/assets/mushroom-soup.jpg",
+    "image_alt": "奶香蘑菇汤",
+    "description": "蘑菇的香气，适合慢下来的晚餐。",
+    "difficulty": "需要一点耐心",
+    "ingredients": [
+      {
+        "name": "鲜蘑菇",
+        "quantity": 300,
+        "unit": "克"
+      },
+      {
+        "name": "干牛肝菌",
+        "quantity": 10,
+        "unit": "克"
+      },
+      {
+        "name": "洋葱",
+        "quantity": 80,
+        "unit": "克"
+      },
+      {
+        "name": "蒜",
+        "quantity": 1,
+        "unit": "瓣"
+      },
+      {
+        "name": "黄油",
+        "quantity": 20,
+        "unit": "克"
+      },
+      {
+        "name": "蔬菜高汤",
+        "quantity": 500,
+        "unit": "毫升"
+      },
+      {
+        "name": "淡奶油",
+        "quantity": 80,
+        "unit": "毫升"
+      },
+      {
+        "name": "百里香",
+        "quantity": 1,
+        "unit": "克"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "干牛肝菌用温水泡软，过滤泡菇水去除沙粒；鲜蘑菇切片。",
+      "黄油小火炒软洋葱、蒜和百里香，加入所有蘑菇炒约 5 分钟。",
+      "加高汤和少量泡菇水，小火煮约 20 分钟。",
+      "稍冷后用手持搅拌机打细，再加奶油加热至热透，调味即可。"
+    ],
+    "tip": "以淡奶油替代原菜谱的酸奶油；无搅拌机可做有颗粒版本。勿用密闭搅拌杯搅打滚烫液体。",
+    "allergens": [
+      "牛奶"
+    ],
+    "tags": [
+      "蘑菇",
+      "奶油",
+      "汤",
+      "素食",
+      "西式",
+      "不辣"
+    ],
+    "equipment": [
+      "汤锅",
+      "手持搅拌机"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Creamy mushroom soup",
+      "url": "https://www.bbcgoodfood.com/recipes/creamy-mushroom-soup",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "欧洲",
+    "area": "其他西式"
+  },
+  {
+    "id": "baked-salmon",
+    "name": "柠檬香草烤三文鱼",
+    "region": "西方",
+    "cuisine": "欧式 · 烤箱",
+    "minutes": 25,
+    "servings": 2,
+    "diet": "omnivore",
+    "image": "/assets/salmon.jpg",
+    "image_alt": "三文鱼与蔬菜",
+    "description": "简单调味，留住鱼肉本来的鲜。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "三文鱼",
+        "quantity": 320,
+        "unit": "克"
+      },
+      {
+        "name": "橄榄油",
+        "quantity": 10,
+        "unit": "毫升"
+      },
+      {
+        "name": "柠檬",
+        "quantity": 0.5,
+        "unit": "个"
+      },
+      {
+        "name": "欧芹",
+        "quantity": 5,
+        "unit": "克"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "烤箱预热至 180°C（热风 160°C），鱼肉擦干。",
+      "鱼肉放烤盘，刷油，加少量盐和胡椒。",
+      "烤约 10–15 分钟，按厚度调整；最厚处达到 63°C。",
+      "撒欧芹，配柠檬；可另外搭配蒸蔬菜或主食。"
+    ],
+    "tip": "需要烤箱；鱼片厚度影响时间，应以中心温度判断熟度。",
+    "allergens": [
+      "鱼"
+    ],
+    "tags": [
+      "三文鱼",
+      "鱼",
+      "柠檬",
+      "烤箱",
+      "西式",
+      "不辣"
+    ],
+    "equipment": [
+      "烤箱"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Baked salmon",
+      "url": "https://www.bbcgoodfood.com/recipes/baked-salmon",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "欧洲",
+    "area": "其他西式"
+  },
+  {
+    "id": "garlic-prawns",
+    "name": "黄油蒜香辣虾",
+    "region": "西方",
+    "cuisine": "欧式 · 快手",
+    "minutes": 20,
+    "servings": 2,
+    "diet": "omnivore",
+    "image": "/assets/shrimp.jpg",
+    "image_alt": "熟虾仁",
+    "description": "蒜香黄油遇见鲜虾，简单却很有滋味。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "去壳虾仁",
+        "quantity": 300,
+        "unit": "克"
+      },
+      {
+        "name": "黄油",
+        "quantity": 25,
+        "unit": "克"
+      },
+      {
+        "name": "橄榄油",
+        "quantity": 5,
+        "unit": "毫升"
+      },
+      {
+        "name": "蒜",
+        "quantity": 3,
+        "unit": "瓣"
+      },
+      {
+        "name": "红辣椒",
+        "quantity": 1,
+        "unit": "个"
+      },
+      {
+        "name": "柠檬",
+        "quantity": 0.5,
+        "unit": "个"
+      },
+      {
+        "name": "欧芹",
+        "quantity": 5,
+        "unit": "克"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "虾仁去虾线，擦干；蒜和辣椒切碎。",
+      "平底锅小火融化黄油与油，放蒜和辣椒炒香。",
+      "加入虾仁，中火翻炒约 3–5 分钟至整体不透明、完全熟透。",
+      "挤入少量柠檬汁，撒欧芹，尝味后加盐。"
+    ],
+    "tip": "不吃辣可省辣椒；虾变色不一定代表中心熟透，需检查最厚处。",
+    "allergens": [
+      "甲壳类",
+      "牛奶"
+    ],
+    "tags": [
+      "虾",
+      "黄油",
+      "蒜",
+      "辣",
+      "西式",
+      "快手"
+    ],
+    "equipment": [
+      "平底锅"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Buttery chilli prawns",
+      "url": "https://www.bbcgoodfood.com/recipes/buttery-chilli-prawns",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "欧洲",
+    "area": "西班牙"
+  },
+  {
+    "id": "hummus",
+    "name": "柠檬鹰嘴豆泥",
+    "region": "东方",
+    "cuisine": "中东 · 清新",
+    "minutes": 15,
+    "servings": 2,
+    "diet": "vegan",
+    "image": "/assets/hummus.jpg",
+    "image_alt": "鹰嘴豆泥",
+    "description": "熟鹰嘴豆与芝麻酱，做一份柔滑的小食。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "熟鹰嘴豆",
+        "quantity": 240,
+        "unit": "克"
+      },
+      {
+        "name": "芝麻酱",
+        "quantity": 30,
+        "unit": "克"
+      },
+      {
+        "name": "橄榄油",
+        "quantity": 25,
+        "unit": "毫升"
+      },
+      {
+        "name": "柠檬汁",
+        "quantity": 20,
+        "unit": "毫升"
+      },
+      {
+        "name": "蒜",
+        "quantity": 1,
+        "unit": "瓣"
+      },
+      {
+        "name": "水",
+        "quantity": 40,
+        "unit": "毫升"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "使用煮熟或罐装鹰嘴豆，沥干，蒜切碎。",
+      "鹰嘴豆与芝麻酱、柠檬汁、蒜和橄榄油放入搅拌机。",
+      "分次加水打成细滑泥，尝味加少量盐。",
+      "装碗，可与新鲜蔬菜条或另外准备的饼搭配。"
+    ],
+    "tip": "只用已经煮熟的鹰嘴豆；配饼时另核对小麦过敏原。本版减少了原配方用油。",
+    "allergens": [
+      "芝麻"
+    ],
+    "tags": [
+      "鹰嘴豆",
+      "豆类",
+      "芝麻",
+      "素食",
+      "无需加热",
+      "不辣"
+    ],
+    "equipment": [
+      "搅拌机"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Hummus",
+      "url": "https://www.bbcgoodfood.com/recipes/hummus",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "中东",
+    "area": "中东"
+  },
+  {
+    "id": "bruschetta",
+    "name": "罗勒番茄烤面包",
+    "region": "西方",
+    "cuisine": "意式 · 小食",
+    "minutes": 20,
+    "servings": 2,
+    "diet": "vegan",
+    "image": "/assets/bruschetta.jpg",
+    "image_alt": "番茄香草面包",
+    "description": "烤脆的面包，装满番茄与罗勒的清香。",
+    "difficulty": "新手友好",
+    "ingredients": [
+      {
+        "name": "法棍",
+        "quantity": 120,
+        "unit": "克"
+      },
+      {
+        "name": "番茄",
+        "quantity": 250,
+        "unit": "克"
+      },
+      {
+        "name": "蒜",
+        "quantity": 1,
+        "unit": "瓣"
+      },
+      {
+        "name": "红洋葱",
+        "quantity": 30,
+        "unit": "克"
+      },
+      {
+        "name": "罗勒",
+        "quantity": 5,
+        "unit": "克"
+      },
+      {
+        "name": "橄榄油",
+        "quantity": 15,
+        "unit": "毫升"
+      },
+      {
+        "name": "意式黑醋",
+        "quantity": 5,
+        "unit": "毫升"
+      },
+      {
+        "name": "盐",
+        "quantity": null,
+        "unit": ""
+      },
+      {
+        "name": "黑胡椒",
+        "quantity": null,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "番茄与洋葱切小丁，罗勒切碎。",
+      "拌入橄榄油、黑醋、盐和胡椒，静置约 10 分钟。",
+      "法棍切片，在烤箱或干平底锅中烤至表面酥脆。",
+      "用蒜轻擦面包表面，铺上番茄混合物，及时食用。"
+    ],
+    "tip": "铺料前去掉过多汁水，更不易变软；纯素饮食须核对面包配料。",
+    "allergens": [
+      "小麦"
+    ],
+    "tags": [
+      "面包",
+      "番茄",
+      "罗勒",
+      "意式",
+      "小食",
+      "素食"
+    ],
+    "equipment": [
+      "平底锅",
+      "烤箱"
+    ],
+    "source": {
+      "name": "Good Food",
+      "title": "Tomato bruschetta",
+      "url": "https://www.bbcgoodfood.com/recipes/tomato-bruschetta",
+      "retrieved_at": "2026-10-08"
+    },
+    "adaptation": "中文家庭简化版；用量和步骤已调整，非原文逐字翻译",
+    "area_group": "欧洲",
+    "area": "意大利"
+  }
+]

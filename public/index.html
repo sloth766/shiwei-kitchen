@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#52634c">
+  <meta name="description" content="拾味厨房：从冰箱里的食材出发，探索东西方菜谱，与 AI 一起把每顿饭做好。">
+  <title>拾味厨房 · 好好吃饭，从这里开始</title>
+  <link rel="icon" href="/assets/brand.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-defs" aria-hidden="true"><defs>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M19 4C9 2 3 7 5 14s15 8 14-10Z"/><path d="m5 21 11-12M9 15l-1-5M12 12h5"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.7 6.3L21 12l-6.3 2.7L12 21l-2.7-6.3L3 12l6.3-2.7Z"/><path d="M20 2v4m-2-2h4"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5v16M12 6C8 3 5 3 2 4v15c4-1 7-1 10 2 3-3 6-3 10-2V4c-3-1-6-1-10 2Z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20 5c-3-3-7-1-8 2-1-3-5-5-8-2s-2 6 0 8l8 8 8-8c2-2 3-5 0-8Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="m9 3-1 3-3 1-2 3 2 2-1 3 2 3 3-1 3 3 3-3 3 1 2-3-1-3 2-2-2-3-3-1-1-3Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+    <symbol id="i-chef" viewBox="0 0 24 24"><path d="M6 14a5 5 0 0 1-1-10 5 5 0 0 1 9-1 5 5 0 1 1 4 11v7H6Zm0 3h12"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M14 3h7v7m0-7L10 14M11 4H4v16h16v-7"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </defs></svg>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#home" aria-label="拾味厨房首页"><span class="brand-mark"><svg><use href="#i-leaf"/></svg></span><span>拾味厨房<small>SHIWEI KITCHEN</small></span></a>
+      <div class="nav-caption">把日子过成喜欢的味道</div>
+      <nav aria-label="主导航">
+        <a href="#home" class="nav-item active" data-page="home"><svg><use href="#i-home"/></svg>厨房首页</a>
+        <a href="#chat" class="nav-item" data-page="chat"><svg><use href="#i-spark"/></svg>问问小厨<span class="nav-label">AI</span></a>
+        <a href="#recipes" class="nav-item" data-page="recipes"><svg><use href="#i-book"/></svg>探索菜谱</a>
+        <a href="#favorites" class="nav-item" data-page="favorites"><svg><use href="#i-heart"/></svg>我的收藏<span class="nav-count" id="favorite-count">0</span></a>
+      </nav>
+      <div class="sidebar-note"><span class="note-doodle">✳</span><h3>每一餐，都值得用心。</h3><p>一点新鲜食材，<br>一点小小灵感，<br>就是生活的好味道。</p><span class="note-line"></span></div>
+      <div class="sidebar-bottom"><button class="nav-item" id="settings-button"><svg><use href="#i-settings"/></svg>AI 连接设置</button><div class="local-profile"><span class="avatar">厨</span><div>我的小厨房<small><span class="status-dot"></span>本地运行 · 数据存于本机</small></div></div></div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    <div class="main-shell">
+      <header class="topbar"><div class="breadcrumb"><button class="icon-button mobile-menu" id="menu-button" aria-label="打开导航"><svg><use href="#i-menu"/></svg></button><span>我的厨房</span><span class="crumb-slash">/</span><strong id="page-label">厨房首页</strong></div><div class="topbar-right"><span class="connection-status" id="connection-status"><span class="status-dot"></span>正在连接厨房</span><button class="icon-button" id="top-settings" aria-label="连接设置"><svg><use href="#i-settings"/></svg></button><span class="avatar small">厨</span></div></header>
+      <main id="main-content">
+        <section id="page-home" class="page">
+          <div class="greeting-row"><div><div class="eyebrow">A LITTLE INSPIRATION, EVERY DAY</div><h1>今天，也要好好吃饭<span class="heading-flower">✳</span></h1><p>让冰箱里的日常，变成餐桌上的惊喜。</p></div><div class="date-pill" id="date-label"></div></div>
+          <section class="hero" aria-label="做饭灵感">
+            <div class="hero-copy"><div class="hero-kicker"><span></span>你的私人 AI 烹饪搭子</div><h2>有些什么食材？<br>一起做点<span>好吃的。</span></h2><p>告诉小厨你手边的食材、口味和时间。<br>从家常烟火到异国风味，为你找到这一餐。</p><button class="primary-button" id="hero-chat"><svg><use href="#i-spark"/></svg>和小厨聊一聊<svg><use href="#i-arrow"/></svg></button><div class="hero-footnote"><span class="mini-leaf">✦</span> 以真实菜谱为起点，为你的厨房量身调整</div></div>
+            <div class="hero-photo"><img src="/assets/hero.jpg" alt="新鲜蔬菜与谷物组成的缤纷餐碗" fetchpriority="high"><span class="photo-caption">FRESH IDEAS. GOOD FOOD.</span><div class="photo-sticker"><svg><use href="#i-leaf"/></svg><span>好食材<br><strong>好心情</strong></span></div></div>
+          </section>
+          <section class="quick-ask"><div><span class="round-icon"><svg><use href="#i-chef"/></svg></span><div><h3>冰箱里有什么？</h3><p>输入食材，发现今晚的菜单</p></div></div><form id="home-ask-form"><label class="sr-only" for="home-question">现有食材或做饭问题</label><input id="home-question" maxlength="2000" placeholder="比如：鸡蛋、番茄，20 分钟能做什么？" required><button aria-label="用这些食材询问小厨"><svg><use href="#i-arrow"/></svg></button></form></section>
+          <section class="inspiration-section"><div class="section-heading"><div><h2>今天想吃哪一种？</h2><p>跟着心情，发现餐桌的新灵感</p></div><a href="#recipes" class="text-link">探索全部菜谱<svg><use href="#i-arrow"/></svg></a></div><div class="category-grid"><button class="category-card" data-category="东方"><span class="category-symbol">🥢</span><div><h3>东方烟火</h3><p>熟悉的滋味，暖暖的家常</p></div><svg><use href="#i-arrow"/></svg></button><button class="category-card western" data-category="西方"><span class="category-symbol">🍝</span><div><h3>西式风味</h3><p>换一种方式，享受日常</p></div><svg><use href="#i-arrow"/></svg></button><button class="category-card quick" data-category="quick"><span class="category-symbol">⏱</span><div><h3>快手一餐</h3><p>30 分钟内，美味不将就</p></div><svg><use href="#i-arrow"/></svg></button></div></section>
+          <section><div class="section-heading featured-heading"><div><span class="eyebrow">COOK SOMETHING LOVELY</span><h2>从这几道开始<span class="tiny-flower">✳</span></h2></div><div class="pill-tabs" id="home-tabs"><button class="active" data-home-filter="all">全部灵感</button><button data-home-filter="东方">东方菜式</button><button data-home-filter="西方">西方菜式</button></div></div><div class="recipe-grid" id="home-recipes"><div class="loading-placeholder">正在准备新鲜灵感…</div></div></section>
+          <footer class="page-footer"><span>拾味厨房 · 让每一餐都有期待</span><span><svg><use href="#i-leaf"/></svg>食谱有出处，灵感有温度</span></footer>
+        </section>
+        <section id="page-recipes" class="page" hidden><div class="greeting-row"><div><div class="eyebrow">A WORLD OF FLAVOURS</div><h1>探索菜谱<span class="heading-flower">✳</span></h1><p>从家常到远方，总有一道适合今天的你。</p></div><span class="date-pill" id="recipe-total"></span></div><div class="explore-toolbar"><label class="search-box"><svg><use href="#i-search"/></svg><input id="recipe-search" placeholder="搜索菜名、食材或风味…" maxlength="100" aria-label="搜索菜谱"></label><select id="time-filter" aria-label="烹饪时间"><option value="">不限时间</option><option value="15">15 分钟内</option><option value="30">30 分钟内</option><option value="60">60 分钟内</option></select><select id="diet-filter" aria-label="饮食偏好"><option value="">全部饮食</option><option value="vegetarian">蛋奶素</option><option value="vegan">纯素</option></select></div><div class="filter-tabs" id="explore-tabs"><button class="active" data-explore-filter="all">全部菜谱</button><button data-explore-filter="东方">东方烟火</button><button data-explore-filter="西方">西式风味</button></div><section class="region-browser" aria-label="按地区浏览"><div class="region-heading"><span>跟着味道去旅行</span><small id="region-summary"></small></div><div id="region-groups" class="region-groups" aria-label="地区大类"></div><div id="region-areas" class="region-areas" aria-label="具体地区"></div></section><div class="results-caption" id="results-caption" aria-live="polite"></div><div class="recipe-grid explore-grid" id="explore-recipes"></div><nav id="recipe-pagination" class="recipe-pagination" aria-label="菜谱分页"></nav><div class="source-note"><svg><use href="#i-book"/></svg><p>收录 HowToCook 开源社区做法及精选家庭菜谱，每道菜保留来源。地区为浏览标签；配图为风味示意。未标注用时的菜不参与限时筛选，未核对饮食类型的菜不参与素食筛选。</p></div></section>
+        <section id="page-favorites" class="page" hidden><div class="greeting-row"><div><div class="eyebrow">YOUR LITTLE COOKBOOK</div><h1>我的收藏<span class="heading-flower">✳</span></h1><p>把喜欢的味道留下，下一次想吃时就能找到。</p></div></div><div class="recipe-grid explore-grid" id="favorite-recipes"></div></section>
+        <section id="page-chat" class="page chat-page" hidden><div class="chat-layout"><div class="chat-panel"><div class="chat-header"><div class="chef-avatar"><svg><use href="#i-chef"/></svg></div><div><h1>小厨，你的烹饪搭子</h1><p id="chat-mode-label">从真实菜谱出发，陪你做好每一餐</p></div><button class="secondary-button" id="new-chat"><svg><use href="#i-plus"/></svg>新对话</button></div><div class="chat-scroll" id="chat-scroll"><div class="chat-welcome" id="chat-welcome"><span class="welcome-spark">✳</span><div class="eyebrow">LET'S COOK TOGETHER</div><h2>好吃的答案，<br>从一个小问题开始。</h2><p>食材不够、做法不熟、今晚没灵感？<br>把你的厨房情况告诉我，我们一起想办法。</p><div class="suggestion-grid"><button data-prompt="我有番茄和鸡蛋，想做一顿简单的晚餐。">🍅 番茄和鸡蛋，怎么做好吃？</button><button data-prompt="推荐一道 30 分钟内的西式晚餐，并告诉我具体做法。">🍝 30 分钟，做一份西式晚餐</button><button data-prompt="我只有平底锅，想做一道纯素菜，有什么建议？">🥬 只有平底锅，想吃点纯素的</button><button data-prompt="照烧鸡腿饭怎么做？没有味醂可以用什么代替？">🥢 没有味醂，照烧饭怎么做？</button></div></div><div id="chat-messages" aria-live="polite" aria-relevant="additions"></div></div><div class="chat-composer"><div class="composer-context" id="composer-context"></div><form id="chat-form"><label class="sr-only" for="chat-input">向小厨提问</label><textarea id="chat-input" rows="2" placeholder="告诉我你有什么食材，或者想吃点什么…" maxlength="2000" required></textarea><button class="send-button" id="send-button" aria-label="发送问题"><svg><use href="#i-arrow"/></svg></button></form><p id="composer-note">菜谱建议请结合实际食材与设备判断。未连接 AI 时提供本地菜谱检索。</p></div></div><aside class="kitchen-context"><div class="context-heading"><svg><use href="#i-leaf"/></svg><h2>今天的厨房</h2></div><p class="context-intro">这些小细节，让建议更合你心意。</p><label for="context-ingredients">手边食材</label><textarea id="context-ingredients" rows="3" maxlength="500" placeholder="番茄、鸡蛋、鸡腿…"></textarea><label for="context-servings">用餐人数</label><select id="context-servings"><option value="1">1 人 · 一人食</option><option value="2" selected>2 人 · 好好吃饭</option><option value="3">3 人</option><option value="4">4 人 · 一起分享</option><option value="6">6 人</option><option value="8">8 人</option></select><label for="context-time">我有多少时间</label><select id="context-time"><option value="15">15 分钟</option><option value="30" selected>30 分钟</option><option value="60">60 分钟</option><option value="120">120 分钟</option></select><label for="context-diet">饮食偏好</label><select id="context-diet"><option value="">没有特别偏好</option><option value="vegetarian">蛋奶素</option><option value="vegan">纯素</option></select><label for="context-avoid">忌口 / 过敏食材</label><input id="context-avoid" maxlength="300" placeholder="如：花生、牛奶、不能吃辣"><label for="context-equipment">厨房设备</label><input id="context-equipment" maxlength="200" placeholder="如：平底锅、电饭煲"><div class="context-tip"><span>✦</span><p>连接 DeepSeek 后，小厨会结合菜谱库调整份量、食材替换和步骤。</p></div><div class="history-heading"><h3>最近的对话</h3></div><div id="chat-history" class="chat-history"></div></aside></div></section>
+      </main>
+    </div>
+  </div>
+  <dialog id="recipe-dialog" class="recipe-dialog"><button class="icon-button dialog-close" data-close-dialog="recipe-dialog" aria-label="关闭菜谱"><svg><use href="#i-close"/></svg></button><div id="recipe-detail"></div></dialog>
+  <dialog id="settings-dialog" class="settings-dialog"><button class="icon-button dialog-close" data-close-dialog="settings-dialog" aria-label="关闭设置"><svg><use href="#i-close"/></svg></button><span class="settings-emblem"><svg><use href="#i-spark"/></svg></span><div class="eyebrow">YOUR KITCHEN, A LITTLE SMARTER</div><h2>连接你的 AI 小厨</h2><p>让 DeepSeek 从本地菜谱中查找做法，<br>再根据你的食材、口味和设备调整。</p><form id="settings-form"><label for="api-key">DeepSeek API Key</label><input id="api-key" type="password" autocomplete="off" maxlength="300" placeholder="输入 API Key；留空保留已有配置"><label for="api-model">模型名称</label><input id="api-model" value="deepseek-flash" maxlength="80" placeholder="deepseek-flash"><div class="settings-privacy"><svg><use href="#i-check"/></svg><span>Key 保存在本机 .env 中；仅后端向 DeepSeek 发送。<br>问答时会发送相关菜谱、对话和当前厨房信息。</span></div><div class="settings-actions"><button type="button" class="text-button" id="disconnect-ai">断开 AI 连接</button><button class="primary-button" id="save-settings">保存设置<svg><use href="#i-arrow"/></svg></button></div><div class="form-message" id="settings-message" role="status"></div></form><a class="settings-doc-link" href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer">前往 DeepSeek 获取 API Key<svg><use href="#i-link"/></svg></a></dialog>
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>

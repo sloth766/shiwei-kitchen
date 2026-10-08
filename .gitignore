@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.env.env.tmp
+*.db
+*.db-shm
+*.db-wal
+*.log
+.tools/
+.github-upload/
+data/*.db
+data/*.db-shm
+data/*.db-wal
+__pycache__/
+*.pyc
+tests/.tmp*/
