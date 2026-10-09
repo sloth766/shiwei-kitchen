@@ -1,0 +1,79 @@
+{
+  "format": "shiwei-evaluation",
+  "format_version": 1,
+  "name": "内置菜谱检索回归基线",
+  "cases": [
+    {
+      "id": "curry",
+      "name": "咖喱匹配菜名或食材，不返回无关菜单",
+      "turns": [{"message": "咖喱", "expected": {"match_status": "matched", "min_sources": 1, "source_ids_include": ["htc-b69537e9b0c4b779"], "source_ids_exclude": ["tomato-eggs", "carbonara"]}}]
+    },
+    {
+      "id": "single-shrimp",
+      "name": "单字食材：虾",
+      "turns": [{"message": "虾", "expected": {"match_status": "matched", "min_sources": 1, "max_sources": 3}}]
+    },
+    {
+      "id": "single-fish",
+      "name": "单字食材：鱼，不把鱼香当作鱼",
+      "turns": [{"message": "鱼", "expected": {"match_status": "matched", "min_sources": 1, "source_ids_exclude": ["htc-5f3a3719b0e0ae36", "htc-bfaaef2163ddf728"]}}]
+    },
+    {
+      "id": "single-crab",
+      "name": "单字食材：蟹",
+      "turns": [{"message": "蟹", "expected": {"match_status": "matched", "min_sources": 1, "max_sources": 3}}]
+    },
+    {
+      "id": "unknown",
+      "name": "未知菜名返回零匹配",
+      "turns": [{"message": "未收录的菜9f84", "expected": {"match_status": "no_match", "max_sources": 0}}]
+    },
+    {
+      "id": "dish-time-limit",
+      "name": "具体菜名不能绕过时间限制",
+      "turns": [{"message": "5 分钟内的番茄炒鸡蛋", "expected": {"match_status": "no_match", "max_sources": 0, "context": {"time": 5}}}]
+    },
+    {
+      "id": "conditional-followup",
+      "name": "条件追问继承咖喱主题；内置库没有 15 分钟西式咖喱",
+      "turns": [
+        {"message": "咖喱", "expected": {"match_status": "matched", "source_ids_include": ["htc-b69537e9b0c4b779"], "source_ids_exclude": ["tomato-eggs", "carbonara"]}},
+        {"message": "再推荐一道西式的，15 分钟内，4 人份", "expected": {"match_status": "no_match", "max_sources": 0, "context": {"region": "西方", "time": 15, "servings": 4}}}
+      ]
+    },
+    {
+      "id": "new-topic",
+      "name": "明确新菜名替换历史咖喱主题",
+      "turns": [
+        {"message": "咖喱", "expected": {"match_status": "matched", "source_ids_include": ["htc-b69537e9b0c4b779"], "source_ids_exclude": ["tomato-eggs", "carbonara"]}},
+        {"message": "番茄炒鸡蛋", "expected": {"match_status": "matched", "source_ids_include": ["tomato-eggs"], "source_ids_exclude": ["htc-b69537e9b0c4b779"], "source_name_contains": "炒鸡蛋"}}
+      ]
+    },
+    {
+      "id": "pantry-empty",
+      "name": "空库存不能借用用户真实库存",
+      "pantry": [],
+      "turns": [{"message": "根据库存推荐菜单", "context": {"use_pantry": true}, "expected": {"match_status": "no_match", "max_sources": 0}}]
+    },
+    {
+      "id": "tomato-sauce",
+      "name": "番茄酱不等同鲜番茄",
+      "pantry": [{"name": "番茄酱"}],
+      "turns": [{"message": "根据库存推荐番茄炒鸡蛋", "context": {"use_pantry": true}, "expected": {"match_status": "no_match", "max_sources": 0}}]
+    },
+    {
+      "id": "pantry-match",
+      "name": "鲜番茄与鸡蛋库存可匹配对应菜谱",
+      "pantry": [{"name": "番茄", "quantity": 2, "unit": "个"}, {"name": "鸡蛋", "quantity": 3, "unit": "个"}],
+      "turns": [{"message": "根据库存推荐番茄炒鸡蛋", "context": {"use_pantry": true}, "expected": {"match_status": "matched", "source_ids_include": ["tomato-eggs"]}}]
+    },
+    {
+      "id": "explicit-priority",
+      "name": "本轮文字条件优先，未表达人数使用显式侧栏值",
+      "turns": [
+        {"message": "番茄炒鸡蛋，30 分钟内，2 人份", "expected": {"match_status": "matched", "context": {"time": 30, "servings": 2}}},
+        {"message": "再推荐一道，5 分钟内", "context": {"time": 60, "servings": 4}, "context_overrides": ["time", "servings"], "expected": {"match_status": "no_match", "max_sources": 0, "context": {"time": 5, "servings": 4}}}
+      ]
+    }
+  ]
+}

@@ -88,6 +88,14 @@ function updateStatus() {
   $('#chat-mode-label').textContent=online?`DeepSeek · ${state.settings.model} · 结合本地菜谱回答`:'本地菜谱模式 · 配置 DeepSeek 后启用 AI 调整';
   $('#api-model').value=state.settings.model;
   $('#composer-note').textContent=online?'AI 会参考菜谱与厨房条件。请结合实际食材和设备判断做法。':'当前为本地检索，不能自由推理。连接 DeepSeek 后可获得个性化调整。';
+  updateWebSearchControl();
+  if(state.page==='testing')DatasetTests.refreshCapabilities();
+}
+function updateWebSearchControl() {
+  const input=$('#chat-web-search'),configured=state.settings.configured;
+  if(!configured)input.checked=false;
+  input.disabled=!configured||state.sending;
+  $('#chat-web-help').textContent=!configured?'当前服务尚未配置 DeepSeek API Key，配置后可启用联网。':input.checked?'本轮将查询网页并交由 DeepSeek 回答，联网会额外消耗 API 额度。':'默认关闭。开启后查询网页并提供来源，联网会额外消耗 API 额度。';
 }
 function updateFavoriteCount() { $('#favorite-count').textContent=state.favorites.size; }
 function emptyState(title, detail, link=true) { return `<div class="empty-state">${icon('leaf')}<h3>${esc(title)}</h3><p>${esc(detail)}</p>${link?'<a class="primary-button" href="#recipes">去发现新味道 →</a>':''}</div>`; }
@@ -140,8 +148,8 @@ async function refreshRecipes() {
   state.recipes=recipes;state.favorites=new Set(favorites);
   renderHome();renderExplore();renderFavorites();renderPersonal();updateFavoriteCount();
 }
-function downloadJson(name,data) {
-  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'}));
+function downloadJson(name,data,pretty=true) {
+  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,pretty?2:0)],{type:'application/json;charset=utf-8'}));
   const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function openEditor(recipe=null) {
@@ -205,17 +213,18 @@ async function confirmImport() {
   }catch(err){$('#import-message').textContent=err.message;}finally{controls.forEach(id=>$(`#${id}`).disabled=false);$('#confirm-import').disabled=!importDraft;}
 }
 function navigate() {
-  const page=location.hash.slice(1)||'home', valid=['home','recipes','favorites','chat','personal','pantry'].includes(page)?page:'home';
+  const page=location.hash.slice(1)||'home', valid=['home','recipes','favorites','chat','personal','pantry','testing'].includes(page)?page:'home';
   state.page=valid;
   $$('.page').forEach(el=>{el.hidden=el.id!==`page-${valid}`;});
   $$('.nav-item[data-page]').forEach(el=>{el.classList.toggle('active',el.dataset.page===valid); if(el.dataset.page===valid)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
-  $('#page-label').textContent={home:'厨房首页',recipes:'探索菜谱',favorites:'我的收藏',chat:'问问小厨',personal:'我的菜谱',pantry:'食材仓库'}[valid];
+  $('#page-label').textContent={home:'厨房首页',recipes:'探索菜谱',favorites:'我的收藏',chat:'问问小厨',personal:'我的菜谱',pantry:'食材仓库',testing:'数据集测试'}[valid];
   toggleSidebar(false);
   if(valid==='recipes')renderExplore();
   if(valid==='favorites')renderFavorites();
   if(valid==='personal')renderPersonal();
   if(valid==='pantry')refreshPantry().catch(err=>toast(err.message));
   if(valid==='chat')loadHistory().catch(()=>{});
+  if(valid==='testing')DatasetTests.open();
   window.scrollTo(0,0);
 }
 function toggleSidebar(open) { $('#sidebar').classList.toggle('open',open); $('#sidebar').inert=window.matchMedia('(max-width:680px)').matches&&!open; $('#menu-button').setAttribute('aria-expanded',String(open)); }
@@ -238,9 +247,11 @@ function renderIngredients() {
 async function openRecipe(id) {
   try {
     const recipe=await api(`/api/recipes/${encodeURIComponent(id)}`);state.currentRecipe=recipe;
-    $('#recipe-detail').innerHTML=`<div class="detail-top"><img src="${esc(recipe.image)}" alt="${esc(recipe.image_alt)}（风味示意）"><div class="detail-title"><small>${esc(recipe.area_group)} / ${esc(recipe.area || recipe.cuisine)}</small><h2>${esc(recipe.name)}</h2></div></div><div class="detail-content"><div class="detail-summary"><span>${icon('clock')}${esc(recipeTime(recipe))}</span><span>${icon('chef')}${esc(recipe.difficulty)}</span><span>${recipe.diet==='vegan'?'纯素':recipe.diet==='vegetarian'?'蛋奶素':recipe.diet==='unknown'?'饮食类型待核对':'荤素搭配'}</span><div class="detail-actions"><button class="secondary-button" id="detail-favorite"></button><button class="secondary-button" id="detail-ask">${icon('spark')}请小厨调整</button></div></div><p class="detail-description">${esc(recipe.description)}</p><div class="detail-columns"><section><h3>准备这些食材</h3><div class="servings-control"><span>${recipe.servings_note?'保留原文份量':'按人数换算用量'}</span><select id="detail-servings" aria-label="菜谱人数" ${recipe.servings_note?'disabled':''}>${recipe.servings_note?`<option value="${recipe.servings}">原文份量</option>`:[...new Set([1,2,3,4,6,8,recipe.servings])].sort((a,b)=>a-b).map(n=>`<option value="${n}" ${n===recipe.servings?'selected':''}>${n} 人份</option>`).join('')}</select></div><ul class="ingredient-list" id="detail-ingredients"></ul>${recipe.quantity_notes?`<details class="quantity-notes" open><summary>原文用量说明</summary><p>${esc(recipe.quantity_notes)}</p></details>`:''}</section><section><h3>一步一步，好好做饭</h3><ol class="step-list">${recipe.steps.map(s=>`<li ${s.startsWith('【')?'class="step-section"':''}>${esc(s)}</li>`).join('')}</ol><div class="recipe-tip">✦ 小提醒：${esc(recipe.tip)}</div></section></div><div class="detail-source">参考来源：${recipe.source.url?`<a href="${esc(safeUrl(recipe.source.url))}" target="_blank" rel="noopener noreferrer">${esc(recipe.source.name)} · ${esc(recipe.source.title)} ${icon('link')}</a>`:`<span>${esc(recipe.source.name)} · ${esc(recipe.source.title)}</span>`}<br>整理日期：${esc(recipe.source.retrieved_at)} · ${esc(recipe.adaptation)} 配图为风味示意。<br>常见过敏原：${esc(recipe.allergens.join('、')||'无已标注常见过敏原，请核对包装')}。人数换算仅缩放食材用量，烹饪时间须按锅具和食材状态判断。</div></div>`;
+    $('#recipe-detail').innerHTML=`<div class="detail-top"><img src="${esc(recipe.image)}" alt="${esc(recipe.image_alt)}（风味示意）"><div class="detail-title"><small>${esc(recipe.area_group)} / ${esc(recipe.area || recipe.cuisine)}</small><h2>${esc(recipe.name)}</h2></div></div><div class="detail-content"><div class="detail-summary"><span>${icon('clock')}${esc(recipeTime(recipe))}</span><span>${icon('chef')}${esc(recipe.difficulty)}</span><span>${recipe.diet==='vegan'?'纯素':recipe.diet==='vegetarian'?'蛋奶素':recipe.diet==='unknown'?'饮食类型待核对':'荤素搭配'}</span><div class="detail-actions"><button class="secondary-button" id="detail-favorite"></button><button class="primary-button" id="detail-cook">${icon('chef')}开始做饭</button><button class="secondary-button" id="detail-ask">${icon('spark')}请小厨调整</button></div></div><p class="detail-description">${esc(recipe.description)}</p><div class="detail-columns"><section><h3>准备这些食材</h3><div class="servings-control"><span>${recipe.servings_note?'保留原文份量':'按人数换算用量'}</span><select id="detail-servings" aria-label="菜谱人数" ${recipe.servings_note?'disabled':''}>${recipe.servings_note?`<option value="${recipe.servings}">原文份量</option>`:[...new Set([1,2,3,4,6,8,recipe.servings])].sort((a,b)=>a-b).map(n=>`<option value="${n}" ${n===recipe.servings?'selected':''}>${n} 人份</option>`).join('')}</select></div><ul class="ingredient-list" id="detail-ingredients"></ul>${recipe.equipment?.length?`<div class="detail-equipment"><h3>准备这些设备</h3><ul>${recipe.equipment.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></div>`:''}${recipe.quantity_notes?`<details class="quantity-notes" open><summary>原文用量说明</summary><p>${esc(recipe.quantity_notes)}</p></details>`:''}</section><section><h3>一步一步，好好做饭</h3><ol class="step-list">${recipe.steps.map(s=>`<li ${CookingState.isHeading(s)?'class="step-section"':''}>${esc(s)}</li>`).join('')}</ol><div class="recipe-tip">✦ 小提醒：${esc(recipe.tip)}</div></section></div><div class="detail-source">参考来源：${recipe.source.url?`<a href="${esc(safeUrl(recipe.source.url))}" target="_blank" rel="noopener noreferrer">${esc(recipe.source.name)} · ${esc(recipe.source.title)} ${icon('link')}</a>`:`<span>${esc(recipe.source.name)} · ${esc(recipe.source.title)}</span>`}<br>整理日期：${esc(recipe.source.retrieved_at)} · ${esc(recipe.adaptation)} 配图为风味示意。<br>常见过敏原：${esc(recipe.allergens.join('、')||'无已标注常见过敏原，请核对包装')}。人数换算仅缩放食材用量，烹饪时间须按锅具和食材状态判断。</div></div>`;
     renderIngredients();updateDetailFavorite();photoHandlers($('#recipe-detail'));
     $('#detail-servings').addEventListener('change',renderIngredients);
+    $('#detail-cook').disabled=!CookingState.steps(recipe).length;
+    $('#detail-cook').addEventListener('click',()=>openCooking(recipe));
     $('#detail-favorite').addEventListener('click',()=>toggleFavorite(id));
     if(recipe.personal){
       const edit=document.createElement('button');edit.className='secondary-button';edit.textContent='编辑';edit.addEventListener('click',()=>{$('#recipe-dialog').close();openEditor(recipe);});
@@ -258,40 +269,45 @@ function markdown(text) {
   const flush=()=>{if(listType){blocks.push(`<${listType}>${items.join('')}</${listType}>`);listType=null;items=[];}};
   text.split('\n').forEach(line=>{const heading=line.match(/^#{1,4}\s+(.+)$/),unordered=line.match(/^[-*]\s+(.+)$/),ordered=line.match(/^\d+[.)、]\s*(.+)$/);if(unordered||ordered){const type=unordered?'ul':'ol';if(listType&&listType!==type)flush();listType=type;items.push(`<li>${inline((unordered||ordered)[1])}</li>`);}else{flush();if(heading)blocks.push(`<h3>${inline(heading[1])}</h3>`);else if(line.trim())blocks.push(`<p>${inline(line)}</p>`);}});flush();return blocks.join('');
 }
-function appendMessage(role,content,mode=null,sources=[],save=true) {
+function appendMessage(role,content,mode=null,sources=[],save=true,webSources=[],webSearch=false) {
+  webSources=Array.isArray(webSources)?webSources:[];
   $('#chat-welcome').hidden=true;
   const div=document.createElement('div');div.className=`message ${role}`;
   const body=document.createElement('div');body.className='message-body';
-  if(role==='assistant'&&mode){const label=document.createElement('div');label.className='message-mode';label.textContent=mode==='deepseek'?'DEEPSEEK · 参考本地菜谱':sources.length?'本地菜谱检索 · 尚未调用 AI':'本地菜谱检索 · 0 匹配';body.append(label);}
+  if(role==='assistant'&&mode){const label=document.createElement('div');label.className='message-mode';label.textContent=webSearch||webSources.length?'DEEPSEEK · 联网搜索与本地菜谱':mode==='deepseek'?'DEEPSEEK · 参考本地菜谱':sources.length?'本地菜谱检索 · 尚未调用 AI':'本地菜谱检索 · 0 匹配';body.append(label);}
   const contentDiv=document.createElement('div');contentDiv.className='message-content';if(role==='user')contentDiv.textContent=content;else contentDiv.innerHTML=markdown(content);body.append(contentDiv);
   if(sources.length){const list=document.createElement('div');list.className='message-source-list';sources.forEach(r=>{const btn=document.createElement('button');btn.textContent=`↗ ${r.name}`;btn.dataset.recipeId=r.id;list.append(btn);});body.append(list);}
+  if(role==='assistant'&&(webSearch||webSources.length)){const list=document.createElement('div');list.innerHTML=DatasetTests.webSourcesHtml(webSources,webSearch);body.append(list);}
   const avatar=document.createElement('div');avatar.className='message-avatar';if(role==='user')avatar.textContent='我';else avatar.innerHTML=icon('chef');div.append(avatar,body);$('#chat-messages').append(div);
-  if(save)state.messages.push({role,content,mode,sources});scrollChat();return div;
+  if(save)state.messages.push({role,content,mode,sources,web_sources:webSources,web_search:webSearch});scrollChat();return div;
 }
 function scrollChat() { const box=$('#chat-scroll');box.scrollTop=box.scrollHeight; }
 function goChat(prompt='') { location.hash='chat';if(prompt){$('#chat-input').value=prompt;setTimeout(()=>$('#chat-input').focus(),50);} }
 async function sendChat(event) {
   event.preventDefault();if(state.sending)return;
   const message=$('#chat-input').value.trim();if(!message)return;
+  const webSearch=$('#chat-web-search').checked;
+  if(webSearch&&!state.settings.configured){toast('当前服务尚未配置 DeepSeek API Key，请先打开 AI 连接设置。');updateWebSearchControl();return;}
   state.sending=true;$('#send-button').disabled=true;$('#new-chat').disabled=true;const epoch=state.sessionEpoch;
-  const userNode=appendMessage('user',message);$('#chat-input').value='';
-  const thinking=document.createElement('div');thinking.className='message';thinking.innerHTML=`<span class="message-avatar">${icon('chef')}</span><div class="thinking">${state.settings.configured?'小厨正在查看菜谱，准备你的答案':'正在从本地菜谱中寻找好味道'} <span></span><span></span><span></span></div>`;$('#chat-messages').append(thinking);scrollChat();
+  updateWebSearchControl();
+  const userNode=appendMessage('user','问题发送中…','local',[],false);$('#chat-input').value='';
+  const thinking=document.createElement('div');thinking.className='message';thinking.innerHTML=`<span class="message-avatar">${icon('chef')}</span><div class="thinking">${webSearch?'小厨正在搜索网页、参考菜谱，准备你的答案':state.settings.configured?'小厨正在查看菜谱，准备你的答案':'正在从本地菜谱中寻找好味道'} <span></span><span></span><span></span></div>`;$('#chat-messages').append(thinking);scrollChat();
   const sentContext=context();
   const sentOverrides=[...contextOverrides];
   try {
-    const result=await api('/api/chat',{method:'POST',body:JSON.stringify({message,session_id:state.sessionId,context:sentContext,context_overrides:sentOverrides})});
+    const result=await api('/api/chat',{method:'POST',body:JSON.stringify({message,session_id:state.sessionId,context:sentContext,context_overrides:sentOverrides,web_search:webSearch})});
     if(epoch!==state.sessionEpoch)return;
-    state.sessionId=result.session_id;sessionStorage.setItem('shiwei.session',state.sessionId);thinking.remove();sentOverrides.forEach(key=>{if($(`#context-${key}`).value===String(sentContext[key]))contextOverrides.delete(key);});syncContext(result.context,sentContext);appendMessage('assistant',result.content,result.mode,result.sources);await loadHistory();
+    state.sessionId=result.session_id;sessionStorage.setItem('shiwei.session',state.sessionId);thinking.remove();userNode.remove();appendMessage('user',typeof result.user_content==='string'?result.user_content:'问题已提交');sentOverrides.forEach(key=>{if($(`#context-${key}`).value===String(sentContext[key]))contextOverrides.delete(key);});syncContext(result.context,sentContext);appendMessage('assistant',result.content,result.mode,result.sources,true,result.web_sources,result.web_search===true);await loadHistory();
   } catch(err) {
-    thinking.remove();userNode.remove();state.messages.pop();$('#chat-input').value=message;
+    thinking.remove();userNode.remove();$('#chat-input').value=message;
     const error=document.createElement('div');error.className='error-message';error.textContent=err.message;$('#chat-messages').append(error);scrollChat();
-  } finally { state.sending=false;$('#send-button').disabled=false;$('#new-chat').disabled=false; }
+  } finally { state.sending=false;$('#send-button').disabled=false;$('#new-chat').disabled=false;updateWebSearchControl(); }
 }
 async function loadHistory() { const sessions=await api('/api/sessions');$('#chat-history').innerHTML=sessions.length?sessions.map(s=>`<button data-session-id="${esc(s.id)}" title="${esc(s.title)}">${esc(s.title)}</button>`).join(''):'<span class="history-empty">聊过的味道，会留在这里。</span>'; }
 async function loadSession(id) {
   if(state.sending){toast('小厨正在回答，请等这次回答完成。');return;}
   const epoch=++state.sessionEpoch;
-  try { const session=await api(`/api/sessions/${encodeURIComponent(id)}`);if(epoch!==state.sessionEpoch)return;state.sessionId=id;state.messages=[];sessionStorage.setItem('shiwei.session',id);syncContext(session.context);$('#chat-messages').replaceChildren();$('#chat-welcome').hidden=!!session.messages.length;session.messages.forEach(m=>appendMessage(m.role,m.content,m.mode,m.sources)); } catch(err){if(err.status===404&&sessionStorage.getItem('shiwei.session')===id)newChat();toast(err.message);}
+  try { const session=await api(`/api/sessions/${encodeURIComponent(id)}`);if(epoch!==state.sessionEpoch)return;state.sessionId=id;state.messages=[];sessionStorage.setItem('shiwei.session',id);syncContext(session.context);$('#chat-messages').replaceChildren();$('#chat-welcome').hidden=!!session.messages.length;session.messages.forEach(m=>appendMessage(m.role,m.content,m.mode,m.sources,true,m.web_sources,m.web_search===true)); } catch(err){if(err.status===404&&sessionStorage.getItem('shiwei.session')===id)newChat();toast(err.message);}
 }
 function newChat() { if(state.sending)return;state.sessionEpoch++;state.sessionId=null;state.messages=[];sessionStorage.removeItem('shiwei.session');$('#chat-messages').replaceChildren();$('#chat-welcome').hidden=false;$('#chat-input').value='';$('#chat-input').focus(); }
 function openSettings() { $('#api-key').value='';$('#settings-message').textContent='';$('#api-key').placeholder=state.settings.configured?'已配置 Key；留空保持不变':'输入你的 DeepSeek API Key';$('#api-model').value=state.settings.model;$('#settings-dialog').showModal(); }
@@ -302,6 +318,9 @@ async function saveSettings(event) {
 async function disconnect() { try{state.settings=await api('/api/settings',{method:'POST',body:JSON.stringify({clear_key:true,model:$('#api-model').value.trim()})});updateStatus();$('#api-key').value='';$('#settings-message').textContent='已移除本机保存的 Key，切换为本地菜谱模式。';}catch(err){$('#settings-message').textContent=err.message;} }
 function setExploreFilter(filter) { state.exploreFilter=filter;$$('#explore-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.exploreFilter===filter)); }
 function bindEvents() {
+  initKitchenTools();
+  DatasetTests.init({api,downloadJson,openSettings});
+  $('#chat-web-search').addEventListener('change',updateWebSearchControl);
   $('#add-pantry').addEventListener('click',()=>openPantryEditor());$('#pantry-editor-form').addEventListener('submit',savePantry);
   $('#pantry-search').addEventListener('input',renderPantry);$('#pantry-filter').addEventListener('change',renderPantry);
   $('#pantry-menu').addEventListener('click',()=>analyzePantry('menu'));$('#pantry-expiry').addEventListener('click',()=>analyzePantry('expiry'));
@@ -317,6 +336,7 @@ function bindEvents() {
   $('#export-recipes').addEventListener('click',()=>downloadJson('拾味厨房-我的菜谱.json',state.recipes.filter(r=>r.personal)));
   $('#download-template').addEventListener('click',()=>downloadJson('拾味厨房-导入模板.json',[{name:'番茄炒鸡蛋（我的做法）',area_group:'中国',area:'家常菜',minutes:15,servings:2,diet:'vegetarian',allergens:['鸡蛋'],ingredients:[{name:'番茄',quantity:2,unit:'个'},{name:'鸡蛋',quantity:3,unit:'个'},{name:'盐',quantity:null,unit:'适量'}],steps:['番茄洗净切块，鸡蛋打散。','热锅加油炒熟鸡蛋，盛出。','炒软番茄，加入鸡蛋与盐，翻炒均匀。']} ]));
   window.addEventListener('hashchange',navigate);
+  $$('.nav-item[data-page]').forEach(link=>link.addEventListener('click',()=>toggleSidebar(false)));
   $('#menu-button').addEventListener('click',()=>toggleSidebar(!$('#sidebar').classList.contains('open')));$('#sidebar-backdrop').addEventListener('click',()=>toggleSidebar(false));
   window.matchMedia('(max-width:680px)').addEventListener('change',()=>toggleSidebar(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')toggleSidebar(false);});
@@ -331,8 +351,8 @@ function bindEvents() {
   $('#region-groups').addEventListener('click',e=>{const b=e.target.closest('[data-region-group]');if(b){state.areaGroup=b.dataset.regionGroup;state.area='';expandedRegions=false;setExploreFilter('all');renderExplore(true);}});
   $('#region-areas').addEventListener('click',e=>{if(e.target.closest('[data-region-toggle]')){expandedRegions=!expandedRegions;renderRegions();return;}const b=e.target.closest('[data-region-area]');if(b){state.area=b.dataset.regionArea;renderExplore(true);}});
   $('#recipe-pagination').addEventListener('click',e=>{const b=e.target.closest('[data-recipe-page]');if(b&&!b.disabled){state.recipePage=Number(b.dataset.recipePage);renderExplore();$('#results-caption').scrollIntoView({block:'start',behavior:'smooth'});}});
-  document.addEventListener('click',e=>{const favorite=e.target.closest('[data-favorite-id]'),recipe=e.target.closest('[data-recipe-id]'),session=e.target.closest('[data-session-id]'),close=e.target.closest('[data-close-dialog]');if(favorite)toggleFavorite(favorite.dataset.favoriteId);else if(recipe)openRecipe(recipe.dataset.recipeId);else if(session)loadSession(session.dataset.sessionId);else if(close)$(`#${close.dataset.closeDialog}`).close();});
-  $$('dialog').forEach(dialog=>dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}}));
+  document.addEventListener('click',e=>{const favorite=e.target.closest('[data-favorite-id]'),recipe=e.target.closest('[data-recipe-id]'),session=e.target.closest('[data-session-id]'),close=e.target.closest('[data-close-dialog]');if(favorite)toggleFavorite(favorite.dataset.favoriteId);else if(recipe)openRecipe(recipe.dataset.recipeId);else if(session)loadSession(session.dataset.sessionId);else if(close){if(close.dataset.closeDialog==='backup-dialog'&&restoreBusy)return;$(`#${close.dataset.closeDialog}`).close();}});
+  $$('dialog').forEach(dialog=>dialog.addEventListener('click',e=>{if(e.target===dialog){if(dialog.id==='backup-dialog'&&restoreBusy)return;const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}}));
   $('#settings-form').addEventListener('submit',saveSettings);$('#disconnect-ai').addEventListener('click',disconnect);$('#chat-form').addEventListener('submit',sendChat);$('#new-chat').addEventListener('click',newChat);
   $('#chat-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('#chat-form').requestSubmit();}});
   contextIds.forEach(id=>$(`#context-${id}`).addEventListener('input',()=>{contextOverrides.add(id);saveContext();}));
@@ -345,6 +365,7 @@ async function boot() {
   try {
     const [recipes,favorites,settings,inventory]=await Promise.all([api('/api/recipes'),api('/api/favorites'),api('/api/settings'),api('/api/pantry')]);state.recipes=recipes;state.favorites=new Set(favorites);state.settings=settings;pantry=inventory;renderPantry();renderHome();renderExplore();renderFavorites();renderPersonal();updateFavoriteCount();updateStatus();
     const sessionId=sessionStorage.getItem('shiwei.session');if(sessionId)await loadSession(sessionId);
+    const cookingId=sessionStorage.getItem('shiwei.cooking.active'),activeRecipe=state.recipes.find(recipe=>recipe.id===cookingId);if(activeRecipe)openCooking(activeRecipe);
   } catch(err) {$('#connection-status').textContent='厨房连接失败';$('#home-recipes').innerHTML=emptyState('厨房暂时没有连接上',err.message,false);toast(err.message);}
 }
 boot();

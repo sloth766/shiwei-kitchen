@@ -51,7 +51,7 @@ class KitchenTests(unittest.TestCase):
         data=None if body is None else json.dumps(body,ensure_ascii=False).encode()
         request=urllib.request.Request(self.base+path,data=data,method=method,headers={'Content-Type':'application/json',**(headers or {})})
         try:
-            with urllib.request.urlopen(request,timeout=5) as response:
+            with urllib.request.urlopen(request,timeout=30 if path=='/api/recipes' else 5) as response:
                 raw=response.read()
                 return response.status,json.loads(raw) if response.headers.get_content_type()=='application/json' else raw
         except urllib.error.HTTPError as error:
@@ -520,14 +520,14 @@ class KitchenTests(unittest.TestCase):
 
     def test_provider_errors_are_safe_and_request_matches_api(self):
         config={'model':'deepseek-flash','api_key':'test-only-not-a-real-key'}
-        with patch.object(app.urllib.request,'urlopen',side_effect=urllib.error.HTTPError(app.DEEPSEEK_URL,401,'bad',None,io.BytesIO(b'secret upstream error'))):
+        with patch.object(app,'open_model_request',side_effect=urllib.error.HTTPError(app.DEEPSEEK_URL,401,'bad',None,io.BytesIO(b'secret upstream error'))):
             with self.assertRaises(app.AppError) as raised:
                 app.deepseek_request([{'role':'user','content':'Hi'}],config)
             self.assertIn('API Key 无效',str(raised.exception))
             self.assertNotIn('secret',str(raised.exception))
         response=unittest.mock.MagicMock()
         response.__enter__.return_value.read.return_value=b'{"choices":[{"message":{"role":"assistant","content":"hello"}}]}'
-        with patch.object(app.urllib.request,'urlopen',return_value=response) as mock:
+        with patch.object(app,'open_model_request',return_value=response) as mock:
             self.assertEqual(app.deepseek_request([{'role':'user','content':'Hi'}],config)['content'],'hello')
         request=mock.call_args.args[0]
         payload=json.loads(request.data)

@@ -17,3 +17,6 @@ tests/.tmp*/
 
 previews/
 dist/
+data/backups/
+output/
+.playwright-cli/

@@ -37,7 +37,7 @@ def main():
             relative=PurePosixPath(*path.parts[1:])
             if '..' in path.parts or path.is_absolute():
                 raise SystemExit('Unsafe archive path.')
-            if (relative.name.startswith('.env') and relative.name!='.env.example') or relative.suffix in ('.db','.pyc','.log') or any(part in ('.git','.tools','.github-upload','previews','dist','__pycache__') for part in relative.parts) or relative.name.endswith(('.db-shm','.db-wal')):
+            if (relative.name.startswith('.env') and relative.name!='.env.example') or relative.suffix in ('.db','.pyc','.log') or any(part in ('.git','.tools','.github-upload','previews','dist','__pycache__','backups','output','.playwright-cli') for part in relative.parts) or relative.name.endswith(('.db-shm','.db-wal')):
                 raise SystemExit(f'Private or generated file tracked in Git: {relative}')
             data=source.read(info)
             if relative.suffix.lower()=='.bat':

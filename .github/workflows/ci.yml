@@ -32,6 +32,12 @@ jobs:
         with:
           node-version: '22'
       - name: Check browser script
-        run: node --check public/app.js
+        run: |
+          node --check public/app.js
+          node --check public/cooking.js
+          node --check public/kitchen-tools.js
+          node --check public/dataset-tests.js
+      - name: Check browser state and dataset reports
+        run: node --test tests/cooking.test.cjs tests/dataset-tests.test.cjs tests/chat-secrets.test.cjs
       - name: Run isolated integration tests
         run: python -m unittest discover -s tests -v

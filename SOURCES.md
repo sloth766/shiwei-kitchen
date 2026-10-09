@@ -2,6 +2,14 @@
 
 数据快照日期：**2026-10-08**。共 1,775 条做法，保存来源与版本信息；同名菜的不同来源或不同做法分别保留。精选家庭做法为中文改编，社区配方保留上游文字与许可。
 
+### 设备分类核验
+
+`ingredient_rules.py` 使用精确名称和已核对短语区分食材与设备；原始 Markdown 不变，菜谱 ID、来源、用时和饮食类型不因分类而改写。`data/equipment-corrections.json` 记录每项原文字段、源文件 SHA-256、移动目标及核验状态。`source_checked` 只表示本次设备条目与原文核对，`cooking_tested` 表示实际试做，两者不能混用；当前没有新增试做结论。
+
+运行 `python scripts/classify_equipment.py` 查看检查结果，显式加 `--apply` 才更新分类和核验记录。仍混写食材与设备的条目保留原文并列入 `pending`，不以模糊规则自动剔除。
+
+引入的 Inkensai 新增代码与文档贡献保留其 MIT 许可，范围见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。原有项目许可安排保持不变；下列第三方菜谱、图片及来源快照继续保留各自许可。
+
 ## 🌏 社区菜谱
 
 | 来源 | 收录 | 固定版本 | 许可 |
@@ -85,4 +93,4 @@ ForkRecipe：该固定版本包含 963 篇食谱，另有一份模块索引和�
 | hummus.jpg | [鹰嘴豆泥 · Sandie Clarke](https://unsplash.com/photos/a-bowl-of-hummus-next-to-some-garlic--ulJ5sF0NPg) |
 | bruschetta.jpg | [番茄香草面包 · Diego Arenas de Rodrigo](https://unsplash.com/photos/bruschetta-with-fresh-tomatoes-and-herbs-JK1Iog4H4u0) |
 
-图片使用范围参见 [Unsplash License](https://unsplash.com/license)。品牌 SVG 和界面图标在项目中绘制。字体为 Google Fonts 的 Noto Sans SC / Noto Serif SC，断网时自动使用系统中文字体；图片和业务资源均已本地保存。
+图片使用范围参见 [Unsplash License](https://unsplash.com/license)。品牌 SVG 和界面图标在项目中绘制。页面只使用本机已安装字体：优先 Noto Sans SC / Noto Serif SC，再回退系统中文字体；不请求 Google Fonts，避免字体网络超时阻塞页面样式和脚本。图片和业务资源均已本地保存。

@@ -546,7 +546,11 @@
       "大豆",
       "鱼"
     ],
-    "equipment": [],
+    "equipment": [
+      "量杯",
+      "厨房秤（可选）",
+      "大不锈钢碗"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -591,21 +595,6 @@
       },
       {
         "name": "糖",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "量杯",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "厨房秤（可选）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "大不锈钢碗",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -1146,7 +1135,9 @@
     "allergens": [
       "鱼"
     ],
-    "equipment": [],
+    "equipment": [
+      "菜刀一个"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -1201,11 +1192,6 @@
       },
       {
         "name": "盆（两个）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "菜刀一个",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -1808,7 +1794,13 @@
     "allergens": [
       "鱼"
     ],
-    "equipment": [],
+    "equipment": [
+      "蒸笼（含蒸锅）",
+      "砧板",
+      "铁锅",
+      "厨房纸",
+      "菜刀"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -1852,22 +1844,7 @@
         "unit": "见用量说明"
       },
       {
-        "name": "蒸笼（含蒸锅）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
         "name": "清水",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "砧板",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "铁锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -1882,17 +1859,7 @@
         "unit": "见用量说明"
       },
       {
-        "name": "厨房纸",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
         "name": "蒸鱼盘子（能平放下一条鱼即可）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "菜刀",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -2088,7 +2055,9 @@
       "牛奶",
       "虾"
     ],
-    "equipment": [],
+    "equipment": [
+      "平底煎锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -2113,11 +2082,6 @@
       },
       {
         "name": "柠檬",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "平底煎锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -3037,7 +3001,9 @@
     "allergens": [
       "鸡蛋"
     ],
-    "equipment": [],
+    "equipment": [
+      "漏勺"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -3057,11 +3023,6 @@
       },
       {
         "name": "定时器",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "漏勺",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -3170,7 +3131,10 @@
       "鸡蛋",
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "耐热碗",
+      "保鲜膜或微波炉专用盖"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -3195,16 +3159,6 @@
       },
       {
         "name": "香油",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "耐热碗",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "保鲜膜或微波炉专用盖",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -3252,14 +3206,11 @@
       "牛奶",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "微波炉"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "微波炉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "能放进微波炉的容器",
         "quantity": null,
@@ -3326,7 +3277,9 @@
       "鸡蛋",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "宽口平底锅（带锅盖）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -3376,11 +3329,6 @@
       },
       {
         "name": "面包（推荐酸面团面包 Sourdough、恰巴塔 Ciabatta 或厚切吐司）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "宽口平底锅（带锅盖）",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -3576,16 +3524,13 @@
       "breakfast"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "放得下玉米的锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "新鲜玉米",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "放得下玉米的锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -3718,16 +3663,13 @@
     "allergens": [
       "鸡蛋"
     ],
-    "equipment": [],
+    "equipment": [
+      "电锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "鸡蛋",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "电锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -3977,16 +3919,13 @@
     "allergens": [
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "空气炸锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "面包片",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "空气炸锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -4094,7 +4033,9 @@
     "allergens": [
       "鸡蛋"
     ],
-    "equipment": [],
+    "equipment": [
+      "空气炸锅或者油锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -4114,11 +4055,6 @@
       },
       {
         "name": "培根",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "空气炸锅或者油锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -4262,7 +4198,9 @@
     "allergens": [
       "鸡蛋"
     ],
-    "equipment": [],
+    "equipment": [
+      "锡纸或保鲜膜"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -4272,11 +4210,6 @@
       },
       {
         "name": "热水",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "锡纸或保鲜膜",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -4691,7 +4624,9 @@
       "花生",
       "芝麻"
     ],
-    "equipment": [],
+    "equipment": [
+      "家庭小陶瓷碗"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -4721,11 +4656,6 @@
       },
       {
         "name": "花生油（可用菜籽油替换）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "家庭小陶瓷碗",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -5105,7 +5035,9 @@
       "condiment"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "保鲜膜"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -5115,11 +5047,6 @@
       },
       {
         "name": "白砂糖",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "保鲜膜",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -5592,14 +5519,11 @@
       "牛奶",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "烤箱（电饭锅可替代，但大多情况下由于锅胆材质问题易失败）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "烤箱（电饭锅可替代，但大多情况下由于锅胆材质问题易失败）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "打蛋器（电动最好，手动费力且有一定失败概率）或筷子（非常不推荐）",
         "quantity": null,
@@ -5929,7 +5853,9 @@
       "牛奶",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "厨房纸"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -5964,11 +5890,6 @@
       },
       {
         "name": "大约 20cm × 15cm 的耐热方形容器",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "厨房纸",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -6104,7 +6025,9 @@
       "鸡蛋",
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "烤箱 大小不限"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -6129,11 +6052,6 @@
       },
       {
         "name": "白砂糖",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "烤箱 大小不限",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -6202,7 +6120,9 @@
       "牛奶",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "烤箱"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -6232,11 +6152,6 @@
       },
       {
         "name": "玉米淀粉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "烤箱",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -6284,14 +6199,12 @@
       "鸡蛋",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "空气炸锅",
+      "锡纸盘"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "空气炸锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "鸡蛋",
         "quantity": null,
@@ -6304,11 +6217,6 @@
       },
       {
         "name": "面粉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "锡纸盘",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -6374,7 +6282,9 @@
       "牛奶",
       "坚果"
     ],
-    "equipment": [],
+    "equipment": [
+      "厚底锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -6419,11 +6329,6 @@
       },
       {
         "name": "刨丝器",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "厚底锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -6475,7 +6380,9 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "保鲜膜"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -6525,11 +6432,6 @@
       },
       {
         "name": "筛网",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "保鲜膜",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -6808,19 +6710,12 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "不粘平底锅",
+      "烘焙刮刀（可用锅铲代替，小心使用破坏不粘锅涂层）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "不粘平底锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "烘焙刮刀（可用锅铲代替，小心使用破坏不粘锅涂层）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "一次性塑料手套",
         "quantity": null,
@@ -6905,14 +6800,12 @@
     "allergens": [
       "鸡蛋"
     ],
-    "equipment": [],
+    "equipment": [
+      "烤箱",
+      "烘焙纸"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "烤箱",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "电动打蛋器",
         "quantity": null,
@@ -6920,11 +6813,6 @@
       },
       {
         "name": "金属蛋糕模具（形状任意）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "烘焙纸",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -7030,7 +6918,10 @@
       "dessert"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "小锅",
+      "模具或碗"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -7054,17 +6945,7 @@
         "unit": "见用量说明"
       },
       {
-        "name": "小锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
         "name": "搅拌工具",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "模具或碗",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -7253,7 +7134,10 @@
       "drink"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "保鲜膜",
+      "大锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -7267,17 +7151,7 @@
         "unit": "见用量说明"
       },
       {
-        "name": "保鲜膜",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
         "name": "过滤网",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "大锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -7397,7 +7271,9 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "小奶锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -7437,11 +7313,6 @@
       },
       {
         "name": "糖",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "小奶锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -8052,7 +7923,9 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "搅拌机（破壁机/榨汁机）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -8082,11 +7955,6 @@
       },
       {
         "name": "薄荷叶或坚果碎（可选，用于装饰）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "搅拌机（破壁机/榨汁机）",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -8274,7 +8142,9 @@
       "drink"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "搅拌机"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -8304,11 +8174,6 @@
       },
       {
         "name": "工具",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "搅拌机",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -8436,7 +8301,9 @@
       "drink"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "蒸锅（电饭煲即可）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -8451,11 +8318,6 @@
       },
       {
         "name": "清水 720g + 600g（720 克用于蒸饭，后 500g 用于发酵）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "蒸锅（电饭煲即可）",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -9558,7 +9420,10 @@
       "大豆",
       "贝类"
     ],
-    "equipment": [],
+    "equipment": [
+      "高压锅",
+      "滤网"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -9633,16 +9498,6 @@
       },
       {
         "name": "牛腱子（或其他肉类）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "高压锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "滤网",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -10687,19 +10542,12 @@
       "meat_dish"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "烤箱",
+      "烤盘"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "烤箱",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "烤盘",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "铝箔纸",
         "quantity": null,
@@ -12102,19 +11950,12 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "普通的炒锅",
+      "电饭煲/电炖锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "普通的炒锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "电饭煲/电炖锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "Masala 粉（品牌可选 Shan）",
         "quantity": null,
@@ -14420,7 +14261,9 @@
       "小麦",
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "烤箱"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -14445,11 +14288,6 @@
       },
       {
         "name": "料酒",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "烤箱",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -14497,7 +14335,10 @@
     "allergens": [
       "芝麻"
     ],
-    "equipment": [],
+    "equipment": [
+      "高压锅",
+      "炒锅 / 煎锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -14569,16 +14410,6 @@
         "name": "糖",
         "quantity": null,
         "unit": "见用量说明"
-      },
-      {
-        "name": "高压锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "炒锅 / 煎锅",
-        "quantity": null,
-        "unit": "见用量说明"
       }
     ],
     "steps": [
@@ -14625,21 +14456,14 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "平底锅（有条件的推荐铸铁平底锅）",
+      "厨房纸（可选）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
-        "name": "平底锅（有条件的推荐铸铁平底锅）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
         "name": "锡箔纸（可选）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "厨房纸（可选）",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -14907,14 +14731,13 @@
       "大豆",
       "贝类"
     ],
-    "equipment": [],
+    "equipment": [
+      "空气炸锅",
+      "锡纸盘",
+      "保鲜膜"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "空气炸锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "鸡全翅",
         "quantity": null,
@@ -14967,16 +14790,6 @@
       },
       {
         "name": "油",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "锡纸盘",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "保鲜膜",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -15452,7 +15265,9 @@
       "小麦",
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "空气炸锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -15497,11 +15312,6 @@
       },
       {
         "name": "食用油（用于喷涂或刷涂）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "空气炸锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -18203,7 +18013,10 @@
     "allergens": [
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "蒸锅或电蒸炉",
+      "小碗（调酱汁用）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -18262,22 +18075,12 @@
         "unit": "见用量说明"
       },
       {
-        "name": "蒸锅或电蒸炉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
         "name": "耐热盘（适合蒸的盘子）",
         "quantity": null,
         "unit": "见用量说明"
       },
       {
         "name": "刀和砧板",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "小碗（调酱汁用）",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -19950,7 +19753,9 @@
       "牛奶",
       "坚果"
     ],
-    "equipment": [],
+    "equipment": [
+      "炒锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -20045,11 +19850,6 @@
       },
       {
         "name": "食用油",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "炒锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -20462,7 +20262,9 @@
       "芝麻",
       "贝类"
     ],
-    "equipment": [],
+    "equipment": [
+      "盆、碗、盘子、蒜臼"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -20477,11 +20279,6 @@
       },
       {
         "name": "黄瓜、大蒜、绿豆芽",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "盆、碗、盘子、蒜臼",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -20544,7 +20341,9 @@
       "semi-finished"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "平底锅 或 微波炉"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -20554,11 +20353,6 @@
       },
       {
         "name": "50 ml 清水",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "平底锅 或 微波炉",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -20664,16 +20458,13 @@
       "semi-finished"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "1 个空气炸锅（喜欢脆的切忌小牌子）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "1 袋半成品薯条（推荐品牌麦肯）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "1 个空气炸锅（喜欢脆的切忌小牌子）",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -20947,7 +20738,9 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "必备：厨房纸"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -20962,11 +20755,6 @@
       },
       {
         "name": "必备：蒜蓉酱（推荐川娃子的，同样是因为懒）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "必备：厨房纸",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -21133,16 +20921,13 @@
       "semi-finished"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "微波炉"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "速冻汤圆",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "微波炉",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -21185,16 +20970,13 @@
       "semi-finished"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "电饭煲（推荐品牌小米智能电饭煲）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "未过期的一袋速冻馄饨（自带调味料包更佳）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "电饭煲（推荐品牌小米智能电饭煲）",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -21569,7 +21351,9 @@
       "soup"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "砂锅或深汤锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -21609,11 +21393,6 @@
       },
       {
         "name": "食盐",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "砂锅或深汤锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -21658,19 +21437,12 @@
     "allergens": [
       "虾"
     ],
-    "equipment": [],
+    "equipment": [
+      "电压力锅（可以极大简化烹饪过程和时间）",
+      "砂锅（相比于炒锅更适合炖汤）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "电压力锅（可以极大简化烹饪过程和时间）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "砂锅（相比于炒锅更适合炖汤）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "排骨",
         "quantity": null,
@@ -21871,7 +21643,9 @@
       "soup"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "砂锅（没有的话，用铁锅也行）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -21921,11 +21695,6 @@
       },
       {
         "name": "食用盐",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "砂锅（没有的话，用铁锅也行）",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -22194,7 +21963,10 @@
       "大豆",
       "贝类"
     ],
-    "equipment": [],
+    "equipment": [
+      "电饭锅",
+      "小碗若干"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -22259,16 +22031,6 @@
       },
       {
         "name": "食用油",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "电饭锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "小碗若干",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -22621,7 +22383,11 @@
       "花生",
       "坚果"
     ],
-    "equipment": [],
+    "equipment": [
+      "粥锅（普通锅容易糊底，有条件可选择高压锅）",
+      "中号玻璃碗（或其他中号不锈钢容器）",
+      "小碗若干"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -22651,21 +22417,6 @@
       },
       {
         "name": "红枣",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "粥锅（普通锅容易糊底，有条件可选择高压锅）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "中号玻璃碗（或其他中号不锈钢容器）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "小碗若干",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -22774,7 +22525,9 @@
       "soup"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "瓦罐或者高压锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -22804,11 +22557,6 @@
       },
       {
         "name": "食用盐",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "瓦罐或者高压锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -23304,7 +23052,10 @@
       "小麦",
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "平底锅",
+      "炒锅（可以使用同一个平底锅替代）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -23364,16 +23115,6 @@
       },
       {
         "name": "胡萝卜（可选）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "平底锅",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "炒锅（可以使用同一个平底锅替代）",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -23540,7 +23281,9 @@
       "小麦",
       "芝麻"
     ],
-    "equipment": [],
+    "equipment": [
+      "烤箱或明火"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -23632,11 +23375,6 @@
         "name": "盐",
         "quantity": null,
         "unit": "见用量说明"
-      },
-      {
-        "name": "烤箱或明火",
-        "quantity": null,
-        "unit": "见用量说明"
       }
     ],
     "steps": [
@@ -23704,7 +23442,9 @@
       "小麦",
       "芝麻"
     ],
-    "equipment": [],
+    "equipment": [
+      "平底锅（不粘锅或铸铁锅）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -23754,11 +23494,6 @@
       },
       {
         "name": "大蒜（蒜蓉烤饼版本，可选）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "平底锅（不粘锅或铸铁锅）",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -23836,7 +23571,9 @@
     "allergens": [
       "牛奶"
     ],
-    "equipment": [],
+    "equipment": [
+      "厚底锅（带盖，密封用）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -23931,11 +23668,6 @@
       },
       {
         "name": "盐",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "厚底锅（带盖，密封用）",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -24201,7 +23933,9 @@
       "牛奶",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "量杯"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -24251,11 +23985,6 @@
       },
       {
         "name": "烤箱 *（不要使用不带控温的烤箱）*",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "量杯",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -24331,26 +24060,15 @@
       "鸡蛋",
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "微波炉",
+      "2 个大碗（推荐微波炉专用碗）",
+      "1 个小碗"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "工具",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "微波炉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "2 个大碗（推荐微波炉专用碗）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "1 个小碗",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -24714,7 +24432,10 @@
     "allergens": [
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "烤箱",
+      "披萨石（有更好，没有普通烤盘也可以）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -24748,17 +24469,7 @@
         "unit": "见用量说明"
       },
       {
-        "name": "烤箱",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
         "name": "烘焙油纸",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "披萨石（有更好，没有普通烤盘也可以）",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -26488,7 +26199,9 @@
     "allergens": [
       "鱼"
     ],
-    "equipment": [],
+    "equipment": [
+      "电饭煲"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -26518,11 +26231,6 @@
       },
       {
         "name": "冬菇（可选）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "电饭煲",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -26687,14 +26395,11 @@
       "staple"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "电饭煲"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
-      {
-        "name": "电饭煲",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
       {
         "name": "江南米或北方大米",
         "quantity": null,
@@ -26745,7 +26450,9 @@
       "staple"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "高压锅（推荐）或普通汤锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -26825,11 +26532,6 @@
       },
       {
         "name": "盐",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "高压锅（推荐）或普通汤锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -27336,7 +27038,10 @@
       "大豆",
       "花生"
     ],
-    "equipment": [],
+    "equipment": [
+      "蒸锅，需带笼屉",
+      "炒锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -27366,16 +27071,6 @@
       },
       {
         "name": "生抽，老抽，料酒，盐，五香粉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "蒸锅，需带笼屉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "炒锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -27653,7 +27348,9 @@
     "allergens": [
       "花生"
     ],
-    "equipment": [],
+    "equipment": [
+      "煮锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -27683,11 +27380,6 @@
       },
       {
         "name": "醋包、辣椒油等调味包",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "煮锅",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -27855,7 +27547,9 @@
     "allergens": [
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "菜刀"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -27925,11 +27619,6 @@
       },
       {
         "name": "热水",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "菜刀",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -28051,7 +27740,9 @@
       "小麦",
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "一口有点深度的锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -28096,11 +27787,6 @@
       },
       {
         "name": "糖",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "一口有点深度的锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -28219,7 +27905,9 @@
     "allergens": [
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -28264,11 +27952,6 @@
       },
       {
         "name": "青菜（油菜或菠菜均可）",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -28703,7 +28386,9 @@
       "牛奶",
       "小麦"
     ],
-    "equipment": [],
+    "equipment": [
+      "深锅（炸饼用）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -28798,11 +28483,6 @@
       },
       {
         "name": "小苏打",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "深锅（炸饼用）",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -29770,7 +29450,9 @@
       "vegetable_dish"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "炒锅（带盖）"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -29847,11 +29529,6 @@
         "name": "盐",
         "quantity": null,
         "unit": "见用量说明"
-      },
-      {
-        "name": "炒锅（带盖）",
-        "quantity": null,
-        "unit": "见用量说明"
       }
     ],
     "steps": [
@@ -29902,7 +29579,9 @@
       "vegetable_dish"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "深锅或炒锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -29977,11 +29656,6 @@
       },
       {
         "name": "食用油",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "深锅或炒锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -31168,16 +30842,13 @@
       "vegetable_dish"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "蒸锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
         "name": "南瓜",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "蒸锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -31763,7 +31434,9 @@
       "vegetable_dish"
     ],
     "allergens": [],
-    "equipment": [],
+    "equipment": [
+      "冰箱"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -31773,11 +31446,6 @@
       },
       {
         "name": "白砂糖",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "冰箱",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -32122,7 +31790,9 @@
       "大豆",
       "贝类"
     ],
-    "equipment": [],
+    "equipment": [
+      "平底锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -32157,11 +31827,6 @@
       },
       {
         "name": "玉米淀粉",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "平底锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -32513,7 +32178,9 @@
     "allergens": [
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "平底锅"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -32538,11 +32205,6 @@
       },
       {
         "name": "鸡精",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "平底锅",
         "quantity": null,
         "unit": "见用量说明"
       }
@@ -32655,7 +32317,9 @@
     "allergens": [
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "筷子"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -32675,11 +32339,6 @@
       },
       {
         "name": "生抽",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "筷子",
         "quantity": null,
         "unit": "见用量说明"
       },
@@ -32891,7 +32550,9 @@
     "allergens": [
       "大豆"
     ],
-    "equipment": [],
+    "equipment": [
+      "砵或者有一定深度的碗"
+    ],
     "adaptation": "来自 HowToCook 开源社区菜谱，保留原文食材、用量与操作；用时若未标注不参与限时筛选。地区标签用于浏览，非地域真实性认证。饮食类型未经逐条核对。",
     "ingredients": [
       {
@@ -32921,11 +32582,6 @@
       },
       {
         "name": "盐",
-        "quantity": null,
-        "unit": "见用量说明"
-      },
-      {
-        "name": "砵或者有一定深度的碗",
         "quantity": null,
         "unit": "见用量说明"
       }

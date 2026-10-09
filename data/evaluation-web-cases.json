@@ -1,0 +1,37 @@
+{
+  "format": "shiwei-evaluation",
+  "format_version": 1,
+  "name": "DeepSeek 联网来源测试",
+  "cases": [
+    {
+      "id": "web-tomato-eggs",
+      "name": "番茄炒鸡蛋有真实网页来源",
+      "turns": [
+        {
+          "message": "请联网搜索番茄炒鸡蛋的做法，结合实际搜索结果说明，并给出网页来源。",
+          "expected": {"min_web_sources": 1, "max_web_sources": 8}
+        }
+      ]
+    },
+    {
+      "id": "web-salmon",
+      "name": "烤三文鱼有真实网页来源",
+      "turns": [
+        {
+          "message": "请联网搜索柠檬烤三文鱼的做法，结合实际搜索结果说明，并给出网页来源。",
+          "expected": {"min_web_sources": 1, "max_web_sources": 8}
+        }
+      ]
+    },
+    {
+      "id": "web-hummus",
+      "name": "鹰嘴豆泥有真实网页来源",
+      "turns": [
+        {
+          "message": "请联网搜索鹰嘴豆泥的做法，结合实际搜索结果说明，并给出网页来源。",
+          "expected": {"min_web_sources": 1, "max_web_sources": 8}
+        }
+      ]
+    }
+  ]
+}

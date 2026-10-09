@@ -55,6 +55,12 @@ class OpenRecipeTests(unittest.TestCase):
         self.assertFalse(app.pantry_matches('番茄', sauce))
         self.assertFalse(app.pantry_matches('蒜', importer.ingredient_name('Garlic powder')))
         self.assertTrue(app.pantry_matches('蒜', importer.ingredient_name('Garlic, minced')))
+        for text in ('2 tomatoes, canned', '2 cans tomatoes', '2 tomatoes, frozen',
+                     '2 tomatoes, dried', '2 tomatoes, chopped or tomato paste'):
+            with self.subTest(text=text):
+                self.assertFalse(app.pantry_matches('番茄', importer.ingredient_name(text, with_amount=True)))
+        self.assertTrue(app.pantry_matches('番茄', importer.ingredient_name('2 tomatoes, diced', with_amount=True)))
+        self.assertTrue(app.pantry_matches('蒜粉', importer.ingredient_name('Garlic powder')))
 
     def test_snapshot_files_match_pinned_content_and_notices(self):
         manifests = json.loads((ROOT / 'data/open-recipe-sources.json').read_text(encoding='utf-8'))

@@ -221,6 +221,7 @@ def parse(path, text):
     image=images.get(path.split('/')[1], 'salad.jpg')
     if (app.PUBLIC/'assets'/image).exists():
         r['image']='/assets/'+image
+    r=app.classify_recipe(r)
     app.validate_recipe(r)
     return r
 

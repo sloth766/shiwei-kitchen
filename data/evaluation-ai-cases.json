@@ -1,0 +1,50 @@
+{
+  "format": "shiwei-evaluation",
+  "format_version": 1,
+  "name": "DeepSeek 本地资料问答测试",
+  "cases": [
+    {
+      "id": "ai-known-recipe",
+      "name": "已知菜谱保留本地来源",
+      "turns": [
+        {
+          "message": "番茄炒鸡蛋怎么做？请结合本地菜谱说明。",
+          "expected": {
+            "match_status": "matched",
+            "source_ids_include": ["tomato-eggs"],
+            "max_web_sources": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "ai-servings",
+      "name": "明确人数和时间保存为本轮条件",
+      "turns": [
+        {
+          "message": "番茄炒鸡蛋，4 人份，20 分钟内。请按这些条件说明做法。",
+          "expected": {
+            "match_status": "matched",
+            "source_ids_include": ["tomato-eggs"],
+            "context": {"servings": 4, "time": 20},
+            "max_web_sources": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "ai-unknown-recipe",
+      "name": "未知菜名可说明资料不足，不冒用本地来源",
+      "turns": [
+        {
+          "message": "未收录的菜9f84。请说明这道菜没有对应本地资料，不要换成其他菜谱。",
+          "expected": {
+            "match_status": "generated",
+            "max_sources": 0,
+            "max_web_sources": 0
+          }
+        }
+      ]
+    }
+  ]
+}
